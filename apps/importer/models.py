@@ -15,6 +15,7 @@ class ImportJob(TimeStampedModel):
         ZEGO = "zego", "Zego Travel"
         GS25 = "gs25", "GS25 Travel"
         GO365 = "go365", "Go365 Travel"
+        REALJOURNEY = "realjourney", "Real Journey"
         MANUAL = "manual", "Manual Upload"
         OTHER = "other", "Other"
 

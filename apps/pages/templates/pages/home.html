@@ -1,0 +1,314 @@
+{% extends "base.html" %}
+{% load static i18n i18n_fields %}
+
+{% block title %}Smile Memory — {% trans "Your Journey, Our Memory" %}{% endblock %}
+{% block meta_description %}{% trans "Discover amazing tour packages across Asia and beyond. Group tours, cultural experiences, and luxury travel from Thailand's trusted travel agency." %}{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="relative" x-data="{ current: 0, total: {{ hero_slides|length|default:1 }} }" x-init="setInterval(() => current = (current + 1) % total, 6000)">
+    {% if hero_slides %}
+    <div class="relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden">
+        {% for slide in hero_slides %}
+        <div class="absolute inset-0 transition-opacity duration-1000"
+             :class="current === {{ forloop.counter0 }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+            {% if slide.bg_image %}
+            <img src="{{ slide.bg_image }}" alt="{{ slide.title }}"
+                 class="w-full h-full object-cover">
+            {% else %}
+            <div class="w-full h-full bg-gradient-to-br from-navy-800 to-navy-900"></div>
+            {% endif %}
+            <div class="absolute inset-0 bg-gradient-to-t from-navy-900/80 via-navy-900/40 to-navy-900/20"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <div class="text-center px-4 max-w-4xl">
+                    <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+                        {% trans_field slide 'title' %}
+                    </h1>
+                    {% if slide.subtitle %}
+                    <p class="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+                        {% trans_field slide 'subtitle' %}
+                    </p>
+                    {% endif %}
+                    <a href="{{ slide.cta_url }}"
+                       class="inline-flex items-center gap-2 bg-aqua-500 hover:bg-aqua-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-lg hover:shadow-xl">
+                        {% trans_field slide 'cta_text' %}
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Dots -->
+        {% if hero_slides|length > 1 %}
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+            {% for slide in hero_slides %}
+            <button @click="current = {{ forloop.counter0 }}"
+                    class="w-3 h-3 rounded-full transition-all duration-300"
+                    :class="current === {{ forloop.counter0 }} ? 'bg-white scale-110' : 'bg-white/50 hover:bg-white/75'"></button>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    {% else %}
+    <!-- Default hero when no slides configured -->
+    <div class="relative h-[500px] md:h-[600px] lg:h-[700px] bg-gradient-to-br from-navy-800 to-navy-900">
+        <div class="absolute inset-0 flex items-center justify-center">
+            <div class="text-center px-4 max-w-4xl">
+                <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+                    {% trans "Turn Every Journey Into an Everlasting Memory" %}
+                </h1>
+                <p class="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+                    {% trans "Discover amazing tour packages across Asia and beyond with Thailand's trusted travel agency." %}
+                </p>
+                <a href="{% url 'tours:list' %}"
+                   class="inline-flex items-center gap-2 bg-aqua-500 hover:bg-aqua-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-lg hover:shadow-xl">
+                    {% trans "Explore Tours" %}
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Trust Badges -->
+{% if trust_badges %}
+<section class="bg-navy-900 py-8 -mt-1">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            {% for badge in trust_badges %}
+            <div class="text-white">
+                <span class="text-3xl mb-1 block">{{ badge.icon }}</span>
+                <p class="text-2xl md:text-3xl font-bold text-aqua-400">{{ badge.value }}</p>
+                <p class="text-sm text-navy-300 mt-1">{% trans_field badge 'label' %}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Featured Tours -->
+{% if featured_tours %}
+<section class="py-16 lg:py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-navy-900 mb-3">
+                {% trans "Featured Tours" %}
+            </h2>
+            <p class="text-lg text-navy-500 max-w-2xl mx-auto">
+                {% trans "Handpicked tour packages for the best travel experiences" %}
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {% for tour in featured_tours %}
+                {% include "tours/_tour_card.html" with tour=tour %}
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-10">
+            <a href="{% url 'tours:list' %}"
+               class="inline-flex items-center gap-2 border-2 border-navy-900 text-navy-900 hover:bg-navy-900 hover:text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+                {% trans "View All Tours" %}
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Featured Destinations -->
+{% if featured_destinations %}
+<section class="py-16 lg:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-navy-900 mb-3">
+                {% trans "Popular Destinations" %}
+            </h2>
+            <p class="text-lg text-navy-500 max-w-2xl mx-auto">
+                {% trans "Explore our most popular travel destinations" %}
+            </p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
+            {% for dest in featured_destinations %}
+            <a href="{% url 'tours:list' %}?destination={{ dest.slug }}"
+               class="group relative rounded-xl overflow-hidden aspect-[4/3] block">
+                {% if dest.image %}
+                <img src="{{ dest.image.url }}" alt="{% trans_field dest 'name' %}"
+                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy">
+                {% else %}
+                <div class="w-full h-full bg-gradient-to-br from-navy-600 to-navy-800"></div>
+                {% endif %}
+                <div class="absolute inset-0 bg-gradient-to-t from-navy-900/70 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                    <h3 class="text-white font-semibold text-lg">{% trans_field dest 'name' %}</h3>
+                    <p class="text-white/70 text-sm">{{ dest.tours.count }} {% trans "tours" %}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Why Choose Us / CTA -->
+<section class="py-16 lg:py-20 bg-navy-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold mb-3">
+                {% trans "Why Choose Smile Memory?" %}
+            </h2>
+            <p class="text-lg text-navy-300 max-w-2xl mx-auto">
+                {% trans "We make every journey unforgettable" %}
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-aqua-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-aqua-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">{% trans "Trusted & Reliable" %}</h3>
+                <p class="text-navy-300 text-sm">
+                    {% trans "Licensed travel agency partnered with top wholesalers for guaranteed quality tours." %}
+                </p>
+            </div>
+            <div class="text-center">
+                <div class="w-16 h-16 bg-aqua-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-aqua-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">{% trans "Best Value" %}</h3>
+                <p class="text-navy-300 text-sm">
+                    {% trans "Competitive prices with no hidden fees. We match wholesaler rates directly." %}
+                </p>
+            </div>
+            <div class="text-center">
+                <div class="w-16 h-16 bg-aqua-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-aqua-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">{% trans "Personal Support" %}</h3>
+                <p class="text-navy-300 text-sm">
+                    {% trans "Dedicated team available via LINE, phone, or email to assist with your booking." %}
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+{% if testimonials %}
+<section class="py-16 lg:py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-navy-900 mb-3">
+                {% trans "What Our Customers Say" %}
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {% for testimonial in testimonials %}
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-navy-100">
+                <!-- Stars -->
+                <div class="flex gap-1 mb-4">
+                    {% for i in "12345" %}
+                    {% if forloop.counter <= testimonial.rating %}
+                    <svg class="w-5 h-5 text-gold-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    {% else %}
+                    <svg class="w-5 h-5 text-navy-200" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+
+                <blockquote class="text-navy-700 text-sm leading-relaxed mb-4">
+                    "{% trans_field testimonial 'quote' %}"
+                </blockquote>
+
+                <div class="flex items-center gap-3 pt-4 border-t border-navy-100">
+                    {% if testimonial.avatar %}
+                    <img src="{{ testimonial.avatar.url }}" alt="{{ testimonial.name }}"
+                         class="w-10 h-10 rounded-full object-cover">
+                    {% else %}
+                    <div class="w-10 h-10 rounded-full bg-aqua-500/20 flex items-center justify-center">
+                        <span class="text-aqua-600 font-semibold text-sm">{{ testimonial.name|first }}</span>
+                    </div>
+                    {% endif %}
+                    <div>
+                        <p class="font-semibold text-navy-900 text-sm">{{ testimonial.name }}</p>
+                        {% if testimonial.tour_name %}
+                        <p class="text-xs text-navy-400">{{ testimonial.tour_name }}</p>
+                        {% elif testimonial.location %}
+                        <p class="text-xs text-navy-400">{{ testimonial.location }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- FAQ Section -->
+{% if faqs %}
+<section class="py-16 lg:py-20">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-navy-900 mb-3">
+                {% trans "Frequently Asked Questions" %}
+            </h2>
+        </div>
+
+        <div class="space-y-3" x-data="{ openFaq: null }">
+            {% for faq in faqs %}
+            <div class="border border-navy-200 rounded-lg overflow-hidden">
+                <button @click="openFaq = openFaq === {{ forloop.counter }} ? null : {{ forloop.counter }}"
+                        class="w-full flex items-center justify-between px-6 py-4 text-left bg-white hover:bg-navy-50 transition-colors">
+                    <span class="font-medium text-navy-900">{% trans_field faq 'question' %}</span>
+                    <svg class="w-5 h-5 text-navy-400 shrink-0 ml-4 transition-transform duration-200"
+                         :class="openFaq === {{ forloop.counter }} && 'rotate-180'"
+                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div x-show="openFaq === {{ forloop.counter }}"
+                     x-transition:enter="transition ease-out duration-200"
+                     x-transition:enter-start="opacity-0 -translate-y-1"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     x-cloak
+                     class="px-6 pb-4 text-sm text-navy-600 leading-relaxed bg-white">
+                    {% trans_field faq 'answer' %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Final CTA -->
+<section class="py-16 lg:py-20 bg-gradient-to-r from-aqua-500 to-aqua-600">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+            {% trans "Ready for Your Next Adventure?" %}
+        </h2>
+        <p class="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
+            {% trans "Browse our tour packages or contact us for personalized travel planning." %}
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'tours:list' %}"
+               class="inline-flex items-center justify-center gap-2 bg-white text-aqua-600 hover:bg-navy-50 px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-lg">
+                {% trans "Browse Tours" %}
+            </a>
+            <a href="{% url 'pages:contact' %}"
+               class="inline-flex items-center justify-center gap-2 border-2 border-white text-white hover:bg-white/10 px-8 py-4 rounded-lg font-semibold text-lg transition-colors">
+                {% trans "Contact Us" %}
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

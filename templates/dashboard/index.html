@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — Smile Memory Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% load static %}{% static 'css/output.css' %}">
+    <style>
+        body { font-family: 'Inter', system-ui, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+    <!-- Top bar -->
+    <header class="bg-navy-900 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <h1 class="text-xl font-bold tracking-tight">Smile Memory Dashboard</h1>
+            </div>
+            <div class="flex items-center gap-4 text-sm">
+                <a href="/admin/" class="text-aqua-300 hover:text-white transition">Django Admin</a>
+                <a href="/th/" class="text-aqua-300 hover:text-white transition">View Site</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <!-- Tours -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Published Tours</span>
+                    <span class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </span>
+                </div>
+                <p class="text-3xl font-bold text-gray-900">{{ total_tours }}</p>
+                <p class="text-xs text-gray-400 mt-1">{{ total_drafts }} draft{{ total_drafts|pluralize }}</p>
+            </div>
+            <!-- Inquiries -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Inquiries</span>
+                    <span class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                    </span>
+                </div>
+                <p class="text-3xl font-bold text-gray-900">{{ total_inquiries }}</p>
+                <p class="text-xs text-amber-600 font-medium mt-1">{{ new_inquiries }} new</p>
+            </div>
+            <!-- Customers -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Customers</span>
+                    <span class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    </span>
+                </div>
+                <p class="text-3xl font-bold text-gray-900">{{ total_customers }}</p>
+                <p class="text-xs text-gray-400 mt-1">{{ opted_in_customers }} opted-in</p>
+            </div>
+            <!-- Subscribers -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-medium text-gray-500 uppercase tracking-wide">Subscribers</span>
+                    <span class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    </span>
+                </div>
+                <p class="text-3xl font-bold text-gray-900">{{ total_subscribers }}</p>
+                <p class="text-xs text-gray-400 mt-1">{{ total_campaigns }} campaign{{ total_campaigns|pluralize }} sent</p>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Inquiry Status Pie -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h2 class="text-sm font-semibold text-gray-700 mb-4">Inquiry Status Breakdown</h2>
+                <div class="flex justify-center">
+                    <canvas id="statusChart" width="280" height="280"></canvas>
+                </div>
+            </div>
+            <!-- Monthly Trend Line -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h2 class="text-sm font-semibold text-gray-700 mb-4">Monthly Inquiries (6 months)</h2>
+                <canvas id="trendChart" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Two Column: Recent Inquiries + Top Destinations -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+            <!-- Recent Inquiries (2/3) -->
+            <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <h2 class="text-sm font-semibold text-gray-700">Recent Inquiries</h2>
+                    <a href="/admin/bookings/inquiry/" class="text-xs text-aqua-600 hover:text-aqua-800 font-medium">View all &rarr;</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Reference</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Customer</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Tour</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Status</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            {% for inq in recent_inquiries %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-3 font-mono text-xs">
+                                    <a href="/admin/bookings/inquiry/{{ inq.pk }}/change/" class="text-aqua-600 hover:underline">{{ inq.reference_number }}</a>
+                                </td>
+                                <td class="px-4 py-3 text-gray-700">{{ inq.contact_name }}</td>
+                                <td class="px-4 py-3 text-gray-600 truncate max-w-[200px]">{{ inq.tour.title|default:"—" }}</td>
+                                <td class="px-4 py-3">
+                                    <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium
+                                        {% if inq.status == 'new' %}bg-blue-100 text-blue-700
+                                        {% elif inq.status == 'contacted' %}bg-yellow-100 text-yellow-700
+                                        {% elif inq.status == 'confirmed' %}bg-green-100 text-green-700
+                                        {% elif inq.status == 'rejected' %}bg-red-100 text-red-700
+                                        {% else %}bg-gray-100 text-gray-700{% endif %}">
+                                        {{ inq.get_status_display }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-gray-400 text-xs">{{ inq.created_at|date:"M d, H:i" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="5" class="px-4 py-8 text-center text-gray-400">No inquiries yet</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Top Destinations (1/3) -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                <div class="px-6 py-4 border-b border-gray-100">
+                    <h2 class="text-sm font-semibold text-gray-700">Top Destinations</h2>
+                </div>
+                <div class="p-4 space-y-3">
+                    {% for dest in top_destinations %}
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-700">{{ dest.name }}</span>
+                        <span class="text-xs font-medium bg-navy-50 text-navy-700 px-2 py-0.5 rounded-full">{{ dest.tour_count }} tour{{ dest.tour_count|pluralize }}</span>
+                    </div>
+                    {% empty %}
+                    <p class="text-sm text-gray-400 text-center py-4">No destinations</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Departures + Recent Imports -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+
+            <!-- Upcoming Departures -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <h2 class="text-sm font-semibold text-gray-700">Upcoming Departures</h2>
+                    <a href="/admin/tours/tourdeparture/" class="text-xs text-aqua-600 hover:text-aqua-800 font-medium">View all &rarr;</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Tour</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Date</th>
+                                <th class="px-4 py-2 text-right text-xs font-medium text-gray-500">Price (THB)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            {% for dep in upcoming_departures %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-3 text-gray-700 truncate max-w-[250px]">{{ dep.tour.title }}</td>
+                                <td class="px-4 py-3 text-gray-600 text-xs">{{ dep.departure_date|date:"M d, Y" }}</td>
+                                <td class="px-4 py-3 text-right font-mono text-gray-700">{{ dep.price_adult|floatformat:0 }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="3" class="px-4 py-8 text-center text-gray-400">No upcoming departures</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recent Imports -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <h2 class="text-sm font-semibold text-gray-700">Recent Imports</h2>
+                    <a href="/admin/importer/importjob/" class="text-xs text-aqua-600 hover:text-aqua-800 font-medium">View all &rarr;</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Name</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Status</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Result</th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            {% for job in recent_imports %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-3 text-gray-700 truncate max-w-[180px]">
+                                    <a href="/admin/importer/importjob/{{ job.pk }}/change/" class="text-aqua-600 hover:underline">{{ job.name }}</a>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium
+                                        {% if job.status == 'completed' %}bg-green-100 text-green-700
+                                        {% elif job.status == 'failed' %}bg-red-100 text-red-700
+                                        {% elif job.status == 'partial' %}bg-yellow-100 text-yellow-700
+                                        {% else %}bg-gray-100 text-gray-700{% endif %}">
+                                        {{ job.get_status_display }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-xs text-gray-500">
+                                    +{{ job.rows_created }} / ~{{ job.rows_updated }} / !{{ job.rows_failed }}
+                                </td>
+                                <td class="px-4 py-3 text-gray-400 text-xs">{{ job.created_at|date:"M d, H:i" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="4" class="px-4 py-8 text-center text-gray-400">No imports yet</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h2 class="text-sm font-semibold text-gray-700 mb-4">Quick Actions</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <a href="/admin/tours/tour/add/" class="flex flex-col items-center gap-2 p-4 rounded-lg bg-gray-50 hover:bg-blue-50 transition text-sm text-gray-700 hover:text-blue-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    Add Tour
+                </a>
+                <a href="/admin/importer/importjob/add/" class="flex flex-col items-center gap-2 p-4 rounded-lg bg-gray-50 hover:bg-green-50 transition text-sm text-gray-700 hover:text-green-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    Import Tours
+                </a>
+                <a href="/admin/marketing/campaign/add/" class="flex flex-col items-center gap-2 p-4 rounded-lg bg-gray-50 hover:bg-purple-50 transition text-sm text-gray-700 hover:text-purple-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    New Campaign
+                </a>
+                <a href="/admin/blog/blogpost/add/" class="flex flex-col items-center gap-2 p-4 rounded-lg bg-gray-50 hover:bg-amber-50 transition text-sm text-gray-700 hover:text-amber-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                    Write Blog Post
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+    <script>
+        // --- Inquiry Status Pie Chart ---
+        const statusData = [
+            {% for s in inquiry_statuses %}
+            { status: "{{ s.status }}", count: {{ s.count }} }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        const statusColors = {
+            new: '#3b82f6',
+            contacted: '#f59e0b',
+            confirmed: '#10b981',
+            rejected: '#ef4444',
+            cancelled: '#6b7280',
+        };
+
+        if (statusData.length > 0) {
+            new Chart(document.getElementById('statusChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: statusData.map(s => s.status.charAt(0).toUpperCase() + s.status.slice(1)),
+                    datasets: [{
+                        data: statusData.map(s => s.count),
+                        backgroundColor: statusData.map(s => statusColors[s.status] || '#6b7280'),
+                        borderWidth: 0,
+                        hoverOffset: 4,
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true, pointStyleWidth: 8 } }
+                    },
+                    cutout: '60%',
+                }
+            });
+        }
+
+        // --- Monthly Trend Line Chart ---
+        const monthlyData = [
+            {% for m in monthly_inquiries %}
+            { month: "{{ m.month }}", count: {{ m.count }} }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        new Chart(document.getElementById('trendChart'), {
+            type: 'line',
+            data: {
+                labels: monthlyData.map(m => m.month),
+                datasets: [{
+                    label: 'Inquiries',
+                    data: monthlyData.map(m => m.count),
+                    borderColor: '#0ea5e9',
+                    backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#0ea5e9',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1, precision: 0 },
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    x: { grid: { display: false } }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

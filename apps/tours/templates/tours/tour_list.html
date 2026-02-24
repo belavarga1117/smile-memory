@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load static i18n i18n_fields %}
+
+{% block title %}{% trans "Tours" %} — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="bg-navy-50 min-h-screen">
+    <!-- Page header -->
+    <div class="bg-navy-900 text-white py-12 lg:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-3xl lg:text-4xl font-bold mb-2">{% trans "Explore Our Tours" %}</h1>
+            <p class="text-navy-300 text-lg">{% trans "Discover handpicked travel experiences" %}</p>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="lg:flex lg:gap-8">
+
+            <!-- Filters sidebar -->
+            <aside class="lg:w-72 shrink-0 mb-6 lg:mb-0" x-data="{ filtersOpen: false }">
+                <!-- Mobile filter toggle -->
+                <button @click="filtersOpen = !filtersOpen"
+                        class="lg:hidden w-full flex items-center justify-between bg-white rounded-lg px-4 py-3 shadow-sm mb-4 font-medium text-navy-700">
+                    <span class="flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
+                        {% trans "Filters" %}
+                    </span>
+                    <svg :class="filtersOpen ? 'rotate-180' : ''" class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+
+                <form method="get" action="{% url 'tours:list' %}"
+                      class="bg-white rounded-xl shadow-sm p-5 space-y-5"
+                      :class="filtersOpen ? 'block' : 'hidden lg:block'">
+
+                    <!-- Search -->
+                    <div>
+                        <label class="block text-sm font-semibold text-navy-700 mb-1.5">{% trans "Search" %}</label>
+                        <input type="text" name="q" value="{{ current_filters.q }}"
+                               placeholder="{% trans 'Search tours...' %}"
+                               class="w-full px-3 py-2 border border-navy-200 rounded-lg text-sm focus:ring-2 focus:ring-aqua-500 focus:border-transparent">
+                    </div>
+
+                    <!-- Destination -->
+                    <div>
+                        <label class="block text-sm font-semibold text-navy-700 mb-1.5">{% trans "Destination" %}</label>
+                        <select name="destination" class="w-full px-3 py-2 border border-navy-200 rounded-lg text-sm focus:ring-2 focus:ring-aqua-500">
+                            <option value="">{% trans "All Destinations" %}</option>
+                            {% for dest in destinations %}
+                            <option value="{{ dest.slug }}" {% if current_filters.destination == dest.slug %}selected{% endif %}>
+                                {% trans_field dest 'name' %}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Category -->
+                    <div>
+                        <label class="block text-sm font-semibold text-navy-700 mb-1.5">{% trans "Category" %}</label>
+                        <select name="category" class="w-full px-3 py-2 border border-navy-200 rounded-lg text-sm focus:ring-2 focus:ring-aqua-500">
+                            <option value="">{% trans "All Categories" %}</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat.slug }}" {% if current_filters.category == cat.slug %}selected{% endif %}>
+                                {% trans_field cat 'name' %}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Max price -->
+                    <div>
+                        <label class="block text-sm font-semibold text-navy-700 mb-1.5">{% trans "Max Price (THB)" %}</label>
+                        <input type="number" name="max_price" value="{{ current_filters.max_price }}"
+                               placeholder="{% trans 'e.g. 50000' %}"
+                               class="w-full px-3 py-2 border border-navy-200 rounded-lg text-sm focus:ring-2 focus:ring-aqua-500">
+                    </div>
+
+                    <!-- Duration -->
+                    <div>
+                        <label class="block text-sm font-semibold text-navy-700 mb-1.5">{% trans "Max Duration (days)" %}</label>
+                        <input type="number" name="duration" value="{{ current_filters.duration }}"
+                               placeholder="{% trans 'e.g. 7' %}"
+                               class="w-full px-3 py-2 border border-navy-200 rounded-lg text-sm focus:ring-2 focus:ring-aqua-500">
+                    </div>
+
+                    <!-- Sort -->
+                    <div>
+                        <label class="block text-sm font-semibold text-navy-700 mb-1.5">{% trans "Sort by" %}</label>
+                        <select name="sort" class="w-full px-3 py-2 border border-navy-200 rounded-lg text-sm focus:ring-2 focus:ring-aqua-500">
+                            <option value="" {% if not current_filters.sort %}selected{% endif %}>{% trans "Featured" %}</option>
+                            <option value="price_asc" {% if current_filters.sort == "price_asc" %}selected{% endif %}>{% trans "Price: Low to High" %}</option>
+                            <option value="price_desc" {% if current_filters.sort == "price_desc" %}selected{% endif %}>{% trans "Price: High to Low" %}</option>
+                            <option value="newest" {% if current_filters.sort == "newest" %}selected{% endif %}>{% trans "Newest" %}</option>
+                            <option value="duration" {% if current_filters.sort == "duration" %}selected{% endif %}>{% trans "Shortest" %}</option>
+                        </select>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button type="submit"
+                                class="flex-1 bg-aqua-500 hover:bg-aqua-600 text-white py-2.5 rounded-lg font-semibold text-sm transition-colors">
+                            {% trans "Apply Filters" %}
+                        </button>
+                        <a href="{% url 'tours:list' %}"
+                           class="px-4 py-2.5 border border-navy-200 rounded-lg text-sm text-navy-600 hover:bg-navy-50 transition-colors">
+                            {% trans "Reset" %}
+                        </a>
+                    </div>
+                </form>
+            </aside>
+
+            <!-- Tour grid -->
+            <div class="flex-1">
+                <!-- Results count -->
+                <div class="flex items-center justify-between mb-6">
+                    <p class="text-sm text-navy-500">
+                        {{ page_obj.paginator.count }} {% trans "tours found" %}
+                    </p>
+                </div>
+
+                {% if tours %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {% for tour in tours %}
+                        {% include "tours/_tour_card.html" with tour=tour %}
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                {% if page_obj.has_other_pages %}
+                <nav class="mt-10 flex justify-center" aria-label="Pagination">
+                    <div class="flex items-center gap-1">
+                        {% if page_obj.has_previous %}
+                        <a href="?{% for key, val in current_filters.items %}{% if val %}{{ key }}={{ val }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}"
+                           class="px-3 py-2 rounded-lg border border-navy-200 text-navy-600 hover:bg-navy-50 text-sm transition-colors">
+                            &laquo; {% trans "Prev" %}
+                        </a>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                            <span class="px-3.5 py-2 rounded-lg bg-aqua-500 text-white text-sm font-semibold">{{ num }}</span>
+                            {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+                            <a href="?{% for key, val in current_filters.items %}{% if val %}{{ key }}={{ val }}&{% endif %}{% endfor %}page={{ num }}"
+                               class="px-3.5 py-2 rounded-lg border border-navy-200 text-navy-600 hover:bg-navy-50 text-sm transition-colors">
+                                {{ num }}
+                            </a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                        <a href="?{% for key, val in current_filters.items %}{% if val %}{{ key }}={{ val }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}"
+                           class="px-3 py-2 rounded-lg border border-navy-200 text-navy-600 hover:bg-navy-50 text-sm transition-colors">
+                            {% trans "Next" %} &raquo;
+                        </a>
+                        {% endif %}
+                    </div>
+                </nav>
+                {% endif %}
+
+                {% else %}
+                <!-- Empty state -->
+                <div class="text-center py-16">
+                    <svg class="w-16 h-16 text-navy-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold text-navy-700 mb-2">{% trans "No tours found" %}</h3>
+                    <p class="text-navy-400 mb-4">{% trans "Try adjusting your filters or search terms" %}</p>
+                    <a href="{% url 'tours:list' %}" class="text-aqua-600 hover:text-aqua-700 font-medium">{% trans "Clear all filters" %}</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

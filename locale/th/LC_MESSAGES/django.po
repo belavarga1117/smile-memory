@@ -1,0 +1,801 @@
+# Thai translations for Smile Memory travel agency website.
+# Copyright (C) 2026 Smile Memory
+# This file is distributed under the same license as the Smile Memory package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Smile Memory 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-25 02:00+0700\n"
+"PO-Revision-Date: 2026-02-25 02:00+0700\n"
+"Last-Translator: Smile Memory Team\n"
+"Language-Team: Thai\n"
+"Language: th\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: apps/blog/templates/blog/blog_detail.html:17
+#: templates/components/_navbar.html:23 templates/components/_navbar.html:81
+msgid "Blog"
+msgstr "บล็อก"
+
+#: apps/blog/templates/blog/blog_detail.html:74
+#: apps/tours/templates/tours/tour_detail.html:183
+msgid "Share:"
+msgstr "แชร์:"
+
+#: apps/blog/templates/blog/blog_detail.html:94
+msgid "Related Articles"
+msgstr "บทความที่เกี่ยวข้อง"
+
+#: apps/blog/templates/blog/blog_list.html:4
+#: apps/blog/templates/blog/blog_list.html:12
+msgid "Travel Blog"
+msgstr "บล็อกท่องเที่ยว"
+
+#: apps/blog/templates/blog/blog_list.html:5
+msgid ""
+"Travel tips, destination guides, and insider advice from Smile Memory. Plan "
+"your perfect trip with our expert travel blog."
+msgstr ""
+"เคล็ดลับการเดินทาง คู่มือจุดหมายปลายทาง และคำแนะนำจาก Smile Memory "
+"วางแผนทริปในฝันของคุณกับบล็อกท่องเที่ยวของเรา"
+
+#: apps/blog/templates/blog/blog_list.html:13
+msgid "Tips, guides, and inspiration for your next journey"
+msgstr "เคล็ดลับ คู่มือ และแรงบันดาลใจสำหรับการเดินทางครั้งต่อไป"
+
+#: apps/blog/templates/blog/blog_list.html:27
+msgid "Search articles..."
+msgstr "ค้นหาบทความ..."
+
+#: apps/blog/templates/blog/blog_list.html:36
+msgid "Categories"
+msgstr "หมวดหมู่"
+
+#: apps/blog/templates/blog/blog_list.html:41
+msgid "All Posts"
+msgstr "บทความทั้งหมด"
+
+#: apps/blog/templates/blog/blog_list.html:105
+msgid "Previous"
+msgstr "ก่อนหน้า"
+
+#: apps/blog/templates/blog/blog_list.html:121
+#: apps/tours/templates/tours/tour_list.html:151
+msgid "Next"
+msgstr "ถัดไป"
+
+#: apps/blog/templates/blog/blog_list.html:133
+msgid "No articles found"
+msgstr "ไม่พบบทความ"
+
+#: apps/blog/templates/blog/blog_list.html:134
+msgid "Check back soon for travel tips and guides."
+msgstr "กลับมาเร็วๆ นี้เพื่อดูเคล็ดลับและคู่มือการเดินทาง"
+
+#: apps/marketing/templates/marketing/unsubscribe_confirm.html:4
+msgid "Unsubscribe"
+msgstr "ยกเลิกการสมัคร"
+
+#: apps/marketing/templates/marketing/unsubscribe_confirm.html:12
+msgid "Unsubscribe from Newsletter"
+msgstr "ยกเลิกการรับจดหมายข่าว"
+
+#: apps/marketing/templates/marketing/unsubscribe_confirm.html:14
+msgid "Are you sure you want to unsubscribe"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการสมัคร"
+
+#: apps/marketing/templates/marketing/unsubscribe_confirm.html:14
+msgid "from our mailing list?"
+msgstr "จากรายชื่อส่งจดหมายของเรา?"
+
+#: apps/marketing/templates/marketing/unsubscribe_confirm.html:20
+msgid "Yes, Unsubscribe Me"
+msgstr "ใช่ ยกเลิกการสมัคร"
+
+#: apps/marketing/templates/marketing/unsubscribe_confirm.html:24
+msgid "Cancel and go back"
+msgstr "ยกเลิกและกลับไป"
+
+#: apps/marketing/templates/marketing/unsubscribe_done.html:4
+msgid "Unsubscribed"
+msgstr "ยกเลิกการสมัครแล้ว"
+
+#: apps/marketing/templates/marketing/unsubscribe_done.html:12
+msgid "You've Been Unsubscribed"
+msgstr "คุณยกเลิกการสมัครแล้ว"
+
+#: apps/marketing/templates/marketing/unsubscribe_done.html:14
+msgid ""
+"You will no longer receive marketing emails from Smile Memory. If you change "
+"your mind, you can subscribe again anytime from our website."
+msgstr ""
+"คุณจะไม่ได้รับอีเมลจาก Smile Memory อีกต่อไป หากเปลี่ยนใจ "
+"คุณสามารถสมัครรับข่าวสารอีกครั้งได้ตลอดเวลาจากเว็บไซต์ของเรา"
+
+#: apps/marketing/templates/marketing/unsubscribe_done.html:18
+msgid "Back to Homepage"
+msgstr "กลับหน้าแรก"
+
+#: apps/pages/templates/pages/about.html:4 templates/components/_footer.html:40
+msgid "About Us"
+msgstr "เกี่ยวกับเรา"
+
+#: apps/pages/templates/pages/about.html:5
+msgid ""
+"Learn about Smile Memory — Thailand's trusted travel agency offering curated "
+"group tours across Asia and beyond."
+msgstr ""
+"รู้จัก Smile Memory — บริษัททัวร์ที่น่าเชื่อถือของไทย นำเสนอทัวร์กรุ๊ป"
+"คัดสรรทั่วเอเชียและทั่วโลก"
+
+#: apps/pages/templates/pages/about.html:12
+msgid "About Smile Memory"
+msgstr "เกี่ยวกับ Smile Memory"
+
+#: apps/pages/templates/pages/about.html:14
+msgid "Turning every journey into an everlasting memory since day one."
+msgstr "เปลี่ยนทุกการเดินทางให้เป็นความทรงจำที่ยั่งยืนตั้งแต่วันแรก"
+
+#: apps/pages/templates/pages/about.html:24
+msgid "Our Story"
+msgstr "เรื่องราวของเรา"
+
+#: apps/pages/templates/pages/about.html:27
+msgid ""
+"Smile Memory was founded with a simple belief: travel should create memories "
+"that last a lifetime. Based in Thailand, we partner with the country's "
+"leading tour wholesalers to bring you carefully curated group tour packages "
+"across Asia and beyond."
+msgstr ""
+"Smile Memory ก่อตั้งขึ้นด้วยความเชื่อง่ายๆ ว่าการเดินทางควรสร้างความทรงจำ"
+"ที่คงอยู่ตลอดชีวิต ตั้งอยู่ในประเทศไทย เราร่วมมือกับบริษัททัวร์ชั้นนำ"
+"เพื่อนำเสนอแพ็คเกจทัวร์กรุ๊ปคัดสรรทั่วเอเชียและทั่วโลก"
+
+#: apps/pages/templates/pages/about.html:30
+msgid ""
+"We understand that choosing the right tour can be overwhelming. That's why "
+"our team personally reviews every package we offer, ensuring quality "
+"accommodations, well-planned itineraries, and genuine value for your money."
+msgstr ""
+"เราเข้าใจว่าการเลือกทัวร์ที่ใช่อาจเป็นเรื่องยาก ดังนั้นทีมงานของเรา"
+"จึงตรวจสอบทุกแพ็คเกจที่นำเสนอ เพื่อรับรองที่พักคุณภาพ "
+"โปรแกรมที่วางแผนมาอย่างดี และคุ้มค่าคุ้มราคาอย่างแท้จริง"
+
+#: apps/pages/templates/pages/about.html:33
+msgid ""
+"Whether you're dreaming of cherry blossoms in Japan, ancient temples in "
+"China, or Mediterranean coastlines in Turkey — we're here to make it happen "
+"with a smile."
+msgstr ""
+"ไม่ว่าคุณจะฝันถึงซากุระที่ญี่ปุ่น วัดโบราณในจีน "
+"หรือชายฝั่งเมดิเตอร์เรเนียนในตุรกี — เราพร้อมทำให้เป็นจริงด้วยรอยยิ้ม"
+
+#: apps/pages/templates/pages/about.html:54
+msgid "Our Values"
+msgstr "ค่านิยมของเรา"
+
+#: apps/pages/templates/pages/about.html:62
+msgid "Passion for Travel"
+msgstr "หลงใหลในการเดินทาง"
+
+#: apps/pages/templates/pages/about.html:63
+msgid ""
+"We love travel as much as you do. Every tour we offer is one we'd take "
+"ourselves."
+msgstr ""
+"เรารักการเดินทางเท่ากับคุณ ทุกทัวร์ที่เรานำเสนอคือทัวร์ที่เราเลือกเอง"
+
+#: apps/pages/templates/pages/about.html:70
+msgid "Trust & Transparency"
+msgstr "ความน่าเชื่อถือและโปร่งใส"
+
+#: apps/pages/templates/pages/about.html:71
+msgid "No hidden fees, no surprises. What you see is what you get."
+msgstr "ไม่มีค่าใช้จ่ายแอบแฝง ไม่มีเซอร์ไพรส์ สิ่งที่เห็นคือสิ่งที่ได้"
+
+#: apps/pages/templates/pages/about.html:78
+msgid "Personal Touch"
+msgstr "ใส่ใจเป็นพิเศษ"
+
+#: apps/pages/templates/pages/about.html:79
+msgid ""
+"Every customer is treated like family. We're always just a LINE message away."
+msgstr ""
+"ลูกค้าทุกท่านเปรียบเสมือนครอบครัว เราพร้อมให้บริการผ่าน LINE ตลอดเวลา"
+
+#: apps/pages/templates/pages/about.html:88
+msgid "Let's Plan Your Next Trip"
+msgstr "มาวางแผนทริปต่อไปของคุณกันเถอะ"
+
+#: apps/pages/templates/pages/about.html:90
+msgid "Have questions? We'd love to hear from you."
+msgstr "มีคำถาม? เรายินดีรับฟังจากคุณ"
+
+#: apps/pages/templates/pages/about.html:94
+#: apps/pages/templates/pages/contact.html:26
+msgid "Get in Touch"
+msgstr "ติดต่อเรา"
+
+#: apps/pages/templates/pages/contact.html:4
+#: apps/pages/templates/pages/contact.html:12
+#: apps/pages/templates/pages/home.html:308
+#: apps/pages/templates/pages/payment_info.html:104
+#: templates/components/_footer.html:48
+msgid "Contact Us"
+msgstr "ติดต่อเรา"
+
+#: apps/pages/templates/pages/contact.html:5
+msgid ""
+"Contact Smile Memory travel agency. Reach us via LINE, phone, email, or our "
+"contact form."
+msgstr ""
+"ติดต่อ Smile Memory บริษัททัวร์ ติดต่อเราผ่าน LINE โทรศัพท์ อีเมล "
+"หรือแบบฟอร์มติดต่อ"
+
+#: apps/pages/templates/pages/contact.html:14
+msgid ""
+"We'd love to hear from you. Reach out and let's plan your next adventure."
+msgstr "เรายินดีรับฟังจากคุณ ติดต่อเราและมาวางแผนการผจญภัยครั้งต่อไปด้วยกัน"
+
+#: apps/pages/templates/pages/contact.html:34
+#: apps/pages/templates/pages/contact.html:124
+#: apps/tours/templates/tours/tour_detail.html:302
+msgid "Phone"
+msgstr "โทรศัพท์"
+
+#: apps/pages/templates/pages/contact.html:46
+#: apps/pages/templates/pages/contact.html:114
+#: apps/tours/templates/tours/tour_detail.html:296
+msgid "Email"
+msgstr "อีเมล"
+
+#: apps/pages/templates/pages/contact.html:70
+msgid "Address"
+msgstr "ที่อยู่"
+
+#: apps/pages/templates/pages/contact.html:79
+msgid "Follow Us"
+msgstr "ติดตามเรา"
+
+#: apps/pages/templates/pages/contact.html:100
+msgid "Send Us a Message"
+msgstr "ส่งข้อความถึงเรา"
+
+#: apps/pages/templates/pages/contact.html:107
+msgid "Name"
+msgstr "ชื่อ"
+
+#: apps/pages/templates/pages/contact.html:128
+msgid "Subject"
+msgstr "เรื่อง"
+
+#: apps/pages/templates/pages/contact.html:137
+msgid "Message"
+msgstr "ข้อความ"
+
+#: apps/pages/templates/pages/contact.html:146
+msgid "Send Message"
+msgstr "ส่งข้อความ"
+
+#: apps/pages/templates/pages/contact.html:160
+#: apps/pages/templates/pages/home.html:261
+msgid "Frequently Asked Questions"
+msgstr "คำถามที่พบบ่อย"
+
+#: apps/pages/templates/pages/home.html:4
+msgid "Your Journey, Our Memory"
+msgstr "การเดินทางของคุณ ความทรงจำของเรา"
+
+#: apps/pages/templates/pages/home.html:5
+msgid ""
+"Discover amazing tour packages across Asia and beyond. Group tours, cultural "
+"experiences, and luxury travel from Thailand's trusted travel agency."
+msgstr ""
+"ค้นพบแพ็คเกจทัวร์สุดพิเศษทั่วเอเชียและทั่วโลก ทัวร์กรุ๊ป "
+"ประสบการณ์ทางวัฒนธรรม และการท่องเที่ยวหรูจากบริษัททัวร์ที่น่าเชื่อถือของไทย"
+
+#: apps/pages/templates/pages/home.html:60
+msgid "Turn Every Journey Into an Everlasting Memory"
+msgstr "เปลี่ยนทุกการเดินทางให้เป็นความทรงจำที่ยั่งยืน"
+
+#: apps/pages/templates/pages/home.html:63
+msgid ""
+"Discover amazing tour packages across Asia and beyond with Thailand's "
+"trusted travel agency."
+msgstr ""
+"ค้นพบแพ็คเกจทัวร์สุดพิเศษทั่วเอเชียและทั่วโลก "
+"กับบริษัททัวร์ที่น่าเชื่อถือของไทย"
+
+#: apps/pages/templates/pages/home.html:67
+msgid "Explore Tours"
+msgstr "ดูทัวร์ทั้งหมด"
+
+#: apps/pages/templates/pages/home.html:99
+msgid "Featured Tours"
+msgstr "ทัวร์แนะนำ"
+
+#: apps/pages/templates/pages/home.html:102
+msgid "Handpicked tour packages for the best travel experiences"
+msgstr "แพ็คเกจทัวร์คัดสรรเพื่อประสบการณ์การเดินทางที่ดีที่สุด"
+
+#: apps/pages/templates/pages/home.html:115
+msgid "View All Tours"
+msgstr "ดูทัวร์ทั้งหมด"
+
+#: apps/pages/templates/pages/home.html:129
+msgid "Popular Destinations"
+msgstr "จุดหมายยอดนิยม"
+
+#: apps/pages/templates/pages/home.html:132
+msgid "Explore our most popular travel destinations"
+msgstr "สำรวจจุดหมายท่องเที่ยวยอดนิยมของเรา"
+
+#: apps/pages/templates/pages/home.html:149
+msgid "tours"
+msgstr "ทัวร์"
+
+#: apps/pages/templates/pages/home.html:163
+msgid "Why Choose Smile Memory?"
+msgstr "ทำไมต้องเลือก Smile Memory?"
+
+#: apps/pages/templates/pages/home.html:166
+msgid "We make every journey unforgettable"
+msgstr "เราทำให้ทุกการเดินทางน่าจดจำ"
+
+#: apps/pages/templates/pages/home.html:175
+msgid "Trusted & Reliable"
+msgstr "น่าเชื่อถือและไว้วางใจได้"
+
+#: apps/pages/templates/pages/home.html:177
+msgid ""
+"Licensed travel agency partnered with top wholesalers for guaranteed quality "
+"tours."
+msgstr ""
+"บริษัททัวร์ที่มีใบอนุญาต ร่วมมือกับผู้ค้าส่งชั้นนำ "
+"เพื่อรับรองคุณภาพทัวร์ที่ดีที่สุด"
+
+#: apps/pages/templates/pages/home.html:184
+msgid "Best Value"
+msgstr "คุ้มค่าที่สุด"
+
+#: apps/pages/templates/pages/home.html:186
+msgid ""
+"Competitive prices with no hidden fees. We match wholesaler rates directly."
+msgstr "ราคาแข่งขันได้ ไม่มีค่าใช้จ่ายแอบแฝง ราคาตรงจากผู้ค้าส่ง"
+
+#: apps/pages/templates/pages/home.html:193
+msgid "Personal Support"
+msgstr "บริการดูแลเป็นพิเศษ"
+
+#: apps/pages/templates/pages/home.html:195
+msgid ""
+"Dedicated team available via LINE, phone, or email to assist with your "
+"booking."
+msgstr ""
+"ทีมงานพร้อมให้บริการผ่าน LINE โทรศัพท์ หรืออีเมล "
+"เพื่อช่วยเหลือเรื่องการจอง"
+
+#: apps/pages/templates/pages/home.html:208
+msgid "What Our Customers Say"
+msgstr "ลูกค้าของเราพูดว่าอย่างไร"
+
+#: apps/pages/templates/pages/home.html:296
+msgid "Ready for Your Next Adventure?"
+msgstr "พร้อมสำหรับการผจญภัยครั้งต่อไปหรือยัง?"
+
+#: apps/pages/templates/pages/home.html:299
+msgid ""
+"Browse our tour packages or contact us for personalized travel planning."
+msgstr "เลือกดูแพ็คเกจทัวร์ของเรา หรือติดต่อเราเพื่อวางแผนการเดินทางเฉพาะคุณ"
+
+#: apps/pages/templates/pages/home.html:304
+msgid "Browse Tours"
+msgstr "เลือกดูทัวร์"
+
+#: apps/pages/templates/pages/payment_info.html:4
+#: apps/pages/templates/pages/payment_info.html:12
+msgid "Payment Information"
+msgstr "ข้อมูลการชำระเงิน"
+
+#: apps/pages/templates/pages/payment_info.html:5
+msgid ""
+"Payment methods and bank transfer details for Smile Memory travel agency "
+"bookings."
+msgstr ""
+"วิธีการชำระเงินและรายละเอียดการโอนเงินสำหรับการจองทัวร์กับ Smile Memory"
+
+#: apps/pages/templates/pages/payment_info.html:14
+msgid "How to complete your booking payment"
+msgstr "วิธีการชำระเงินสำหรับการจองทัวร์"
+
+#: apps/pages/templates/pages/payment_info.html:24
+msgid "Booking Process"
+msgstr "ขั้นตอนการจอง"
+
+#: apps/pages/templates/pages/payment_info.html:29
+#: apps/tours/templates/tours/tour_detail.html:340
+msgid "Submit Inquiry"
+msgstr "ส่งแบบสอบถาม"
+
+#: apps/pages/templates/pages/payment_info.html:30
+msgid ""
+"Browse our tours and submit an inquiry for the tour and dates you're "
+"interested in."
+msgstr ""
+"เลือกดูทัวร์ของเราและส่งแบบสอบถามสำหรับทัวร์และวันที่คุณสนใจ"
+
+#: apps/pages/templates/pages/payment_info.html:36
+msgid "Receive Confirmation"
+msgstr "รับการยืนยัน"
+
+#: apps/pages/templates/pages/payment_info.html:37
+msgid ""
+"Our team will review your inquiry and send you a booking confirmation with "
+"pricing details via email."
+msgstr ""
+"ทีมงานจะตรวจสอบแบบสอบถามของคุณและส่งการยืนยันการจอง"
+"พร้อมรายละเอียดราคาทางอีเมล"
+
+#: apps/pages/templates/pages/payment_info.html:43
+msgid "Make Payment"
+msgstr "ชำระเงิน"
+
+#: apps/pages/templates/pages/payment_info.html:44
+msgid ""
+"Transfer the deposit or full amount to our bank account using the details "
+"below."
+msgstr "โอนเงินมัดจำหรือเต็มจำนวนเข้าบัญชีธนาคารของเราตามรายละเอียดด้านล่าง"
+
+#: apps/pages/templates/pages/payment_info.html:50
+msgid "Send Payment Proof"
+msgstr "ส่งหลักฐานการชำระเงิน"
+
+#: apps/pages/templates/pages/payment_info.html:51
+msgid ""
+"Send a screenshot or photo of your payment confirmation to us via LINE or "
+"email."
+msgstr ""
+"ส่งภาพหน้าจอหรือภาพถ่ายหลักฐานการชำระเงินมาที่เราผ่าน LINE หรืออีเมล"
+
+#: apps/pages/templates/pages/payment_info.html:61
+msgid "Bank Transfer Details"
+msgstr "รายละเอียดการโอนเงิน"
+
+#: apps/pages/templates/pages/payment_info.html:68
+msgid ""
+"Bank account details will be provided upon booking confirmation. Please "
+"contact us for more information."
+msgstr ""
+"รายละเอียดบัญชีธนาคารจะแจ้งเมื่อยืนยันการจอง "
+"กรุณาติดต่อเราสำหรับข้อมูลเพิ่มเติม"
+
+#: apps/pages/templates/pages/payment_info.html:77
+msgid "Important Notes"
+msgstr "หมายเหตุสำคัญ"
+
+#: apps/pages/templates/pages/payment_info.html:82
+msgid ""
+"A deposit is required to secure your booking. The remaining balance is due "
+"before the departure date."
+msgstr ""
+"ต้องชำระเงินมัดจำเพื่อยืนยันการจอง ยอดคงเหลือต้องชำระก่อนวันเดินทาง"
+
+#: apps/pages/templates/pages/payment_info.html:86
+msgid "Please include your name and tour reference in the bank transfer note."
+msgstr "กรุณาระบุชื่อและรหัสทัวร์ในหมายเหตุการโอนเงิน"
+
+#: apps/pages/templates/pages/payment_info.html:90
+msgid "Always send payment proof via LINE or email for faster processing."
+msgstr "กรุณาส่งหลักฐานการชำระเงินผ่าน LINE หรืออีเมลเพื่อดำเนินการเร็วขึ้น"
+
+#: apps/pages/templates/pages/payment_info.html:94
+msgid "For cancellation and refund policies, please contact us directly."
+msgstr "สำหรับนโยบายการยกเลิกและการคืนเงิน กรุณาติดต่อเราโดยตรง"
+
+#: apps/pages/templates/pages/payment_info.html:101
+msgid "Need help with your payment? We're here for you."
+msgstr "ต้องการความช่วยเหลือเรื่องการชำระเงิน? เราพร้อมช่วยคุณ"
+
+#: apps/tours/templates/tours/_tour_card.html:33
+#: apps/tours/templates/tours/tour_list.html:89
+msgid "Featured"
+msgstr "แนะนำ"
+
+#: apps/tours/templates/tours/_tour_card.html:74
+#: apps/tours/templates/tours/tour_detail.html:62
+msgid "meals"
+msgstr "มื้ออาหาร"
+
+#: apps/tours/templates/tours/_tour_card.html:89
+msgid "From"
+msgstr "เริ่มต้น"
+
+#: apps/tours/templates/tours/_tour_card.html:96
+msgid "Contact for price"
+msgstr "ติดต่อสอบถามราคา"
+
+#: apps/tours/templates/tours/_tour_card.html:101
+msgid "View Details"
+msgstr "ดูรายละเอียด"
+
+#: apps/tours/templates/tours/tour_detail.html:72
+msgid "Tour Highlights"
+msgstr "ไฮไลท์ทัวร์"
+
+#: apps/tours/templates/tours/tour_detail.html:81
+msgid "Overview"
+msgstr "ภาพรวม"
+
+#: apps/tours/templates/tours/tour_detail.html:89
+msgid "Day-by-Day Itinerary"
+msgstr "โปรแกรมทัวร์รายวัน"
+
+#: apps/tours/templates/tours/tour_detail.html:130
+msgid "Gallery"
+msgstr "แกลเลอรี"
+
+#: apps/tours/templates/tours/tour_detail.html:152
+msgid "What's Included"
+msgstr "รวมอยู่ในราคา"
+
+#: apps/tours/templates/tours/tour_detail.html:161
+msgid "Not Included"
+msgstr "ไม่รวมในราคา"
+
+#: apps/tours/templates/tours/tour_detail.html:176
+msgid "Download Tour PDF"
+msgstr "ดาวน์โหลด PDF ทัวร์"
+
+#: apps/tours/templates/tours/tour_detail.html:203
+msgid "Starting from"
+msgstr "เริ่มต้นที่"
+
+#: apps/tours/templates/tours/tour_detail.html:205
+msgid "per person"
+msgstr "ต่อท่าน"
+
+#: apps/tours/templates/tours/tour_detail.html:211
+msgid "Inquire Now"
+msgstr "สอบถามเลย"
+
+#: apps/tours/templates/tours/tour_detail.html:225
+msgid "Available Departures"
+msgstr "วันเดินทางที่เปิดรับ"
+
+#: apps/tours/templates/tours/tour_detail.html:231
+msgid "seats"
+msgstr "ที่นั่ง"
+
+#: apps/tours/templates/tours/tour_detail.html:257
+msgid "Pricing"
+msgstr "ราคา"
+
+#: apps/tours/templates/tours/tour_detail.html:270
+msgid "Inquire About This Tour"
+msgstr "สอบถามเกี่ยวกับทัวร์นี้"
+
+#: apps/tours/templates/tours/tour_detail.html:277
+msgid "Preferred Departure"
+msgstr "วันเดินทางที่ต้องการ"
+
+#: apps/tours/templates/tours/tour_detail.html:279
+msgid "Any available date"
+msgstr "วันไหนก็ได้ที่ว่าง"
+
+#: apps/tours/templates/tours/tour_detail.html:290
+msgid "Full Name"
+msgstr "ชื่อ-นามสกุล"
+
+#: apps/tours/templates/tours/tour_detail.html:296
+#  duplicate of Email above
+
+#: apps/tours/templates/tours/tour_detail.html:302
+#  duplicate of Phone above
+
+#: apps/tours/templates/tours/tour_detail.html:308
+msgid "Adults"
+msgstr "ผู้ใหญ่"
+
+#: apps/tours/templates/tours/tour_detail.html:312
+msgid "Children"
+msgstr "เด็ก"
+
+#: apps/tours/templates/tours/tour_detail.html:316
+msgid "Infants"
+msgstr "ทารก"
+
+#: apps/tours/templates/tours/tour_detail.html:322
+msgid "Room Preference"
+msgstr "ประเภทห้องพักที่ต้องการ"
+
+#: apps/tours/templates/tours/tour_detail.html:327
+msgid "Special Requests"
+msgstr "คำขอพิเศษ"
+
+#: apps/tours/templates/tours/tour_detail.html:334
+msgid "I'd like to receive tour deals and travel tips via email"
+msgstr "ฉันต้องการรับข้อมูลดีลทัวร์และเคล็ดลับการเดินทางทางอีเมล"
+
+#: apps/tours/templates/tours/tour_detail.html:344
+msgid "No payment required. We'll contact you within 24 hours."
+msgstr "ไม่ต้องชำระเงิน เราจะติดต่อกลับภายใน 24 ชั่วโมง"
+
+#: apps/tours/templates/tours/tour_detail.html:355
+msgid "You Might Also Like"
+msgstr "คุณอาจสนใจ"
+
+#: apps/tours/templates/tours/tour_list.html:4
+#: templates/components/_navbar.html:20 templates/components/_navbar.html:78
+msgid "Tours"
+msgstr "ทัวร์"
+
+#: apps/tours/templates/tours/tour_list.html:11
+msgid "Explore Our Tours"
+msgstr "สำรวจทัวร์ของเรา"
+
+#: apps/tours/templates/tours/tour_list.html:12
+msgid "Discover handpicked travel experiences"
+msgstr "ค้นพบประสบการณ์การเดินทางที่คัดสรรมาแล้ว"
+
+#: apps/tours/templates/tours/tour_list.html:26
+msgid "Filters"
+msgstr "ตัวกรอง"
+
+#: apps/tours/templates/tours/tour_list.html:37
+msgid "Search"
+msgstr "ค้นหา"
+
+#: apps/tours/templates/tours/tour_list.html:39
+msgid "Search tours..."
+msgstr "ค้นหาทัวร์..."
+
+#: apps/tours/templates/tours/tour_list.html:45
+msgid "Destination"
+msgstr "จุดหมายปลายทาง"
+
+#: apps/tours/templates/tours/tour_list.html:47
+msgid "All Destinations"
+msgstr "ทุกจุดหมายปลายทาง"
+
+#: apps/tours/templates/tours/tour_list.html:58
+msgid "Category"
+msgstr "หมวดหมู่"
+
+#: apps/tours/templates/tours/tour_list.html:60
+msgid "All Categories"
+msgstr "ทุกหมวดหมู่"
+
+#: apps/tours/templates/tours/tour_list.html:71
+msgid "Max Price (THB)"
+msgstr "ราคาสูงสุด (บาท)"
+
+#: apps/tours/templates/tours/tour_list.html:73
+msgid "e.g. 50000"
+msgstr "เช่น 50000"
+
+#: apps/tours/templates/tours/tour_list.html:79
+msgid "Max Duration (days)"
+msgstr "จำนวนวันสูงสุด"
+
+#: apps/tours/templates/tours/tour_list.html:81
+msgid "e.g. 7"
+msgstr "เช่น 7"
+
+#: apps/tours/templates/tours/tour_list.html:87
+msgid "Sort by"
+msgstr "เรียงตาม"
+
+#: apps/tours/templates/tours/tour_list.html:89
+#  duplicate of Featured above
+
+#: apps/tours/templates/tours/tour_list.html:90
+msgid "Price: Low to High"
+msgstr "ราคา: ต่ำไปสูง"
+
+#: apps/tours/templates/tours/tour_list.html:91
+msgid "Price: High to Low"
+msgstr "ราคา: สูงไปต่ำ"
+
+#: apps/tours/templates/tours/tour_list.html:92
+msgid "Newest"
+msgstr "ใหม่ล่าสุด"
+
+#: apps/tours/templates/tours/tour_list.html:93
+msgid "Shortest"
+msgstr "สั้นที่สุด"
+
+#: apps/tours/templates/tours/tour_list.html:100
+msgid "Apply Filters"
+msgstr "ใช้ตัวกรอง"
+
+#: apps/tours/templates/tours/tour_list.html:104
+msgid "Reset"
+msgstr "รีเซ็ต"
+
+#: apps/tours/templates/tours/tour_list.html:115
+msgid "tours found"
+msgstr "ทัวร์ที่พบ"
+
+#: apps/tours/templates/tours/tour_list.html:133
+msgid "Prev"
+msgstr "ก่อนหน้า"
+
+#: apps/tours/templates/tours/tour_list.html:164
+msgid "No tours found"
+msgstr "ไม่พบทัวร์"
+
+#: apps/tours/templates/tours/tour_list.html:165
+msgid "Try adjusting your filters or search terms"
+msgstr "ลองปรับตัวกรองหรือคำค้นหาของคุณ"
+
+#: apps/tours/templates/tours/tour_list.html:166
+msgid "Clear all filters"
+msgstr "ล้างตัวกรองทั้งหมด"
+
+#: templates/components/_footer.html:10
+msgid "Turn every journey into an everlasting memory."
+msgstr "เปลี่ยนทุกการเดินทางให้เป็นความทรงจำที่ยั่งยืน"
+
+#: templates/components/_footer.html:37
+msgid "Quick Links"
+msgstr "ลิงก์ด่วน"
+
+#: templates/components/_footer.html:39
+msgid "All Tours"
+msgstr "ทัวร์ทั้งหมด"
+
+#: templates/components/_footer.html:41
+msgid "Travel Tips"
+msgstr "เคล็ดลับการเดินทาง"
+
+#: templates/components/_footer.html:42
+msgid "Payment Info"
+msgstr "ข้อมูลการชำระเงิน"
+
+#: templates/components/_footer.html:67
+msgid "Newsletter"
+msgstr "จดหมายข่าว"
+
+#: templates/components/_footer.html:68
+msgid "Get the latest tour deals and travel tips."
+msgstr "รับดีลทัวร์ล่าสุดและเคล็ดลับการเดินทาง"
+
+#: templates/components/_footer.html:73
+msgid "Your email"
+msgstr "อีเมลของคุณ"
+
+#: templates/components/_footer.html:77
+msgid "Subscribe"
+msgstr "สมัครรับข่าวสาร"
+
+#: templates/components/_footer.html:85
+msgid "All rights reserved."
+msgstr "สงวนลิขสิทธิ์"
+
+#: templates/components/_footer.html:87
+msgid "Privacy Policy"
+msgstr "นโยบายความเป็นส่วนตัว"
+
+#: templates/components/_footer.html:88
+msgid "Terms of Service"
+msgstr "ข้อกำหนดการใช้บริการ"
+
+#: templates/components/_navbar.html:17 templates/components/_navbar.html:75
+msgid "Home"
+msgstr "หน้าแรก"
+
+#: templates/components/_navbar.html:26 templates/components/_navbar.html:84
+msgid "About"
+msgstr "เกี่ยวกับ"
+
+#: templates/components/_navbar.html:29 templates/components/_navbar.html:87
+msgid "Contact"
+msgstr "ติดต่อ"
+
+#: templates/components/_navbar.html:46 templates/components/_navbar.html:101
+msgid "Begin Your Journey"
+msgstr "เริ่มการเดินทาง"

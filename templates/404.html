@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Page Not Found" %} — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<div class="min-h-[60vh] flex items-center justify-center px-4">
+    <div class="text-center max-w-md">
+        <p class="text-7xl font-bold text-aqua-500 mb-4">404</p>
+        <h1 class="text-2xl font-bold text-navy-900 mb-3">{% trans "Page Not Found" %}</h1>
+        <p class="text-gray-500 mb-8">{% trans "The page you're looking for doesn't exist or has been moved." %}</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="{% url 'pages:home' %}" class="px-6 py-3 bg-navy-800 text-white rounded-lg hover:bg-navy-700 transition font-medium">
+                {% trans "Back to Home" %}
+            </a>
+            <a href="{% url 'tours:list' %}" class="px-6 py-3 border border-navy-200 text-navy-700 rounded-lg hover:bg-navy-50 transition font-medium">
+                {% trans "Browse Tours" %}
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

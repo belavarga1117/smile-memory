@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="margin:0; padding:0; font-family:Arial,sans-serif; background:#f8fafc;">
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; margin:0 auto; background:#ffffff;">
+    <!-- Header -->
+    <tr>
+        <td style="background:#1e293b; padding:24px 32px; text-align:center;">
+            <h1 style="color:#ffffff; margin:0; font-size:24px;">{{ site_name }}</h1>
+        </td>
+    </tr>
+    <!-- Body -->
+    <tr>
+        <td style="padding:32px;">
+            <h2 style="color:#1e293b; margin:0 0 16px;">Thank you for your inquiry!</h2>
+            <p style="color:#475569; line-height:1.6; margin:0 0 16px;">
+                Dear {{ inquiry.contact_name }},
+            </p>
+            <p style="color:#475569; line-height:1.6; margin:0 0 24px;">
+                We have received your inquiry and our team will review it shortly. You will hear back from us within 24 hours.
+            </p>
+
+            <!-- Inquiry details -->
+            <table width="100%" cellpadding="8" cellspacing="0" style="background:#f1f5f9; border-radius:8px; margin:0 0 24px;">
+                <tr>
+                    <td style="color:#64748b; font-size:13px; width:40%;">Reference Number</td>
+                    <td style="color:#1e293b; font-weight:600;">{{ inquiry.reference_number }}</td>
+                </tr>
+                {% if inquiry.tour %}
+                <tr>
+                    <td style="color:#64748b; font-size:13px;">Tour</td>
+                    <td style="color:#1e293b;">{{ inquiry.tour.title }}</td>
+                </tr>
+                {% endif %}
+                {% if inquiry.departure %}
+                <tr>
+                    <td style="color:#64748b; font-size:13px;">Departure Date</td>
+                    <td style="color:#1e293b;">{{ inquiry.departure.departure_date|date:"d M Y" }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td style="color:#64748b; font-size:13px;">Travelers</td>
+                    <td style="color:#1e293b;">{{ inquiry.num_adults }} adult(s){% if inquiry.num_children %}, {{ inquiry.num_children }} child(ren){% endif %}{% if inquiry.num_infants %}, {{ inquiry.num_infants }} infant(s){% endif %}</td>
+                </tr>
+            </table>
+
+            <p style="color:#475569; line-height:1.6; margin:0 0 8px;">
+                <strong>What happens next?</strong>
+            </p>
+            <ol style="color:#475569; line-height:1.8; margin:0 0 24px; padding-left:20px;">
+                <li>Our team reviews your inquiry</li>
+                <li>We confirm availability and pricing</li>
+                <li>You receive a booking confirmation with payment details</li>
+            </ol>
+
+            <p style="color:#475569; line-height:1.6; margin:0;">
+                If you have any urgent questions, feel free to contact us via LINE or phone.
+            </p>
+        </td>
+    </tr>
+    <!-- Footer -->
+    <tr>
+        <td style="background:#f1f5f9; padding:20px 32px; text-align:center;">
+            <p style="color:#94a3b8; font-size:12px; margin:0;">
+                &copy; {{ site_name }}. All rights reserved.
+            </p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

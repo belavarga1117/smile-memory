@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load static i18n i18n_fields %}
+
+{% block title %}{% trans_field post 'title' %} — Smile Memory Blog{% endblock %}
+{% block meta_description %}{% if post.meta_description %}{{ post.meta_description }}{% elif post.excerpt %}{{ post.excerpt|truncatewords:25 }}{% endif %}{% endblock %}
+{% block og_title %}{% trans_field post 'title' %}{% endblock %}
+{% block og_description %}{% if post.excerpt %}{{ post.excerpt|truncatewords:25 }}{% endif %}{% endblock %}
+{% block og_image %}{% if post.featured_img %}<meta property="og:image" content="{{ post.featured_img }}">{% endif %}{% endblock %}
+
+{% block content %}
+
+<article class="py-12 lg:py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Breadcrumb -->
+        <nav class="mb-6 text-sm text-navy-400">
+            <a href="{% url 'blog:list' %}" class="hover:text-navy-600 transition-colors">{% trans "Blog" %}</a>
+            {% if post.category %}
+            <span class="mx-2">/</span>
+            <a href="{% url 'blog:list' %}?category={{ post.category.slug }}" class="hover:text-navy-600 transition-colors">{% trans_field post.category 'name' %}</a>
+            {% endif %}
+            <span class="mx-2">/</span>
+            <span class="text-navy-600">{% trans_field post 'title' %}</span>
+        </nav>
+
+        <!-- Header -->
+        <header class="mb-8">
+            {% if post.category %}
+            <span class="inline-block bg-aqua-500/10 text-aqua-600 text-sm font-medium px-3 py-1 rounded-full mb-4">
+                {% trans_field post.category 'name' %}
+            </span>
+            {% endif %}
+
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-navy-900 mb-4 leading-tight">
+                {% trans_field post 'title' %}
+            </h1>
+
+            <div class="flex items-center gap-4 text-sm text-navy-400">
+                <span>{{ post.author_name }}</span>
+                {% if post.published_at %}
+                <span>&bull;</span>
+                <time datetime="{{ post.published_at|date:'Y-m-d' }}">{{ post.published_at|date:"F d, Y" }}</time>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- Featured Image -->
+        {% if post.featured_img %}
+        <div class="mb-10 rounded-xl overflow-hidden aspect-[21/9]">
+            <img src="{{ post.featured_img }}" alt="{% trans_field post 'title' %}"
+                 class="w-full h-full object-cover">
+        </div>
+        {% endif %}
+
+        <!-- Body -->
+        <div class="prose prose-lg prose-navy max-w-none mb-10">
+            {% trans_field post 'body' %}
+        </div>
+
+        <!-- Tags -->
+        {% if post.tags.all %}
+        <div class="flex flex-wrap gap-2 mb-10 pt-6 border-t border-navy-200">
+            {% for tag in post.tags.all %}
+            <a href="{% url 'blog:list' %}?tag={{ tag.slug }}"
+               class="text-xs bg-navy-100 hover:bg-navy-200 text-navy-600 px-3 py-1.5 rounded-full transition-colors">
+                #{{ tag.name }}
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Share -->
+        <div class="flex items-center gap-4 py-6 border-t border-navy-200 mb-10">
+            <span class="text-sm font-medium text-navy-700">{% trans "Share:" %}</span>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+               target="_blank" rel="noopener"
+               class="w-9 h-9 bg-navy-100 hover:bg-navy-200 rounded-lg flex items-center justify-center transition-colors">
+                <svg class="w-4 h-4 text-navy-600" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="https://social-plugins.line.me/lineit/share?url={{ request.build_absolute_uri }}"
+               target="_blank" rel="noopener"
+               class="w-9 h-9 bg-[#06C755]/10 hover:bg-[#06C755]/20 rounded-lg flex items-center justify-center transition-colors">
+                <svg class="w-4 h-4 text-[#06C755]" fill="currentColor" viewBox="0 0 24 24"><path d="M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+            </a>
+        </div>
+
+    </div>
+</article>
+
+<!-- Related Posts -->
+{% if related_posts %}
+<section class="py-12 lg:py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-navy-900 mb-8">{% trans "Related Articles" %}</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for rpost in related_posts %}
+            <article class="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-navy-100">
+                <a href="{{ rpost.get_absolute_url }}" class="block relative overflow-hidden aspect-[16/10]">
+                    {% if rpost.featured_img %}
+                    <img src="{{ rpost.featured_img }}" alt="{% trans_field rpost 'title' %}"
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                    {% else %}
+                    <div class="w-full h-full bg-gradient-to-br from-navy-100 to-navy-200"></div>
+                    {% endif %}
+                </a>
+                <div class="p-4">
+                    <h3 class="font-semibold text-navy-900 mb-2 line-clamp-2 group-hover:text-aqua-600 transition-colors">
+                        <a href="{{ rpost.get_absolute_url }}">{% trans_field rpost 'title' %}</a>
+                    </h3>
+                    {% if rpost.published_at %}
+                    <time class="text-xs text-navy-400" datetime="{{ rpost.published_at|date:'Y-m-d' }}">{{ rpost.published_at|date:"M d, Y" }}</time>
+                    {% endif %}
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

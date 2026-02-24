@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin:0; padding:0; font-family:Arial,sans-serif; background:#f8fafc;">
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; margin:0 auto; background:#ffffff;">
+    <tr>
+        <td style="background:#1e293b; padding:20px 32px;">
+            <h1 style="color:#ffffff; margin:0; font-size:20px;">New Inquiry Received</h1>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding:32px;">
+            <table width="100%" cellpadding="8" cellspacing="0" style="background:#fef3c7; border-radius:8px; margin:0 0 24px;">
+                <tr>
+                    <td style="color:#92400e; font-size:13px; width:35%;">Reference</td>
+                    <td style="color:#1e293b; font-weight:600;">{{ inquiry.reference_number }}</td>
+                </tr>
+                <tr>
+                    <td style="color:#92400e; font-size:13px;">Customer</td>
+                    <td style="color:#1e293b;">{{ inquiry.contact_name }} ({{ inquiry.contact_email }})</td>
+                </tr>
+                {% if inquiry.contact_phone %}
+                <tr>
+                    <td style="color:#92400e; font-size:13px;">Phone</td>
+                    <td style="color:#1e293b;">{{ inquiry.contact_phone }}</td>
+                </tr>
+                {% endif %}
+                {% if inquiry.tour %}
+                <tr>
+                    <td style="color:#92400e; font-size:13px;">Tour</td>
+                    <td style="color:#1e293b;">{{ inquiry.tour.title }}</td>
+                </tr>
+                {% endif %}
+                {% if inquiry.departure %}
+                <tr>
+                    <td style="color:#92400e; font-size:13px;">Departure</td>
+                    <td style="color:#1e293b;">{{ inquiry.departure.departure_date|date:"d M Y" }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td style="color:#92400e; font-size:13px;">Travelers</td>
+                    <td style="color:#1e293b;">{{ inquiry.num_adults }} adults, {{ inquiry.num_children }} children, {{ inquiry.num_infants }} infants</td>
+                </tr>
+                {% if inquiry.special_requests %}
+                <tr>
+                    <td style="color:#92400e; font-size:13px;">Special Requests</td>
+                    <td style="color:#1e293b;">{{ inquiry.special_requests }}</td>
+                </tr>
+                {% endif %}
+            </table>
+            <p style="text-align:center;">
+                <a href="{{ admin_url }}" style="background:#0ea5e9; color:#ffffff; padding:12px 24px; text-decoration:none; border-radius:6px; font-weight:600; display:inline-block;">
+                    View in Admin Panel
+                </a>
+            </p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "smile-memory",
+  "private": true,
+  "scripts": {
+    "css:build": "npx @tailwindcss/cli -i static/src/input.css -o static/css/output.css --minify",
+    "css:watch": "npx @tailwindcss/cli -i static/src/input.css -o static/css/output.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4"
+  }
+}

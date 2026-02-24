@@ -5,6 +5,34 @@ All notable changes to **Smile Memory** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-02-25
+
+### Added
+- API-based tour scrapers for three wholesalers:
+  - **Go365 Travel**: CryptoJS AES-encrypted AJAX API client (274 tours)
+  - **Real Journey**: TourProX WordPress AJAX API client (23 tours)
+  - **Zego Travel**: Portal internal API client with session auth (239 tours)
+- `scrape_tours` management command with --source, --country, --url, --dry-run options
+- BaseScraper framework with rate limiting, retry logic, and cookie support
+- Full pricing matrix import (adult/child/infant/promo/join-land/deposit/commission)
+- Departure date sync with availability status and seat tracking
+- ImportJob logging for every scrape run
+
+### Changed
+- Go365 scraper rewritten from HTML parsing to encrypted AJAX API (17 → 274 tours)
+- Real Journey scraper rewritten from HTML parsing to AJAX API (730 → 316 lines)
+
+## [1.1.0] - 2026-02-25
+
+### Added
+- Image optimization with `{% thumbnail %}` template tag (auto-resize via Pillow)
+- Lazy loading on all tour card and blog images
+- Responsive image sizing per context (cards: 400px, hero: 1200px, gallery: 800px)
+
+### Changed
+- Updated all templates to use optimized thumbnail URLs
+- Seed data updated with proper image dimensions
+
 ## [1.0.0] - 2026-02-24
 
 ### Added
@@ -52,5 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions CI: ruff lint + pytest
 - Seed data command: 8 airlines, 10 destinations, 7 categories, 10 tours
 
+[1.2.0]: https://github.com/belavarga1117/smile-memory/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/belavarga1117/smile-memory/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/belavarga1117/smile-memory/compare/v0.9.0...v1.0.0
 [0.9.0]: https://github.com/belavarga1117/smile-memory/releases/tag/v0.9.0

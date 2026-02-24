@@ -7,10 +7,10 @@
 {% block content %}
 
 <!-- Hero -->
-<section class="bg-navy-900 text-white py-12 lg:py-16">
+<section class="bg-brand-cocoa text-white py-12 lg:py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="text-3xl md:text-4xl font-bold mb-3">{% trans "Travel Blog" %}</h1>
-        <p class="text-navy-300 text-lg">{% trans "Tips, guides, and inspiration for your next journey" %}</p>
+        <p class="text-white/70 text-lg">{% trans "Tips, guides, and inspiration for your next journey" %}</p>
     </div>
 </section>
 
@@ -25,26 +25,26 @@
                     <div class="relative">
                         <input type="text" name="q" value="{{ current_filters.q }}"
                                placeholder="{% trans 'Search articles...' %}"
-                               class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-navy-200 focus:ring-2 focus:ring-aqua-500 focus:border-transparent text-sm">
-                        <svg class="w-4 h-4 text-navy-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                               class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-brand-taupe/20 focus:ring-2 focus:ring-brand-gold focus:border-transparent text-sm">
+                        <svg class="w-4 h-4 text-brand-hint absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </div>
                 </form>
 
                 <!-- Categories -->
                 {% if categories %}
                 <div class="mb-8">
-                    <h3 class="font-semibold text-navy-900 mb-3">{% trans "Categories" %}</h3>
+                    <h3 class="font-semibold text-brand-text mb-3">{% trans "Categories" %}</h3>
                     <ul class="space-y-2">
                         <li>
                             <a href="{% url 'blog:list' %}"
-                               class="text-sm {% if not current_filters.category %}text-aqua-600 font-medium{% else %}text-navy-500 hover:text-navy-700{% endif %} transition-colors">
+                               class="text-sm {% if not current_filters.category %}text-brand-clay font-medium{% else %}text-brand-muted hover:text-brand-text{% endif %} transition-colors">
                                 {% trans "All Posts" %}
                             </a>
                         </li>
                         {% for cat in categories %}
                         <li>
                             <a href="?category={{ cat.slug }}"
-                               class="text-sm {% if current_filters.category == cat.slug %}text-aqua-600 font-medium{% else %}text-navy-500 hover:text-navy-700{% endif %} transition-colors">
+                               class="text-sm {% if current_filters.category == cat.slug %}text-brand-clay font-medium{% else %}text-brand-muted hover:text-brand-text{% endif %} transition-colors">
                                 {% trans_field cat 'name' %}
                             </a>
                         </li>
@@ -59,31 +59,31 @@
                 {% if posts %}
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {% for post in posts %}
-                    <article class="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-navy-100">
+                    <article class="group bg-brand-surface rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-brand-taupe/20">
                         <a href="{{ post.get_absolute_url }}" class="block relative overflow-hidden aspect-[16/10]">
                             {% if post.featured_img %}
                             <img src="{{ post.featured_img }}" alt="{% trans_field post 'title' %}"
                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
                             {% else %}
-                            <div class="w-full h-full bg-gradient-to-br from-navy-100 to-navy-200 flex items-center justify-center">
-                                <svg class="w-12 h-12 text-navy-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
+                            <div class="w-full h-full bg-gradient-to-br from-brand-bg to-brand-taupe/20 flex items-center justify-center">
+                                <svg class="w-12 h-12 text-brand-hint" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
                             </div>
                             {% endif %}
                             {% if post.category %}
-                            <span class="absolute top-3 left-3 bg-aqua-500 text-white text-xs font-medium px-2.5 py-1 rounded-full">
+                            <span class="absolute top-3 left-3 bg-brand-rose text-white text-xs font-medium px-2.5 py-1 rounded-full">
                                 {% trans_field post.category 'name' %}
                             </span>
                             {% endif %}
                         </a>
 
                         <div class="p-4">
-                            <h2 class="font-semibold text-navy-900 mb-2 line-clamp-2 group-hover:text-aqua-600 transition-colors">
+                            <h2 class="font-semibold text-brand-text mb-2 line-clamp-2 group-hover:text-brand-clay transition-colors">
                                 <a href="{{ post.get_absolute_url }}">{% trans_field post 'title' %}</a>
                             </h2>
                             {% if post.excerpt %}
-                            <p class="text-sm text-navy-500 mb-3 line-clamp-2">{% trans_field post 'excerpt' %}</p>
+                            <p class="text-sm text-brand-muted mb-3 line-clamp-2">{% trans_field post 'excerpt' %}</p>
                             {% endif %}
-                            <div class="flex items-center justify-between text-xs text-navy-400">
+                            <div class="flex items-center justify-between text-xs text-brand-hint">
                                 <span>{{ post.author_name }}</span>
                                 {% if post.published_at %}
                                 <time datetime="{{ post.published_at|date:'Y-m-d' }}">{{ post.published_at|date:"M d, Y" }}</time>
@@ -101,7 +101,7 @@
                         {% if page_obj.has_previous %}
                         <li>
                             <a href="?page={{ page_obj.previous_page_number }}{% if current_filters.category %}&category={{ current_filters.category }}{% endif %}{% if current_filters.q %}&q={{ current_filters.q }}{% endif %}"
-                               class="px-3 py-2 rounded-lg text-sm text-navy-600 hover:bg-navy-100 transition-colors">
+                               class="px-3 py-2 rounded-lg text-sm text-brand-muted hover:bg-brand-bg transition-colors">
                                 {% trans "Previous" %}
                             </a>
                         </li>
@@ -109,7 +109,7 @@
                         {% for num in page_obj.paginator.page_range %}
                         <li>
                             <a href="?page={{ num }}{% if current_filters.category %}&category={{ current_filters.category }}{% endif %}{% if current_filters.q %}&q={{ current_filters.q }}{% endif %}"
-                               class="px-3 py-2 rounded-lg text-sm {% if page_obj.number == num %}bg-navy-900 text-white{% else %}text-navy-600 hover:bg-navy-100{% endif %} transition-colors">
+                               class="px-3 py-2 rounded-lg text-sm {% if page_obj.number == num %}bg-brand-cocoa text-white{% else %}text-brand-muted hover:bg-brand-bg{% endif %} transition-colors">
                                 {{ num }}
                             </a>
                         </li>
@@ -117,7 +117,7 @@
                         {% if page_obj.has_next %}
                         <li>
                             <a href="?page={{ page_obj.next_page_number }}{% if current_filters.category %}&category={{ current_filters.category }}{% endif %}{% if current_filters.q %}&q={{ current_filters.q }}{% endif %}"
-                               class="px-3 py-2 rounded-lg text-sm text-navy-600 hover:bg-navy-100 transition-colors">
+                               class="px-3 py-2 rounded-lg text-sm text-brand-muted hover:bg-brand-bg transition-colors">
                                 {% trans "Next" %}
                             </a>
                         </li>
@@ -129,9 +129,9 @@
                 {% else %}
                 <!-- Empty state -->
                 <div class="text-center py-16">
-                    <svg class="w-16 h-16 text-navy-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
-                    <h3 class="text-lg font-semibold text-navy-900 mb-2">{% trans "No articles found" %}</h3>
-                    <p class="text-navy-500">{% trans "Check back soon for travel tips and guides." %}</p>
+                    <svg class="w-16 h-16 text-brand-hint mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
+                    <h3 class="text-lg font-semibold text-brand-text mb-2">{% trans "No articles found" %}</h3>
+                    <p class="text-brand-muted">{% trans "Check back soon for travel tips and guides." %}</p>
                 </div>
                 {% endif %}
             </div>

@@ -7,35 +7,35 @@
 <div class="max-w-2xl mx-auto py-16 px-4 text-center">
     <div class="bg-green-50 border border-green-200 rounded-2xl p-8">
         <div class="text-5xl mb-4">✅</div>
-        <h1 class="text-2xl font-bold text-navy-900 mb-2">
+        <h1 class="text-2xl font-bold text-brand-text mb-2">
             {% trans "Thank You!" %}
         </h1>
-        <p class="text-navy-600 mb-6">
+        <p class="text-brand-muted mb-6">
             {% trans "Your inquiry has been submitted successfully. We'll get back to you within 24 hours." %}
         </p>
 
-        <div class="bg-white rounded-xl p-6 text-left mb-6">
-            <h2 class="font-semibold text-navy-900 mb-3">{% trans "Inquiry Details" %}</h2>
-            <div class="space-y-2 text-sm text-navy-700">
+        <div class="bg-brand-surface rounded-xl p-6 text-left mb-6">
+            <h2 class="font-semibold text-brand-text mb-3">{% trans "Inquiry Details" %}</h2>
+            <div class="space-y-2 text-sm text-brand-text">
                 <div class="flex justify-between">
-                    <span class="text-navy-500">{% trans "Reference" %}:</span>
+                    <span class="text-brand-muted">{% trans "Reference" %}:</span>
                     <span class="font-mono font-semibold">{{ inquiry.reference_number }}</span>
                 </div>
                 {% if inquiry.tour %}
                 <div class="flex justify-between">
-                    <span class="text-navy-500">{% trans "Tour" %}:</span>
+                    <span class="text-brand-muted">{% trans "Tour" %}:</span>
                     <span>{% trans_field inquiry.tour "title" %}</span>
                 </div>
                 {% endif %}
                 <div class="flex justify-between">
-                    <span class="text-navy-500">{% trans "Travelers" %}:</span>
+                    <span class="text-brand-muted">{% trans "Travelers" %}:</span>
                     <span>{{ inquiry.total_travelers }} {% trans "person(s)" %}</span>
                 </div>
             </div>
         </div>
 
         <a href="{% url 'pages:home' %}"
-           class="inline-block bg-aqua-500 hover:bg-aqua-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+           class="inline-block bg-brand-rose hover:bg-brand-clay text-white px-6 py-3 rounded-lg font-semibold transition-colors">
             {% trans "Back to Home" %}
         </a>
     </div>

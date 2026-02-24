@@ -4,32 +4,19 @@
 @source "../../templates/**/*.html";
 @source "../../apps/**/templates/**/*.html";
 
-/* Smile Memory Design System — navy/aqua/gold palette */
+/* Smile Memory Design System — warm premium palette */
 @theme {
-  /* Navy palette (primary) */
-  --color-navy-50:  #f0f4f8;
-  --color-navy-100: #d9e2ec;
-  --color-navy-200: #bcccdc;
-  --color-navy-300: #9fb3c8;
-  --color-navy-400: #829ab1;
-  --color-navy-500: #627d98;
-  --color-navy-600: #486581;
-  --color-navy-700: #334e68;
-  --color-navy-800: #243b53;
-  --color-navy-900: #102a43;
-
-  /* Aqua accent */
-  --color-aqua-300: #54d1db;
-  --color-aqua-400: #38bec9;
-  --color-aqua-500: #14919b;
-  --color-aqua-600: #0e7c86;
-  --color-aqua-700: #0a6c74;
-
-  /* Gold accent */
-  --color-gold-300: #e8c860;
-  --color-gold-400: #d4a843;
-  --color-gold-500: #b8941f;
-  --color-gold-600: #9a7b1a;
+  /* Brand palette */
+  --color-brand-bg:      #E9E2D8;
+  --color-brand-surface:  #F6F3EE;
+  --color-brand-rose:     #9B6B63;
+  --color-brand-clay:     #7D5347;
+  --color-brand-taupe:    #7A695F;
+  --color-brand-cocoa:    #6E5A52;
+  --color-brand-text:     #2E2A28;
+  --color-brand-muted:    #57534E;
+  --color-brand-hint:     #78716C;
+  --color-brand-gold:     #D4B483;
 
   /* Fonts */
   --font-family-sans: 'Inter', 'Noto Sans Thai', system-ui, sans-serif;

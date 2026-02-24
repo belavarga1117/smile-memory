@@ -169,7 +169,7 @@ Pipeline: `Trigger → Parser → Field Mapper → Validator → Upsert Tour →
 
 ### Design System
 
-- **Colors**: Navy (primary), Aqua (accent), Gold (highlight)
+- **Colors**: Warm premium palette — brand-cocoa (#6E5A52, nav/footer), brand-rose (#9B6B63, primary CTA), brand-clay (#7D5347, hover), brand-bg (#E9E2D8, page background), brand-surface (#F6F3EE, cards), brand-taupe (#7A695F, borders/icons), brand-text (#2E2A28), brand-muted (#57534E), brand-hint (#78716C), brand-gold (#D4B483, sparing accent). On dark backgrounds use text-white/70 or text-white/60 instead of brand-hint.
 - **Fonts**: Inter (Latin) + Noto Sans Thai — loaded from Google Fonts
 - **Layout**: Mobile-first responsive with Tailwind CSS
 - **Components**: Alpine.js for interactivity (dropdowns, modals, form handling)

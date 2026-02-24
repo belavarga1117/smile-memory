@@ -15,14 +15,14 @@
 <body class="bg-gray-50 min-h-screen">
 
     <!-- Top bar -->
-    <header class="bg-navy-900 text-white shadow-lg">
+    <header class="bg-brand-cocoa text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <h1 class="text-xl font-bold tracking-tight">Smile Memory Dashboard</h1>
             </div>
             <div class="flex items-center gap-4 text-sm">
-                <a href="/admin/" class="text-aqua-300 hover:text-white transition">Django Admin</a>
-                <a href="/th/" class="text-aqua-300 hover:text-white transition">View Site</a>
+                <a href="/admin/" class="text-white/70 hover:text-white transition">Django Admin</a>
+                <a href="/th/" class="text-white/70 hover:text-white transition">View Site</a>
             </div>
         </div>
     </header>
@@ -100,7 +100,7 @@
             <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                     <h2 class="text-sm font-semibold text-gray-700">Recent Inquiries</h2>
-                    <a href="/admin/bookings/inquiry/" class="text-xs text-aqua-600 hover:text-aqua-800 font-medium">View all &rarr;</a>
+                    <a href="/admin/bookings/inquiry/" class="text-xs text-brand-clay hover:text-brand-cocoa font-medium">View all &rarr;</a>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
@@ -117,7 +117,7 @@
                             {% for inq in recent_inquiries %}
                             <tr class="hover:bg-gray-50">
                                 <td class="px-4 py-3 font-mono text-xs">
-                                    <a href="/admin/bookings/inquiry/{{ inq.pk }}/change/" class="text-aqua-600 hover:underline">{{ inq.reference_number }}</a>
+                                    <a href="/admin/bookings/inquiry/{{ inq.pk }}/change/" class="text-brand-clay hover:underline">{{ inq.reference_number }}</a>
                                 </td>
                                 <td class="px-4 py-3 text-gray-700">{{ inq.contact_name }}</td>
                                 <td class="px-4 py-3 text-gray-600 truncate max-w-[200px]">{{ inq.tour.title|default:"—" }}</td>
@@ -150,7 +150,7 @@
                     {% for dest in top_destinations %}
                     <div class="flex items-center justify-between">
                         <span class="text-sm text-gray-700">{{ dest.name }}</span>
-                        <span class="text-xs font-medium bg-navy-50 text-navy-700 px-2 py-0.5 rounded-full">{{ dest.tour_count }} tour{{ dest.tour_count|pluralize }}</span>
+                        <span class="text-xs font-medium bg-brand-bg text-brand-text px-2 py-0.5 rounded-full">{{ dest.tour_count }} tour{{ dest.tour_count|pluralize }}</span>
                     </div>
                     {% empty %}
                     <p class="text-sm text-gray-400 text-center py-4">No destinations</p>
@@ -166,7 +166,7 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                     <h2 class="text-sm font-semibold text-gray-700">Upcoming Departures</h2>
-                    <a href="/admin/tours/tourdeparture/" class="text-xs text-aqua-600 hover:text-aqua-800 font-medium">View all &rarr;</a>
+                    <a href="/admin/tours/tourdeparture/" class="text-xs text-brand-clay hover:text-brand-cocoa font-medium">View all &rarr;</a>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
@@ -196,7 +196,7 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                     <h2 class="text-sm font-semibold text-gray-700">Recent Imports</h2>
-                    <a href="/admin/importer/importjob/" class="text-xs text-aqua-600 hover:text-aqua-800 font-medium">View all &rarr;</a>
+                    <a href="/admin/importer/importjob/" class="text-xs text-brand-clay hover:text-brand-cocoa font-medium">View all &rarr;</a>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
@@ -212,7 +212,7 @@
                             {% for job in recent_imports %}
                             <tr class="hover:bg-gray-50">
                                 <td class="px-4 py-3 text-gray-700 truncate max-w-[180px]">
-                                    <a href="/admin/importer/importjob/{{ job.pk }}/change/" class="text-aqua-600 hover:underline">{{ job.name }}</a>
+                                    <a href="/admin/importer/importjob/{{ job.pk }}/change/" class="text-brand-clay hover:underline">{{ job.name }}</a>
                                 </td>
                                 <td class="px-4 py-3">
                                     <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-medium

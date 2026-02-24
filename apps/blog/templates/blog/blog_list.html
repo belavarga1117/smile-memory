@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n i18n_fields %}
+{% load static i18n i18n_fields image_utils %}
 
 {% block title %}{% trans "Travel Blog" %} — Smile Memory{% endblock %}
 {% block meta_description %}{% trans "Travel tips, destination guides, and insider advice from Smile Memory. Plan your perfect trip with our expert travel blog." %}{% endblock %}
@@ -61,8 +61,11 @@
                     {% for post in posts %}
                     <article class="group bg-brand-surface rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-brand-taupe/20">
                         <a href="{{ post.get_absolute_url }}" class="block relative overflow-hidden aspect-[16/10]">
-                            {% if post.featured_img %}
-                            <img src="{{ post.featured_img }}" alt="{% trans_field post 'title' %}"
+                            {% if post.featured_image %}
+                            <img src="{% thumbnail post.featured_image 600 %}" alt="{% trans_field post 'title' %}"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                            {% elif post.featured_image_url %}
+                            <img src="{{ post.featured_image_url }}" alt="{% trans_field post 'title' %}"
                                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
                             {% else %}
                             <div class="w-full h-full bg-gradient-to-br from-brand-bg to-brand-taupe/20 flex items-center justify-center">

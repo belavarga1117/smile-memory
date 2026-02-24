@@ -1,13 +1,13 @@
-{% load static i18n i18n_fields %}
+{% load static i18n i18n_fields image_utils %}
 {# Reusable tour card component — used in tour list, homepage featured, related tours #}
 <article class="group bg-brand-surface rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-brand-taupe/20">
     <!-- Image -->
     <a href="{{ tour.get_absolute_url }}" class="block relative overflow-hidden aspect-[4/3]">
         {% if tour.thumbnail %}
-            <img src="{{ tour.thumbnail.url }}" alt="{% trans_field tour 'title' %}"
+            <img src="{% thumbnail tour.thumbnail 600 %}" alt="{% trans_field tour 'title' %}"
                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
         {% elif tour.hero_image %}
-            <img src="{{ tour.hero_image.url }}" alt="{% trans_field tour 'title' %}"
+            <img src="{% thumbnail tour.hero_image 600 %}" alt="{% trans_field tour 'title' %}"
                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
         {% elif tour.hero_image_url %}
             <img src="{{ tour.hero_image_url }}" alt="{% trans_field tour 'title' %}"

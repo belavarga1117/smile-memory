@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n i18n_fields %}
+{% load static i18n i18n_fields image_utils %}
 
 {% block title %}{% trans_field tour 'title' %} — {{ SITE_NAME }}{% endblock %}
 {% block meta_description %}{% trans_field tour 'short_description' %}{% endblock %}
@@ -9,7 +9,7 @@
     <!-- Hero -->
     <div class="relative h-64 sm:h-80 lg:h-96 bg-brand-cocoa">
         {% if tour.hero_image %}
-            <img src="{{ tour.hero_image.url }}" alt="{% trans_field tour 'title' %}" class="w-full h-full object-cover">
+            <img src="{% thumbnail tour.hero_image 1400 %}" alt="{% trans_field tour 'title' %}" class="w-full h-full object-cover">
         {% elif tour.hero_image_url %}
             <img src="{{ tour.hero_image_url }}" alt="{% trans_field tour 'title' %}" class="w-full h-full object-cover">
         {% endif %}
@@ -132,7 +132,7 @@
                         {% for img in tour.images.all %}
                         <div class="aspect-[4/3] rounded-lg overflow-hidden">
                             {% if img.image %}
-                            <img src="{{ img.image.url }}" alt="{{ img.caption }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" loading="lazy">
+                            <img src="{% thumbnail img.image 800 %}" alt="{{ img.caption }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" loading="lazy">
                             {% elif img.image_url %}
                             <img src="{{ img.image_url }}" alt="{{ img.caption }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" loading="lazy">
                             {% endif %}

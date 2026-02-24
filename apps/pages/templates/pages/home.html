@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static i18n i18n_fields %}
+{% load static i18n i18n_fields image_utils %}
 
 {% block title %}Smile Memory — {% trans "Your Journey, Our Memory" %}{% endblock %}
 {% block meta_description %}{% trans "Discover amazing tour packages across Asia and beyond. Group tours, cultural experiences, and luxury travel from Thailand's trusted travel agency." %}{% endblock %}
@@ -13,8 +13,11 @@
         {% for slide in hero_slides %}
         <div class="absolute inset-0 transition-opacity duration-1000"
              :class="current === {{ forloop.counter0 }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
-            {% if slide.bg_image %}
-            <img src="{{ slide.bg_image }}" alt="{{ slide.title }}"
+            {% if slide.image %}
+            <img src="{% thumbnail slide.image 1920 %}" alt="{{ slide.title }}"
+                 class="w-full h-full object-cover">
+            {% elif slide.image_url %}
+            <img src="{{ slide.image_url }}" alt="{{ slide.title }}"
                  class="w-full h-full object-cover">
             {% else %}
             <div class="w-full h-full bg-gradient-to-br from-brand-cocoa to-brand-text"></div>
@@ -138,7 +141,7 @@
             <a href="{% url 'tours:list' %}?destination={{ dest.slug }}"
                class="group relative rounded-xl overflow-hidden aspect-[4/3] block">
                 {% if dest.image %}
-                <img src="{{ dest.image.url }}" alt="{% trans_field dest 'name' %}"
+                <img src="{% thumbnail dest.image 600 %}" alt="{% trans_field dest 'name' %}"
                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy">
                 {% else %}
                 <div class="w-full h-full bg-gradient-to-br from-brand-taupe to-brand-cocoa"></div>
@@ -229,8 +232,8 @@
 
                 <div class="flex items-center gap-3 pt-4 border-t border-brand-taupe/20">
                     {% if testimonial.avatar %}
-                    <img src="{{ testimonial.avatar.url }}" alt="{{ testimonial.name }}"
-                         class="w-10 h-10 rounded-full object-cover">
+                    <img src="{% thumbnail testimonial.avatar 80 %}" alt="{{ testimonial.name }}"
+                         class="w-10 h-10 rounded-full object-cover" loading="lazy">
                     {% else %}
                     <div class="w-10 h-10 rounded-full bg-brand-rose/20 flex items-center justify-center">
                         <span class="text-brand-clay font-semibold text-sm">{{ testimonial.name|first }}</span>

@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% load static i18n i18n_fields %}
+{% load static i18n i18n_fields image_utils %}
 
 {% block title %}{% trans_field post 'title' %} — Smile Memory Blog{% endblock %}
 {% block meta_description %}{% if post.meta_description %}{{ post.meta_description }}{% elif post.excerpt %}{{ post.excerpt|truncatewords:25 }}{% endif %}{% endblock %}
 {% block og_title %}{% trans_field post 'title' %}{% endblock %}
 {% block og_description %}{% if post.excerpt %}{{ post.excerpt|truncatewords:25 }}{% endif %}{% endblock %}
-{% block og_image %}{% if post.featured_img %}<meta property="og:image" content="{{ post.featured_img }}">{% endif %}{% endblock %}
+{% block og_image %}{% if post.featured_image %}<meta property="og:image" content="{{ post.featured_image.url }}">{% elif post.featured_image_url %}<meta property="og:image" content="{{ post.featured_image_url }}">{% endif %}{% endblock %}
 
 {% block content %}
 
@@ -45,9 +45,14 @@
         </header>
 
         <!-- Featured Image -->
-        {% if post.featured_img %}
+        {% if post.featured_image %}
         <div class="mb-10 rounded-xl overflow-hidden aspect-[21/9]">
-            <img src="{{ post.featured_img }}" alt="{% trans_field post 'title' %}"
+            <img src="{% thumbnail post.featured_image 1200 %}" alt="{% trans_field post 'title' %}"
+                 class="w-full h-full object-cover">
+        </div>
+        {% elif post.featured_image_url %}
+        <div class="mb-10 rounded-xl overflow-hidden aspect-[21/9]">
+            <img src="{{ post.featured_image_url }}" alt="{% trans_field post 'title' %}"
                  class="w-full h-full object-cover">
         </div>
         {% endif %}
@@ -96,8 +101,11 @@
             {% for rpost in related_posts %}
             <article class="group bg-brand-surface rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-brand-taupe/20">
                 <a href="{{ rpost.get_absolute_url }}" class="block relative overflow-hidden aspect-[16/10]">
-                    {% if rpost.featured_img %}
-                    <img src="{{ rpost.featured_img }}" alt="{% trans_field rpost 'title' %}"
+                    {% if rpost.featured_image %}
+                    <img src="{% thumbnail rpost.featured_image 400 %}" alt="{% trans_field rpost 'title' %}"
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                    {% elif rpost.featured_image_url %}
+                    <img src="{{ rpost.featured_image_url }}" alt="{% trans_field rpost 'title' %}"
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
                     {% else %}
                     <div class="w-full h-full bg-gradient-to-br from-brand-bg to-brand-taupe/20"></div>

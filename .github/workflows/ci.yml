@@ -53,11 +53,17 @@ jobs:
           ALLOWED_HOSTS: "*"
           DATABASE_URL: "sqlite:///db.sqlite3"
         run: python manage.py migrate
-      - name: Run tests
+      - name: Run tests with coverage
         env:
           DJANGO_SETTINGS_MODULE: config.settings.development
           SECRET_KEY: test-secret-key-for-ci
           DEBUG: "True"
           ALLOWED_HOSTS: "*"
           DATABASE_URL: "sqlite:///db.sqlite3"
-        run: python manage.py test --verbosity=2
+        run: pytest --cov=apps --cov-report=term-missing --cov-report=html -v
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: htmlcov/

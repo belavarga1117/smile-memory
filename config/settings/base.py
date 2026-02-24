@@ -8,6 +8,10 @@ import environ
 # Build paths: BASE_DIR = travel-agency/
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+# App version — read from VERSION file (single source of truth)
+_version_file = BASE_DIR / "VERSION"
+APP_VERSION = _version_file.read_text().strip() if _version_file.exists() else "0.0.0"
+
 # Environment variables
 env = environ.Env(
     DEBUG=(bool, False),

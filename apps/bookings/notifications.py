@@ -26,6 +26,12 @@ def _send_async(subject, message, from_email, recipient_list, html_message):
 
 
 def _dispatch(subject, message, recipient_list, html_message):
+    # In tests (locmem backend) send synchronously so mail.outbox works
+    if "locmem" in settings.EMAIL_BACKEND:
+        _send_async(
+            subject, message, settings.DEFAULT_FROM_EMAIL, recipient_list, html_message
+        )
+        return
     t = threading.Thread(
         target=_send_async,
         args=(

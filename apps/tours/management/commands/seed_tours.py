@@ -700,7 +700,7 @@ class Command(BaseCommand):
                     "locations": td.get("locations", []),
                     "includes": td.get("includes", ""),
                     "excludes": td.get("excludes", ""),
-                    "status": Tour.Status.PUBLISHED,
+                    "status": Tour.Status.DRAFT,  # No PDF → not published per site rule
                     "is_featured": td.get("slug")
                     in [
                         "tokyo-osaka-classic",

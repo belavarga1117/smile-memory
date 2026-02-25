@@ -2,7 +2,7 @@
 
 from django.contrib import admin, messages
 from django.shortcuts import redirect
-from django.urls import path
+from django.urls import path, reverse
 from django.utils.html import format_html
 
 from .models import ImportJob, ImportLog
@@ -53,8 +53,10 @@ class ImportJobAdmin(admin.ModelAdmin):
     def sync_view(self, request, source):
         from .tasks import sync_all_tours
 
+        changelist_url = reverse("admin:importer_importjob_changelist")
+
         if request.method != "POST":
-            return redirect("..")
+            return redirect(changelist_url)
 
         sources = None if source == "all" else [source]
         result = sync_all_tours.delay(sources=sources)
@@ -64,7 +66,7 @@ class ImportJobAdmin(admin.ModelAdmin):
             f"✅ Sync queued ({label}). Task ID: {result.id} — check worker logs for progress.",
             messages.SUCCESS,
         )
-        return redirect("..")
+        return redirect(changelist_url)
 
     list_display = (
         "name",

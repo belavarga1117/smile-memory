@@ -45,7 +45,7 @@ class ImportJob(TimeStampedModel):
     file_format = models.CharField(max_length=10, choices=FileFormat.choices)
 
     # File upload
-    uploaded_file = models.FileField(upload_to="imports/%Y/%m/", blank=True)
+    uploaded_file = models.FileField(upload_to="imports/%Y/%m/", blank=True, max_length=500)
     source_url = models.URLField(blank=True, help_text="URL for HTML/API imports")
 
     # Field mapping configuration (JSON)

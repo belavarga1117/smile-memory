@@ -7,6 +7,7 @@
 {% block og_description %}{% trans_field tour 'short_description' %}{% endblock %}
 {% block og_type %}product{% endblock %}
 {% block og_image %}{% if tour.hero_image %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ tour.hero_image.url }}">{% elif tour.hero_image_url %}<meta property="og:image" content="{{ tour.hero_image_url }}">{% endif %}{% endblock %}
+{% block twitter_image %}{% if tour.hero_image %}<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ tour.hero_image.url }}">{% elif tour.hero_image_url %}<meta name="twitter:image" content="{{ tour.hero_image_url }}">{% endif %}{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">

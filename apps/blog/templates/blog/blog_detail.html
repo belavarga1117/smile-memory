@@ -7,6 +7,7 @@
 {% block og_description %}{% if post.excerpt %}{{ post.excerpt|truncatewords:25 }}{% endif %}{% endblock %}
 {% block og_type %}article{% endblock %}
 {% block og_image %}{% if post.featured_image %}<meta property="og:image" content="{{ post.featured_image.url }}">{% elif post.featured_image_url %}<meta property="og:image" content="{{ post.featured_image_url }}">{% endif %}{% endblock %}
+{% block twitter_image %}{% if post.featured_image %}<meta name="twitter:image" content="{{ post.featured_image.url }}">{% elif post.featured_image_url %}<meta name="twitter:image" content="{{ post.featured_image_url }}">{% endif %}{% endblock %}
 
 {% block structured_data %}
 <script type="application/ld+json">

@@ -2,6 +2,26 @@
 {% load static i18n i18n_fields %}
 
 {% block title %}{% trans "Tours" %} — {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}{% trans "Browse our full collection of group tour packages across Asia and Europe. Japan, China, Korea, Turkey, Egypt and more — from Thailand's trusted travel agency Smile Memory." %}{% endblock %}
+{% block og_title %}{% trans "Tour Packages" %} — {{ SITE_NAME }}{% endblock %}
+{% block og_description %}{% trans "Discover handpicked group tours across Asia and Europe. Expert-curated itineraries, quality hotels, and great value from Smile Memory." %}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "{% trans 'Tour Packages' %} — Smile Memory",
+  "description": "{% trans 'Browse our full collection of group tour packages across Asia and Europe.' %}",
+  "url": "{{ request.build_absolute_uri }}",
+  "provider": {
+    "@type": "TravelAgency",
+    "name": "Smile Memory",
+    "url": "https://smilememorytravel.com"
+  }
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="min-h-screen">

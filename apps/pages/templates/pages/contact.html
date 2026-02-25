@@ -3,6 +3,32 @@
 
 {% block title %}{% trans "Contact Us" %} — Smile Memory{% endblock %}
 {% block meta_description %}{% trans "Contact Smile Memory travel agency. Reach us via LINE, phone, email, or our contact form." %}{% endblock %}
+{% block og_title %}{% trans "Contact Us" %} — Smile Memory{% endblock %}
+{% block og_description %}{% trans "Get in touch with Smile Memory. Reach us via LINE, phone, email, or fill out our contact form." %}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": "{% trans 'Contact Smile Memory' %}",
+  "url": "{{ request.build_absolute_uri }}",
+  "mainEntity": {
+    "@type": "TravelAgency",
+    "name": "Smile Memory",
+    "url": "https://smilememorytravel.com",
+    "address": {"@type": "PostalAddress", "addressCountry": "TH"},
+    {% if site_config and site_config.phone_number %}"telephone": "{{ site_config.phone_number }}",{% endif %}
+    {% if site_config and site_config.admin_email %}"email": "{{ site_config.admin_email }}",{% endif %}
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "availableLanguage": ["Thai", "English"]
+    }
+  }
+}
+</script>
+{% endblock %}
 
 {% block content %}
 

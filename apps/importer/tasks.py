@@ -39,3 +39,29 @@ def sync_all_tours(sources=None):
 
     logger.info("Tour sync complete: %s", results)
     return results
+
+
+@shared_task(name="importer.validate_scrapers")
+def validate_scrapers(source=None, sample=5):
+    """Validate scraped data against live wholesaler sources.
+
+    Runs validate_scrapers management command inside the Celery worker
+    so it has access to the production database.
+
+    Args:
+        source: single source name to validate, or None for all
+        sample: number of tours to sample per source (default: 5)
+    """
+    logger.info(
+        "Starting scraper validation — source=%s sample=%d", source or "all", sample
+    )
+    try:
+        kwargs = {"sample": sample}
+        if source:
+            kwargs["source"] = source
+        call_command("validate_scrapers", **kwargs)
+        logger.info("Scraper validation complete")
+        return {"status": "ok"}
+    except Exception as e:
+        logger.exception("Scraper validation failed: %s", e)
+        return {"status": "error", "error": str(e)}

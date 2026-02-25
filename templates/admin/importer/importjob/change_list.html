@@ -4,6 +4,50 @@
 {% block object-tools-items %}
   {{ block.super }}
 
+  {# ── Validate Data ── #}
+  <li style="position:relative; margin-right:6px;">
+    <details style="display:inline-block;">
+      <summary class="addlink" style="cursor:pointer; padding:4px 10px; background:#2563eb; color:#fff; border-radius:4px; font-size:13px; list-style:none;">
+        ✅ Validate Data
+      </summary>
+      <div style="position:absolute; right:0; z-index:9999; background:#fff; border:1px solid #ccc; border-radius:6px; padding:12px; width:280px; box-shadow:0 4px 12px rgba(0,0,0,.15); margin-top:4px;">
+        <p style="margin:0 0 10px; font-weight:600; font-size:13px; color:#333;">🔍 Compare DB vs Live</p>
+        <p style="margin:0 0 10px; font-size:12px; color:#666;">Samples 10 tours per source, re-fetches live data, compares title/price/duration. Results in worker logs.</p>
+        <form method="post" action="{% url 'admin:importer_run_validate' 'all' %}" style="margin-bottom:6px;">
+          {% csrf_token %}
+          <button type="submit" style="width:100%; padding:7px 12px; background:#2563eb; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:13px; font-weight:600;">
+            ✅ All sources
+          </button>
+        </form>
+        <form method="post" action="{% url 'admin:importer_run_validate' 'zego' %}" style="margin-bottom:6px;">
+          {% csrf_token %}
+          <button type="submit" style="width:100%; padding:6px 12px; background:#f0f0f0; color:#333; border:1px solid #ccc; border-radius:4px; cursor:pointer; font-size:12px;">
+            Zego only
+          </button>
+        </form>
+        <form method="post" action="{% url 'admin:importer_run_validate' 'go365' %}" style="margin-bottom:6px;">
+          {% csrf_token %}
+          <button type="submit" style="width:100%; padding:6px 12px; background:#f0f0f0; color:#333; border:1px solid #ccc; border-radius:4px; cursor:pointer; font-size:12px;">
+            Go365 only
+          </button>
+        </form>
+        <form method="post" action="{% url 'admin:importer_run_validate' 'realjourney' %}" style="margin-bottom:6px;">
+          {% csrf_token %}
+          <button type="submit" style="width:100%; padding:6px 12px; background:#f0f0f0; color:#333; border:1px solid #ccc; border-radius:4px; cursor:pointer; font-size:12px;">
+            RealJourney only
+          </button>
+        </form>
+        <form method="post" action="{% url 'admin:importer_run_validate' 'gs25' %}">
+          {% csrf_token %}
+          <button type="submit" style="width:100%; padding:6px 12px; background:#f0f0f0; color:#333; border:1px solid #ccc; border-radius:4px; cursor:pointer; font-size:12px;">
+            GS25 only
+          </button>
+        </form>
+      </div>
+    </details>
+  </li>
+
+  {# ── Sync from API ── #}
   <li style="position:relative;">
     <details style="display:inline-block;">
       <summary class="addlink" style="cursor:pointer; padding:4px 10px; background:#6B4F54; color:#fff; border-radius:4px; font-size:13px; list-style:none;">

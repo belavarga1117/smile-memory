@@ -15,12 +15,17 @@ SOURCES = [
 
 
 @shared_task(name="importer.sync_all_tours")
-def sync_all_tours():
-    """Run all tour scrapers sequentially. Scheduled daily at 15:00 ICT."""
-    logger.info("Starting daily tour sync for all sources")
+def sync_all_tours(sources=None):
+    """Run tour scrapers sequentially. Scheduled twice daily.
+
+    Args:
+        sources: list of source names to sync (default: all sources)
+    """
+    targets = [s for s in SOURCES if sources is None or s["source"] in sources]
+    logger.info("Starting tour sync for sources: %s", [s["source"] for s in targets])
     results = {}
 
-    for src in SOURCES:
+    for src in targets:
         source_name = src["source"]
         try:
             logger.info("Syncing %s...", source_name)
@@ -31,5 +36,5 @@ def sync_all_tours():
             results[source_name] = f"error: {e}"
             logger.exception("Failed to sync %s", source_name)
 
-    logger.info("Daily tour sync complete: %s", results)
+    logger.info("Tour sync complete: %s", results)
     return results

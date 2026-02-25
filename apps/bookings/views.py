@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
+from django.utils.translation import get_language
 from django.views import View
 
 from apps.core.spam_protection import check_rate_limit, rate_limit_response
@@ -25,6 +26,7 @@ class InquiryCreateView(View):
         if form.is_valid():
             inquiry = form.save(commit=False)
             inquiry.tour = tour
+            inquiry.language = get_language() or "th"
 
             # Link departure if specified
             departure_id = request.POST.get("departure_id")

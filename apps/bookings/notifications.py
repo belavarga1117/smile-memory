@@ -46,66 +46,85 @@ def _dispatch(subject, message, recipient_list, html_message):
     t.start()
 
 
+def _lang(inquiry):
+    """Return 'th' or 'en' from inquiry, defaulting to 'th'."""
+    return getattr(inquiry, "language", "th") or "th"
+
+
 def send_inquiry_thank_you(inquiry):
-    """Send thank-you email to customer after inquiry submission."""
-    subject = f"Thank you for your inquiry — {inquiry.reference_number}"
+    """Send thank-you email — language matches customer's browsing language."""
+    lang = _lang(inquiry)
+    subject = (
+        f"ขอบคุณที่สอบถาม — {inquiry.reference_number}"
+        if lang == "th"
+        else f"Thank you for your inquiry — {inquiry.reference_number}"
+    )
     html_message = render_to_string(
-        "emails/inquiry_thank_you.html",
+        f"emails/inquiry_thank_you_{lang}.html",
         {"inquiry": inquiry, "site_name": settings.SITE_NAME},
     )
-    _dispatch(
-        subject=subject,
-        message=f"Thank you for your inquiry ({inquiry.reference_number}). "
-        f"We will review your request and get back to you within 24 hours.",
-        recipient_list=[inquiry.contact_email],
-        html_message=html_message,
+    plain = (
+        f"ขอบคุณ ({inquiry.reference_number}). เราจะติดต่อกลับภายใน 24 ชั่วโมง"
+        if lang == "th"
+        else f"Thank you for your inquiry ({inquiry.reference_number}). We will get back to you within 24 hours."
     )
+    _dispatch(subject, plain, [inquiry.contact_email], html_message)
 
 
 def send_inquiry_notification_to_admin(inquiry):
-    """Notify admin about new inquiry."""
-    subject = f"New Inquiry: {inquiry.reference_number} — {inquiry.contact_name}"
+    """Notify admin — always in Thai (admin is Thai-speaking)."""
+    subject = f"[Inquiry ใหม่] {inquiry.reference_number} — {inquiry.contact_name}"
+    admin_url = (
+        f"{settings.SITE_URL}/admin/bookings/inquiry/{inquiry.pk}/change/"
+        if hasattr(settings, "SITE_URL")
+        else f"https://web-production-86e1f.up.railway.app/admin/bookings/inquiry/{inquiry.pk}/change/"
+    )
     html_message = render_to_string(
         "emails/inquiry_admin_notification.html",
-        {"inquiry": inquiry, "site_name": settings.SITE_NAME},
+        {"inquiry": inquiry, "site_name": settings.SITE_NAME, "admin_url": admin_url},
     )
-    _dispatch(
-        subject=subject,
-        message=f"New inquiry {inquiry.reference_number} from {inquiry.contact_name} "
-        f"for {inquiry.tour.title if inquiry.tour else 'N/A'}. "
-        f"Check admin panel for details.",
-        recipient_list=[settings.ADMIN_EMAIL],
-        html_message=html_message,
+    plain = (
+        f"Inquiry ใหม่ {inquiry.reference_number} จาก {inquiry.contact_name} "
+        f"({inquiry.contact_email}) สำหรับ {inquiry.tour.title if inquiry.tour else 'N/A'}."
     )
+    _dispatch(subject, plain, [settings.ADMIN_EMAIL], html_message)
 
 
 def send_booking_confirmation(inquiry):
-    """Send booking confirmation email after admin approves."""
-    subject = f"Booking Confirmed — {inquiry.reference_number}"
+    """Send booking confirmation — language matches inquiry language."""
+    lang = _lang(inquiry)
+    subject = (
+        f"ยืนยันการจองแล้ว — {inquiry.reference_number}"
+        if lang == "th"
+        else f"Booking Confirmed — {inquiry.reference_number}"
+    )
     html_message = render_to_string(
-        "emails/booking_confirmed.html",
+        f"emails/booking_confirmed_{lang}.html",
         {"inquiry": inquiry, "site_name": settings.SITE_NAME},
     )
-    _dispatch(
-        subject=subject,
-        message=f"Your booking ({inquiry.reference_number}) has been confirmed! "
-        f"Please check the details in the email.",
-        recipient_list=[inquiry.contact_email],
-        html_message=html_message,
+    plain = (
+        f"การจองของท่านได้รับการยืนยันแล้ว ({inquiry.reference_number})."
+        if lang == "th"
+        else f"Your booking ({inquiry.reference_number}) has been confirmed!"
     )
+    _dispatch(subject, plain, [inquiry.contact_email], html_message)
 
 
 def send_booking_rejection(inquiry, reason=""):
-    """Send rejection/unavailability email."""
-    subject = f"Update on your inquiry — {inquiry.reference_number}"
+    """Send rejection email — language matches inquiry language."""
+    lang = _lang(inquiry)
+    subject = (
+        f"อัปเดตการสอบถาม — {inquiry.reference_number}"
+        if lang == "th"
+        else f"Update on your inquiry — {inquiry.reference_number}"
+    )
     html_message = render_to_string(
-        "emails/booking_rejected.html",
+        f"emails/booking_rejected_{lang}.html",
         {"inquiry": inquiry, "reason": reason, "site_name": settings.SITE_NAME},
     )
-    _dispatch(
-        subject=subject,
-        message=f"We're sorry, but your inquiry ({inquiry.reference_number}) "
-        f"could not be confirmed at this time.",
-        recipient_list=[inquiry.contact_email],
-        html_message=html_message,
+    plain = (
+        f"ขออภัย ไม่สามารถยืนยันการจองได้ ({inquiry.reference_number})."
+        if lang == "th"
+        else f"We could not confirm your booking ({inquiry.reference_number})."
     )
+    _dispatch(subject, plain, [inquiry.contact_email], html_message)

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="margin:0; padding:0; font-family:'Noto Sans Thai',Arial,sans-serif; background:#f8fafc;">
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; margin:0 auto; background:#ffffff;">
+    <tr>
+        <td style="background:#6E5A52; padding:24px 32px; text-align:center;">
+            <h1 style="color:#ffffff; margin:0; font-size:24px;">{{ site_name }}</h1>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding:32px;">
+            <h2 style="color:#1e293b; margin:0 0 16px;">ขอบคุณที่สอบถามข้อมูล!</h2>
+            <p style="color:#475569; line-height:1.8; margin:0 0 16px;">เรียน คุณ{{ inquiry.contact_name }},</p>
+            <p style="color:#475569; line-height:1.8; margin:0 0 24px;">
+                เราได้รับข้อมูลการสอบถามของท่านแล้ว ทีมงานจะตรวจสอบและติดต่อกลับภายใน 24 ชั่วโมง
+            </p>
+            <table width="100%" cellpadding="8" cellspacing="0" style="background:#f1f5f9; border-radius:8px; margin:0 0 24px;">
+                <tr>
+                    <td style="color:#64748b; font-size:13px; width:40%;">รหัสอ้างอิง</td>
+                    <td style="color:#1e293b; font-weight:600; font-family:monospace;">{{ inquiry.reference_number }}</td>
+                </tr>
+                {% if inquiry.tour %}
+                <tr>
+                    <td style="color:#64748b; font-size:13px;">ทัวร์</td>
+                    <td style="color:#1e293b;">{{ inquiry.tour.title_th|default:inquiry.tour.title }}</td>
+                </tr>
+                {% endif %}
+                {% if inquiry.departure %}
+                <tr>
+                    <td style="color:#64748b; font-size:13px;">วันเดินทาง</td>
+                    <td style="color:#1e293b;">{{ inquiry.departure.departure_date|date:"d M Y" }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td style="color:#64748b; font-size:13px;">จำนวนผู้เดินทาง</td>
+                    <td style="color:#1e293b;">
+                        {{ inquiry.num_adults }} ผู้ใหญ่{% if inquiry.num_children %}, {{ inquiry.num_children }} เด็ก{% endif %}{% if inquiry.num_infants %}, {{ inquiry.num_infants }} ทารก{% endif %}
+                    </td>
+                </tr>
+            </table>
+            <p style="color:#475569; line-height:1.8; margin:0 0 8px;"><strong>ขั้นตอนต่อไป</strong></p>
+            <ol style="color:#475569; line-height:2; margin:0 0 24px; padding-left:20px;">
+                <li>ทีมงานตรวจสอบข้อมูลการสอบถาม</li>
+                <li>ยืนยันที่นั่งและราคา</li>
+                <li>ส่งยืนยันการจองพร้อมข้อมูลการชำระเงิน</li>
+            </ol>
+            <p style="color:#475569; line-height:1.8; margin:0;">
+                หากมีข้อสงสัยเร่งด่วน กรุณาติดต่อทาง LINE หรือโทรศัพท์
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td style="background:#f1f5f9; padding:20px 32px; text-align:center;">
+            <p style="color:#94a3b8; font-size:12px; margin:0;">&copy; {{ site_name }}. สงวนลิขสิทธิ์.</p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

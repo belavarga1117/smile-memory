@@ -165,6 +165,7 @@ class TestInquiryEmails:
         inquiry = InquiryFactory(
             contact_email="confirm@test.com",
             status=Inquiry.Status.CONFIRMED,
+            language="en",
         )
         send_booking_confirmation(inquiry)
 

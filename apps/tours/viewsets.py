@@ -18,7 +18,6 @@ class TourFilter(filters.FilterSet):
     min_price = filters.NumberFilter(field_name="price_from", lookup_expr="gte")
     max_price = filters.NumberFilter(field_name="price_from", lookup_expr="lte")
     max_duration = filters.NumberFilter(field_name="duration_days", lookup_expr="lte")
-    source = filters.CharFilter(field_name="source")
 
     class Meta:
         model = Tour
@@ -28,14 +27,13 @@ class TourFilter(filters.FilterSet):
             "min_price",
             "max_price",
             "max_duration",
-            "source",
         ]
 
 
 class TourViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
     filterset_class = TourFilter
-    search_fields = ["title", "title_th", "description", "product_code"]
+    search_fields = ["title", "title_th", "description"]
     ordering_fields = ["price_from", "created_at", "duration_days"]
     ordering = ["-is_featured", "-created_at"]
 

@@ -166,7 +166,7 @@
 
             <a href="{% url 'tours:list' %}"
                class="group relative rounded-xl overflow-hidden aspect-[4/3] block">
-                <img src="/media/destinations/all-tours.jpg" alt="{% trans 'All Tours' %}"
+                <img src="{% static 'media/destinations/all-tours.jpg' %}" alt="{% trans 'All Tours' %}"
                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy">
                 <div class="absolute inset-0 bg-gradient-to-t from-brand-text/70 to-transparent"></div>
                 <div class="absolute bottom-0 left-0 right-0 p-4">

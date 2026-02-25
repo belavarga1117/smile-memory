@@ -378,7 +378,9 @@ class Command(BaseCommand):
                     source_url=data.get("source_url", ""),
                     external_id=data.get("external_id", ""),
                     last_synced_at=timezone.now(),
-                    status=Tour.Status.PUBLISHED if (publish and data.get("pdf_url")) else Tour.Status.DRAFT,
+                    status=Tour.Status.PUBLISHED
+                    if (publish and data.get("pdf_url"))
+                    else Tour.Status.DRAFT,
                 )
                 # Zego-specific fields
                 if locations is not None:

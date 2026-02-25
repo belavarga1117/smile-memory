@@ -4,15 +4,16 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('importer', '0003_cleanup_stuck_importjobs'),
+        ("importer", "0003_cleanup_stuck_importjobs"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='importjob',
-            name='uploaded_file',
-            field=models.FileField(blank=True, max_length=500, upload_to='imports/%Y/%m/'),
+            model_name="importjob",
+            name="uploaded_file",
+            field=models.FileField(
+                blank=True, max_length=500, upload_to="imports/%Y/%m/"
+            ),
         ),
     ]

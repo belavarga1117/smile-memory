@@ -241,7 +241,7 @@ class ZegoScraper(BaseScraper):
     #  Tour parsing (from raw API data)
     # ------------------------------------------------------------------ #
 
-    def scrape_tour(self, url: str) -> dict | None:
+    def scrape_tour(self, url: str) -> dict | None:  # noqa: ARG002
         """Parse tour from raw API rows (pre-fetched by discover_tours).
 
         Unlike Go365/RealJourney, Zego data is already structured JSON.
@@ -268,7 +268,8 @@ class ZegoScraper(BaseScraper):
         # Program info
         product_code = first.get("programtour_code", "")
         title = first.get("programtour_name", "")
-        full_title = first.get("Tour_Name", title)
+        # Tour_Name from Zego API may start with leading ': ' (internal portal convention)
+        full_title = first.get("Tour_Name", title).lstrip(": ").strip() or title
         country = first.get("Country_EN", "")
 
         # Duration
@@ -437,17 +438,20 @@ class ZegoScraper(BaseScraper):
             lunch = self._parse_meal_icon(day.get("pgt_midday", ""))
             dinner = self._parse_meal_icon(day.get("pgt_evening", ""))
 
-            # Meal descriptions
-            breakfast_desc = day.get("pgt_morning_des", "")
-            lunch_desc = day.get("pgt_midday_des", "")
-            dinner_desc = day.get("pgt_evening_des", "")
+            # Meal descriptions — strip any embedded HTML before storing
+            breakfast_desc = self._html_to_text(day.get("pgt_morning_des", ""))
+            lunch_desc = self._html_to_text(day.get("pgt_midday_des", ""))
+            dinner_desc = self._html_to_text(day.get("pgt_evening_des", ""))
 
-            # Hotel
+            # Hotel — API may embed Font Awesome star icons as HTML in the name
             hotel = day.get("pgt_hotel", "")
             equivalent = day.get("pgt_equivalent", "")
             hotel_name = hotel
             if equivalent:
                 hotel_name = f"{hotel} ({equivalent})"
+            hotel_name = self._html_to_text(
+                hotel_name
+            )  # strip <i class='fas fa-star'> etc.
 
             itinerary.append(
                 {
@@ -545,12 +549,46 @@ class ZegoScraper(BaseScraper):
         re.compile(r"py\s+text\b", re.IGNORECASE),
     ]
 
+    # Font Awesome icon class → Unicode replacement.
+    # Applied before HTML stripping so meaningful icons are preserved as text.
+    # Order matters: more specific patterns must come before general ones.
+    _FA_ICON_REPLACEMENTS = [
+        ("fa-star-half", "✭"),  # half star (before fa-star to match first)
+        ("fa-star", "★"),  # full star (hotel ratings)
+        ("fa-circle", "●"),  # filled circle (bullet indicators)
+    ]
+
+    # Pattern matching <i class='...'></i> or <i class="..."></i>
+    _FA_ICON_RE = re.compile(r"<i\s+class=['\"]([^'\"]+)['\"]>\s*</i>")
+
+    def _convert_fa_icons(self, html: str) -> str:
+        """Replace Font Awesome icon elements with Unicode equivalents.
+
+        E.g. <i class='fas fa-star'></i> → ★
+        Unknown icons are removed (replaced with empty string).
+        """
+
+        def _replace(m: re.Match) -> str:
+            class_str = m.group(1)
+            for fa_class, char in self._FA_ICON_REPLACEMENTS:
+                if fa_class in class_str:
+                    return char
+            return ""  # unknown icon — strip it
+
+        return self._FA_ICON_RE.sub(_replace, html)
+
     def _html_to_text(self, html: str) -> str:
-        """Strip HTML tags, decode entities, and remove Zego portal junk."""
+        """Strip HTML tags, decode entities, and remove Zego portal junk.
+
+        Known Font Awesome icons are converted to Unicode before stripping
+        so meaningful symbols (★ stars) are preserved as plain text.
+        """
         if not html:
             return ""
+        # Convert Font Awesome icons to Unicode before stripping HTML
+        text = self._convert_fa_icons(html)
         # Pass 1: handle raw HTML — br→newline, strip tags
-        text = re.sub(r"<br\s*/?>", "\n", html)
+        text = re.sub(r"<br\s*/?>", "\n", text)
         # Use strict tag pattern (requires letter after <) so decoded
         # entities like < > are never misidentified as tags
         tag_re = re.compile(r"</?[a-zA-Z][^>]*>")

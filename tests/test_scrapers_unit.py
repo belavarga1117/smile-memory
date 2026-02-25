@@ -161,3 +161,56 @@ class TestRealJourneyScraperHelpers:
     def test_thai_country_to_english_korea(self):
         s = self._scraper()
         assert s._thai_country_to_english("เกาหลี") == "South Korea"
+
+
+class TestZegoScraperHtmlCleaner:
+    """Unit tests for ZegoScraper HTML cleaning and FA icon conversion."""
+
+    def _scraper(self):
+        from apps.importer.scrapers.zego import ZegoScraper
+
+        return ZegoScraper.__new__(ZegoScraper)
+
+    def test_html_to_text_strips_basic_tags(self):
+        s = self._scraper()
+        assert s._html_to_text("<p>Hello World</p>") == "Hello World"
+
+    def test_html_to_text_strips_br_to_newline(self):
+        s = self._scraper()
+        result = s._html_to_text("Line1<br/>Line2")
+        assert "Line1" in result
+        assert "Line2" in result
+
+    def test_html_to_text_empty_returns_empty(self):
+        s = self._scraper()
+        assert s._html_to_text("") == ""
+        assert s._html_to_text(None) == ""
+
+    def test_convert_fa_star_icon_to_unicode(self):
+        s = self._scraper()
+        html = "HOTEL (<i class='fas fa-star'></i><i class='fas fa-star'></i>)"
+        result = s._html_to_text(html)
+        assert "★★" in result
+        assert "<i" not in result
+        assert "HOTEL" in result
+
+    def test_convert_fa_star_double_quote(self):
+        s = self._scraper()
+        html = 'HOTEL <i class="fas fa-star"></i>'
+        result = s._html_to_text(html)
+        assert "★" in result
+
+    def test_unknown_fa_icon_is_removed(self):
+        s = self._scraper()
+        html = "Text <i class='fas fa-airplane'></i> more"
+        result = s._html_to_text(html)
+        assert "<i" not in result
+        assert "Text" in result
+        assert "more" in result
+
+    def test_html_to_text_strips_zego_junk(self):
+        s = self._scraper()
+        html = "Good content × ส่งโปรแกรมทัวร์ Email ผู้รับ Close Send"
+        result = s._html_to_text(html)
+        assert "Good content" in result
+        assert "ส่งโปรแกรมทัวร์" not in result

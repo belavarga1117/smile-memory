@@ -7,7 +7,7 @@ WORKDIR /app
 
 # Install system dependencies (including Node.js for Tailwind CSS build)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential libpq-dev curl && \
+    build-essential libpq-dev libcairo2-dev pkg-config curl && \
     curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/*

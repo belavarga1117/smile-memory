@@ -5,6 +5,35 @@ All notable changes to **Smile Memory** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-02-25
+
+### Added
+- **Production deployment on Railway** — live at `web-production-86e1f.up.railway.app`
+- Production logging to stdout (`LOGGING` config in production.py)
+- nixpacks.toml for Railway build (Python provider + libcairo2-dev)
+- Root requirements.txt for nixpacks Python detection
+- Seed data images committed as static files (`static/media/`) for ephemeral filesystem compatibility
+
+### Changed
+- Static files storage: `CompressedStaticFilesStorage` (avoids CSS @import resolution errors)
+- `STORAGES` dict includes both `default` and `staticfiles` backends (Django 5.1 requirement)
+- `railway.toml`: migrate in startCommand (DB unavailable at build time), collectstatic in buildCommand
+- `thumbnail` template tag: falls back to `static/media/` when media file doesn't exist
+- About page + "All Tours" images use `{% static %}` tag instead of `/media/` paths
+- Tailwind CSS output.css committed to repo (no Node.js needed in production)
+- Dockerfile renamed to Dockerfile.local (Railway uses nixpacks)
+
+### Fixed
+- `InvalidStorageError` on pages with ImageFields (missing `default` key in STORAGES)
+- `MissingFileError` during collectstatic (`@import "tailwindcss"` resolution)
+- Database connection error during build (postgres.railway.internal only resolves at runtime)
+- Seed images not loading on Railway (ephemeral media/ filesystem)
+
+### Infrastructure
+- Railway: perpetual-vibrancy project, PostgreSQL + web service
+- 6132 objects loaded into production DB (536 tours + all related data)
+- Scraper API verified: Go365 (275 OK), RealJourney (23 OK), zero duplicates
+
 ## [1.4.0] - 2026-02-25
 
 ### Added
@@ -126,6 +155,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions CI: ruff lint + pytest
 - Seed data command: 8 airlines, 10 destinations, 7 categories, 10 tours
 
+[1.5.0]: https://github.com/belavarga1117/smile-memory/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/belavarga1117/smile-memory/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/belavarga1117/smile-memory/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/belavarga1117/smile-memory/compare/v1.1.0...v1.2.0

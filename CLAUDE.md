@@ -15,10 +15,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Database**: SQLite (dev) / PostgreSQL 16 (prod)
 - **Task Queue**: Celery + Redis
 - **Search**: PostgreSQL Full-Text Search
-- **Hosting**: Railway (git push = deploy)
-- **Static Files**: WhiteNoise (prod)
+- **Hosting**: Railway (nixpacks, git push = auto-deploy)
+- **Static Files**: WhiteNoise `CompressedStaticFilesStorage` (prod)
 - **Email**: SendGrid (transactional + marketing)
 - **CI/CD**: GitHub Actions
+- **Production URL**: https://web-production-86e1f.up.railway.app
 
 ## Common Commands
 
@@ -107,7 +108,9 @@ travel-agency/
 │   └── emails/                # Email templates
 ├── static/
 │   ├── src/input.css          # Tailwind v4 entry point
-│   └── css/output.css         # Compiled (gitignored)
+│   ├── css/output.css         # Compiled (committed for prod)
+│   ├── images/                # Static images (about-team.jpg)
+│   └── media/                 # Seed data images (heroes, testimonials, destinations, blog)
 ├── tests/                      # Integration + cross-app tests (factory-boy)
 │   ├── factories.py           # 25 factory-boy factories
 │   ├── conftest → root conftest.py (shared fixtures)
@@ -117,8 +120,10 @@ travel-agency/
 ├── locale/{th,en}/            # Translation .po files
 ├── requirements/{base,dev,prod}.txt
 ├── docker-compose.yml         # PostgreSQL + Redis (when Docker available)
+├── nixpacks.toml              # Nixpacks build config (Python + libcairo2-dev)
 ├── Procfile                   # Railway process definitions
-└── railway.toml               # Railway build config
+├── railway.toml               # Railway deploy config (build + start commands)
+└── Dockerfile.local           # Local Docker build (not used by Railway)
 ```
 
 ## Architecture
@@ -189,9 +194,20 @@ Pipeline: `Trigger → Parser → Field Mapper → Validator → Upsert Tour →
 ## Settings
 
 - Dev settings: `config.settings.development` (SQLite, console email, DEBUG=True)
-- Prod settings: `config.settings.production` (PostgreSQL, SendGrid, WhiteNoise, Sentry)
+- Prod settings: `config.settings.production` (PostgreSQL, SendGrid, WhiteNoise, Sentry, logging to stdout)
 - Settings module controlled by `DJANGO_SETTINGS_MODULE` env var
 - All secrets in `.env` file (never committed)
+
+## Deployment (Railway)
+
+- **Project**: perpetual-vibrancy | **Service**: web | **DB**: PostgreSQL
+- **Builder**: nixpacks (Python provider) — auto-deploy on git push to main
+- **Build**: `collectstatic` | **Start**: `migrate && gunicorn`
+- **Static**: WhiteNoise serves from `staticfiles/`, seed images in `static/media/`
+- **Media**: Ephemeral filesystem — seed images committed as static, tour images are external URLs
+- **Admin**: https://web-production-86e1f.up.railway.app/admin/ (admin / SmileMemory2026!)
+- **Railway CLI**: `railway logs`, `railway variables`, `railway status`
+- **Key env vars**: DJANGO_SETTINGS_MODULE, SECRET_KEY, DATABASE_URL, ALLOWED_HOSTS, PIP_ONLY_BINARY=pycairo
 
 ## Conventions
 
@@ -201,6 +217,8 @@ Pipeline: `Trigger → Parser → Field Mapper → Validator → Upsert Tour →
 - Custom User model: `apps.accounts.User` (`AUTH_USER_MODEL = "accounts.User"`)
 - Template partials prefixed with underscore: `_tour_card.html`, `_navbar.html`
 - Admin credentials (dev): username=`admin`, password=`admin123`
+- Admin credentials (prod): username=`admin`, password=`SmileMemory2026!`
+- Seed images served from `static/media/` via `thumbnail` tag fallback (ephemeral media/ on Railway)
 
 ## Development Workflow
 

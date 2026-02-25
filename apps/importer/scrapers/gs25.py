@@ -226,8 +226,27 @@ class GS25Scraper(BaseScraper):
                     # Follow pagination for this category
                     results.extend(self._paginate(soup, seen_urls))
                 else:
-                    logger.debug(
-                        "No tour links at %s%s — trying next path", self.base_url, path
+                    # Debug: log raw page structure to diagnose AJAX vs static HTML
+                    all_anchors = soup.find_all("a", href=True)
+                    sample_hrefs = [a["href"] for a in all_anchors[:30]]
+                    page_text_preview = soup.get_text(separator=" ", strip=True)[:500]
+                    raw_html_preview = str(soup)[:2000]
+                    logger.warning(
+                        "No tour links at %s%s. "
+                        "Total <a> tags: %d. "
+                        "Sample hrefs: %s. "
+                        "Page text preview: %s",
+                        self.base_url,
+                        path,
+                        len(all_anchors),
+                        sample_hrefs,
+                        page_text_preview,
+                    )
+                    logger.warning(
+                        "Raw HTML preview (%s%s): %s",
+                        self.base_url,
+                        path,
+                        raw_html_preview,
                     )
             except Exception as e:
                 logger.warning(

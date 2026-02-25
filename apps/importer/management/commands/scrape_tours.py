@@ -203,6 +203,9 @@ class Command(BaseCommand):
                     self._log(job, i, "warning", f"No data parsed: {url}")
                     continue
 
+                # Sanitize all text fields (HTML strip + junk removal)
+                data = self._sanitize_tour_data(data, scraper)
+
                 if dry_run:
                     self._print_tour_data(data)
                     stats["created"] += 1
@@ -259,6 +262,38 @@ class Command(BaseCommand):
             self.stdout.write(
                 self.style.WARNING("DRY RUN — no data was saved to the database.")
             )
+
+    def _sanitize_tour_data(self, data, scraper):
+        """Strip HTML and junk from all text fields before saving.
+
+        Applies _html_to_text() if the scraper has it (Zego),
+        otherwise does a lightweight strip on any HTML-looking content.
+        """
+        html_cleaner = getattr(scraper, "_html_to_text", None)
+
+        def clean(val):
+            if not val or not isinstance(val, str):
+                return val
+            if html_cleaner:
+                return html_cleaner(val)
+            # Lightweight fallback: strip obvious HTML tags
+            import re
+
+            cleaned = re.sub(r"<[^>]+>", "", val).strip()
+            return cleaned
+
+        # Text fields that may contain HTML/junk
+        for field in ("highlight", "highlight_th", "description", "description_th"):
+            if data.get(field):
+                data[field] = clean(data[field])
+
+        # Clean itinerary day descriptions
+        for day in data.get("_itinerary", []):
+            for field in ("description", "description_th"):
+                if day.get(field):
+                    day[field] = clean(day[field])
+
+        return data
 
     def _upsert_tour(self, data, publish=False):
         """Create or update a Tour from scraped data."""
@@ -522,16 +557,27 @@ class Command(BaseCommand):
                 logger.warning("Failed to create departure %s: %s", dep_date, e)
 
     def _upsert_images(self, tour, image_urls):
-        """Create TourImage records for new images."""
-        existing = set(tour.images.values_list("image_url", flat=True))
+        """Sync TourImage records: add new, remove stale, update sort order."""
+        new_urls = [u for u in image_urls if u]  # filter empty
+        new_set = set(new_urls)
+        existing = dict(tour.images.values_list("image_url", "id"))
 
-        for i, url in enumerate(image_urls):
+        # Remove images no longer in the import
+        stale_ids = [pk for url, pk in existing.items() if url not in new_set]
+        if stale_ids:
+            tour.images.filter(id__in=stale_ids).delete()
+
+        # Add new images with correct sort order
+        for i, url in enumerate(new_urls):
             if url not in existing:
                 TourImage.objects.create(
                     tour=tour,
                     image_url=url,
                     sort_order=i,
                 )
+            else:
+                # Update sort_order if it changed
+                tour.images.filter(image_url=url).update(sort_order=i)
 
     def _print_tour_data(self, data):
         """Pretty-print tour data for dry run."""

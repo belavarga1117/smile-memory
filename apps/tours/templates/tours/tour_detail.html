@@ -160,9 +160,9 @@
                         {% for img in tour.images.all %}
                         <button @click="current = {{ forloop.counter0 }}; lightbox = true" class="aspect-[4/3] rounded-lg overflow-hidden cursor-zoom-in group">
                             {% if img.image %}
-                            <img src="{% thumbnail img.image 800 %}" alt="{{ img.caption }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                            <img src="{% thumbnail img.image 800 %}" alt="{{ img.caption }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" onerror="this.closest('button').style.display='none'">
                             {% elif img.image_url %}
-                            <img src="{{ img.image_url }}" alt="{{ img.caption }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                            <img src="{{ img.image_url }}" alt="{{ img.caption }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" onerror="this.closest('button').style.display='none'">
                             {% endif %}
                         </button>
                         {% endfor %}

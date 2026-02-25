@@ -20,13 +20,16 @@ class HomePageView(TemplateView):
         )
         ctx["featured_tours"] = (
             Tour.objects.filter(status=Tour.Status.PUBLISHED, is_featured=True)
+            .exclude(pdf_url="")
             .filter(Exists(has_available))
             .select_related("airline")
             .prefetch_related("destinations")[:6]
         )
 
         # Destinations ordered by published tour count, top 7 + "Others"
-        published_filter = Q(tours__status=Tour.Status.PUBLISHED)
+        published_filter = Q(tours__status=Tour.Status.PUBLISHED) & ~Q(
+            tours__pdf_url=""
+        )
         all_dests = (
             Destination.objects.filter(parent__isnull=True)
             .annotate(tour_count=Count("tours", filter=published_filter))
@@ -37,6 +40,7 @@ class HomePageView(TemplateView):
         ctx["featured_destinations"] = top_destinations
         ctx["total_tour_count"] = (
             Tour.objects.filter(status=Tour.Status.PUBLISHED)
+            .exclude(pdf_url="")
             .filter(Exists(has_available))
             .count()
         )

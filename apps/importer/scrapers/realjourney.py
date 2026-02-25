@@ -114,6 +114,10 @@ class RealJourneyScraper(BaseScraper):
         product_code = product.get("product_code", "")
         product_slug = product.get("product_slug", "")
 
+        # Strip product code prefix from title (API returns "RJ-XJ107 ทัวร์..." format)
+        formatted_code = self._format_product_code(product_code)
+        title = self._strip_product_code(title, formatted_code)
+
         # Duration
         days = self._to_int(product.get("stay_day"))
         nights = self._to_int(product.get("stay_night"))
@@ -290,6 +294,18 @@ class RealJourneyScraper(BaseScraper):
         if code.startswith("RJ") and len(code) > 2:
             return f"RJ-{code[2:]}"
         return code
+
+    def _strip_product_code(self, title: str, product_code: str) -> str:
+        """Strip product code prefix from title.
+
+        The RealJourney API embeds the product code at the start of product_name,
+        e.g. "RJ-XJ107 ทัวร์ เรียล เรียล..." → "ทัวร์ เรียล เรียล..."
+        """
+        if not title:
+            return title
+        if product_code and title.startswith(product_code + " "):
+            return title[len(product_code) :].lstrip()
+        return title
 
     def _thai_country_to_english(self, thai_name: str) -> str:
         """Map Thai country names to English."""

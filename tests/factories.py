@@ -88,6 +88,7 @@ class TourFactory(factory.django.DjangoModelFactory):
     description_th = "รายละเอียดทัวร์ทดสอบ"
     short_description = "Short desc"
     status = Tour.Status.PUBLISHED
+    pdf_url = factory.Sequence(lambda n: f"https://example.com/tour-{n}.pdf")
     airline = factory.SubFactory(AirlineFactory)
     price_from = Decimal("29900.00")
     duration_days = 5

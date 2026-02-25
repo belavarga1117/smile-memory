@@ -235,7 +235,7 @@
                 </div>
                 {% endif %}
 
-                <!-- PDF download -->
+                <!-- PDF download — tour program from wholesaler or admin-uploaded -->
                 {% if tour.pdf_file or tour.pdf_url %}
                 <div class="mb-8">
                     <a href="{% if tour.pdf_file %}{{ tour.pdf_file.url }}{% else %}{{ tour.pdf_url }}{% endif %}"
@@ -297,7 +297,7 @@
                             <div class="flex items-center justify-between p-3 rounded-lg {% if dep.status == 'available' %}bg-green-50{% elif dep.status == 'waitlist' %}bg-yellow-50{% else %}bg-brand-bg{% endif %}">
                                 <div>
                                     <p class="text-sm font-medium text-brand-text">{{ dep.departure_date|date:"d M Y" }}</p>
-                                    <p class="text-xs text-brand-hint">{{ dep.seats_available }} {% trans "seats" %}</p>
+                                    {% if dep.seats_available is not None %}<p class="text-xs text-brand-hint">{{ dep.seats_available }} {% trans "seats" %}</p>{% endif %}
                                 </div>
                                 <div class="text-right">
                                     {% if dep.has_promo %}

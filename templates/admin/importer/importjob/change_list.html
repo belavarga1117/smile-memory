@@ -15,7 +15,7 @@
         <form method="post" action="{% url 'admin:importer_run_sync' 'all' %}" style="margin-bottom:6px;">
           {% csrf_token %}
           <button type="submit" style="width:100%; padding:7px 12px; background:#B25E68; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:13px; font-weight:600;">
-            🔄 All sources (Go365 + Zego + RealJourney)
+            🔄 All sources (Zego + Go365 + RealJourney + GS25)
           </button>
         </form>
         <form method="post" action="{% url 'admin:importer_run_sync' 'go365' %}" style="margin-bottom:6px;">
@@ -30,10 +30,16 @@
             Zego only
           </button>
         </form>
-        <form method="post" action="{% url 'admin:importer_run_sync' 'realjourney' %}">
+        <form method="post" action="{% url 'admin:importer_run_sync' 'realjourney' %}" style="margin-bottom:6px;">
           {% csrf_token %}
           <button type="submit" style="width:100%; padding:6px 12px; background:#f0f0f0; color:#333; border:1px solid #ccc; border-radius:4px; cursor:pointer; font-size:12px;">
             RealJourney only
+          </button>
+        </form>
+        <form method="post" action="{% url 'admin:importer_run_sync' 'gs25' %}">
+          {% csrf_token %}
+          <button type="submit" style="width:100%; padding:6px 12px; background:#f0f0f0; color:#333; border:1px solid #ccc; border-radius:4px; cursor:pointer; font-size:12px;">
+            GS25 only
           </button>
         </form>
       </div>

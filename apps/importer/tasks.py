@@ -11,6 +11,7 @@ SOURCES = [
     {"source": "zego"},
     {"source": "go365"},
     {"source": "realjourney"},
+    {"source": "gs25"},
 ]
 
 

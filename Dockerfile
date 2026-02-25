@@ -5,9 +5,11 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies (including Node.js for Tailwind CSS build)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential libpq-dev && \
+    build-essential libpq-dev curl && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
@@ -17,6 +19,9 @@ RUN pip install --no-cache-dir -r requirements/production.txt
 
 # Copy project
 COPY . .
+
+# Build Tailwind CSS
+RUN npm install && npm run css:build
 
 # Collect static files
 RUN python manage.py collectstatic --noinput 2>/dev/null || true

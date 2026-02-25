@@ -4,34 +4,34 @@
 <body style="margin:0; padding:0; font-family:'Noto Sans Thai',Arial,sans-serif; background:#f8fafc;">
 <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; margin:0 auto; background:#ffffff;">
     <tr>
-        <td style="background:#6E5A52; padding:20px 32px;">
+        <td style="background:#8B1346; padding:20px 32px;">
             <h1 style="color:#ffffff; margin:0; font-size:20px;">🔔 Inquiry ใหม่ / New Inquiry</h1>
         </td>
     </tr>
     <tr>
         <td style="padding:32px;">
-            <table width="100%" cellpadding="8" cellspacing="0" style="background:#fef3c7; border-radius:8px; margin:0 0 24px;">
+            <table width="100%" cellpadding="8" cellspacing="0" style="background:#FFF5F8; border-radius:8px; margin:0 0 24px;">
                 <tr>
-                    <td style="color:#92400e; font-size:13px; width:35%;">รหัสอ้างอิง / Reference</td>
+                    <td style="color:#7A385E; font-size:13px; width:35%;">รหัสอ้างอิง / Reference</td>
                     <td style="color:#1e293b; font-weight:600; font-family:monospace;">{{ inquiry.reference_number }}</td>
                 </tr>
                 <tr>
-                    <td style="color:#92400e; font-size:13px;">ลูกค้า / Customer</td>
+                    <td style="color:#7A385E; font-size:13px;">ลูกค้า / Customer</td>
                     <td style="color:#1e293b;">{{ inquiry.contact_name }}</td>
                 </tr>
                 <tr>
-                    <td style="color:#92400e; font-size:13px;">อีเมล / Email</td>
-                    <td style="color:#1e293b;"><a href="mailto:{{ inquiry.contact_email }}" style="color:#6E5A52;">{{ inquiry.contact_email }}</a></td>
+                    <td style="color:#7A385E; font-size:13px;">อีเมล / Email</td>
+                    <td style="color:#1e293b;"><a href="mailto:{{ inquiry.contact_email }}" style="color:#8B1346;">{{ inquiry.contact_email }}</a></td>
                 </tr>
                 {% if inquiry.contact_phone %}
                 <tr>
-                    <td style="color:#92400e; font-size:13px;">โทรศัพท์ / Phone</td>
+                    <td style="color:#7A385E; font-size:13px;">โทรศัพท์ / Phone</td>
                     <td style="color:#1e293b;">{{ inquiry.contact_phone }}</td>
                 </tr>
                 {% endif %}
                 {% if inquiry.tour %}
                 <tr>
-                    <td style="color:#92400e; font-size:13px;">ทัวร์ / Tour</td>
+                    <td style="color:#7A385E; font-size:13px;">ทัวร์ / Tour</td>
                     <td style="color:#1e293b;">
                         {% if inquiry.tour.title_th %}{{ inquiry.tour.title_th }}<br><span style="color:#64748b; font-size:12px;">{{ inquiry.tour.title }}</span>{% else %}{{ inquiry.tour.title }}{% endif %}
                     </td>
@@ -39,46 +39,46 @@
                 {% endif %}
                 {% if inquiry.departure %}
                 <tr>
-                    <td style="color:#92400e; font-size:13px;">วันเดินทาง / Departure</td>
+                    <td style="color:#7A385E; font-size:13px;">วันเดินทาง / Departure</td>
                     <td style="color:#1e293b;">{{ inquiry.departure.departure_date|date:"d M Y" }}</td>
                 </tr>
                 {% endif %}
                 <tr>
-                    <td style="color:#92400e; font-size:13px;">ผู้เดินทาง / Travelers</td>
+                    <td style="color:#7A385E; font-size:13px;">ผู้เดินทาง / Travelers</td>
                     <td style="color:#1e293b;">
                         {{ inquiry.num_adults }} ผู้ใหญ่{% if inquiry.num_children %}, {{ inquiry.num_children }} เด็ก{% endif %}{% if inquiry.num_infants %}, {{ inquiry.num_infants }} ทารก{% endif %}
                     </td>
                 </tr>
                 {% if inquiry.room_preference %}
                 <tr>
-                    <td style="color:#92400e; font-size:13px;">ห้องพัก / Room</td>
+                    <td style="color:#7A385E; font-size:13px;">ห้องพัก / Room</td>
                     <td style="color:#1e293b;">{{ inquiry.room_preference }}</td>
                 </tr>
                 {% endif %}
                 {% if inquiry.special_requests %}
                 <tr>
-                    <td style="color:#92400e; font-size:13px;">คำขอพิเศษ / Special</td>
+                    <td style="color:#7A385E; font-size:13px;">คำขอพิเศษ / Special</td>
                     <td style="color:#1e293b; font-style:italic;">{{ inquiry.special_requests }}</td>
                 </tr>
                 {% endif %}
                 <tr>
-                    <td style="color:#92400e; font-size:13px;">ภาษา / Language</td>
+                    <td style="color:#7A385E; font-size:13px;">ภาษา / Language</td>
                     <td style="color:#1e293b;">{{ inquiry.language|upper }}</td>
                 </tr>
                 <tr>
-                    <td style="color:#92400e; font-size:13px;">Marketing opt-in</td>
+                    <td style="color:#7A385E; font-size:13px;">Marketing opt-in</td>
                     <td style="color:#1e293b;">{% if inquiry.marketing_opt_in %}✅ ใช่{% else %}❌ ไม่{% endif %}</td>
                 </tr>
             </table>
             <p style="text-align:center;">
-                <a href="{{ admin_url }}" style="background:#C9A6A0; color:#ffffff; padding:12px 24px; text-decoration:none; border-radius:6px; font-weight:600; display:inline-block;">
+                <a href="{{ admin_url }}" style="background:#E0517A; color:#ffffff; padding:12px 24px; text-decoration:none; border-radius:6px; font-weight:600; display:inline-block;">
                     ดูใน Admin Panel / View in Admin
                 </a>
             </p>
         </td>
     </tr>
     <tr>
-        <td style="background:#f1f5f9; padding:12px 32px; text-align:center;">
+        <td style="background:#FBF0F4; padding:12px 32px; text-align:center;">
             <p style="color:#94a3b8; font-size:11px; margin:0;">{{ site_name }} — Internal notification</p>
         </td>
     </tr>

@@ -84,12 +84,13 @@ class TestTourListAPI:
         assert "Tokyo Adventure" in titles
         assert "Seoul Explorer" not in titles
 
-    def test_search_by_product_code(self, client):
-        TourFactory(product_code="ZGTYO-999")
+    def test_product_code_not_searchable(self, client):
+        # product_code is hidden from public API — not in search_fields
+        TourFactory(product_code="ZGTYO-999", title="Generic Tour Title")
 
         resp = client.get(self._url(), {"search": "ZGTYO-999"})
         data = resp.json()
-        assert data["count"] >= 1
+        assert data["count"] == 0
 
 
 @pytest.mark.django_db

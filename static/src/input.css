@@ -73,18 +73,18 @@
   }
 }
 
-/* Smile Memory Design System — rose gold luxury palette */
+/* Smile Memory Design System — VS Bold Pink + Rose Gold palette */
 @theme {
-  /* Brand palette — rose gold: warm pink + golden/peach tones, NO dark red/burgundy */
+  /* Brand palette — vivid hot rose + champagne-gold accents (VS Bold Pink + Rose Gold) */
   --color-brand-bg:       #FBF0F4;   /* Barely-there pink — light champagne blush */
   --color-brand-surface:  #FFF5F8;   /* Near-white with soft pink tint */
   --color-brand-blush:    #FAD6E8;   /* Soft rose pink — clearly pink, not beige */
   --color-brand-petal:    #F0A0C4;   /* Petal pink — vivid, clearly pink */
-  --color-brand-rose:     #D85C94;   /* Primary CTA — warm rose pink (not red!) */
-  --color-brand-clay:     #BC4478;   /* CTA hover — deeper warm rose */
-  --color-brand-taupe:    #EAB8D0;   /* Borders — clearly pink-rose, not grey */
-  --color-brand-cocoa:    #9E4068;   /* Navbar/footer — medium-dark rose (VISIBLY PINK) */
-  --color-brand-text:     #2A0820;   /* Main text — near-black, purple-pink undertone */
+  --color-brand-rose:     #E0517A;   /* Primary CTA — warm VS pink (HSL 344° 72% 60%) */
+  --color-brand-clay:     #C03560;   /* CTA hover — deeper warm rose */
+  --color-brand-taupe:    #EAB8D0;   /* Borders — pink-rose */
+  --color-brand-cocoa:    #8B1346;   /* Navbar/footer — deep vivid rose (HSL 334° 76% 31%) */
+  --color-brand-text:     #2A0820;   /* Main text — near-black, pink undertone */
   --color-brand-muted:    #7A385E;   /* Secondary text — deep rose pink */
   --color-brand-hint:     #C07898;   /* Subtle text — light rose pink */
   --color-brand-gold:     #E8AC80;   /* Rose gold accent — warm peach-gold */

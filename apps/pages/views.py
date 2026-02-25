@@ -27,9 +27,9 @@ class HomePageView(TemplateView):
         )
 
         # Destinations ordered by published tour count, top 7 + "Others"
-        published_filter = Q(
-            tours__status=Tour.Status.PUBLISHED
-        ) & ~Q(tours__pdf_url="")
+        published_filter = Q(tours__status=Tour.Status.PUBLISHED) & ~Q(
+            tours__pdf_url=""
+        )
         all_dests = (
             Destination.objects.filter(parent__isnull=True)
             .annotate(tour_count=Count("tours", filter=published_filter))

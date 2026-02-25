@@ -133,8 +133,6 @@ class TestCustomerAdminView:
 
     def test_customer_admin_search_works(self, admin_client):
         CustomerFactory(email="search_me@test.com")
-        resp = admin_client.get(
-            "/admin/customers/customer/?q=search_me"
-        )
+        resp = admin_client.get("/admin/customers/customer/?q=search_me")
         assert resp.status_code == 200
         assert b"search_me" in resp.content

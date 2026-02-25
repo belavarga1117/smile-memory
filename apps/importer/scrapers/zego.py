@@ -21,8 +21,6 @@ import urllib.request
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
 
-from bs4 import BeautifulSoup
-
 from .base import BaseScraper
 
 logger = logging.getLogger(__name__)
@@ -46,6 +44,13 @@ class ZegoScraper(BaseScraper):
 
     source_name = "zego"
     base_url = "https://www.zegotravel.com"
+
+    _JUNK_PATTERNS = [
+        re.compile(r"[×✕]\s*ส่งโปรแกรมทัวร์.*", re.DOTALL),
+        re.compile(r"Email\s+ผู้รับ.*", re.DOTALL),
+        re.compile(r"\bClose\s+Send\b.*", re.DOTALL),
+        re.compile(r"ส่งโปรแกรมทัวร์\s+Email.*", re.DOTALL),
+    ]
 
     def __init__(self, username="", password="", **kwargs):
         super().__init__(min_delay=1.0, max_delay=2.0, max_retries=1)
@@ -541,21 +546,25 @@ class ZegoScraper(BaseScraper):
     ]
 
     def _html_to_text(self, html: str) -> str:
-        """Strip HTML tags and convert to clean plain text using BeautifulSoup."""
+        """Strip HTML tags, decode entities, and remove Zego portal junk."""
         if not html:
             return ""
-        # Decode HTML entities first (handles double-encoded content)
-        decoded = html_module.unescape(html)
-        # Parse with BeautifulSoup for robust tag stripping
-        soup = BeautifulSoup(decoded, "html.parser")
-        # Replace <br> with newline before extracting text
-        for br in soup.find_all("br"):
-            br.replace_with("\n")
-        text = soup.get_text(separator="\n")
-        # Remove Zego portal junk (share modal text, etc.)
+        # Pass 1: handle raw HTML — br→newline, strip tags
+        text = re.sub(r"<br\s*/?>", "\n", html)
+        # Use strict tag pattern (requires letter after <) so decoded
+        # entities like < > are never misidentified as tags
+        tag_re = re.compile(r"</?[a-zA-Z][^>]*>")
+        text = tag_re.sub("", text)
+        # Decode HTML entities (&amp; → &, &lt; → <, etc.)
+        text = html_module.unescape(text)
+        # Pass 2: strip tags that appeared after decoding double-encoded HTML
+        # e.g. &lt;p&gt;text&lt;/p&gt; → <p>text</p> → text
+        text = re.sub(r"<br\s*/?>", "\n", text)
+        text = tag_re.sub("", text)
+        # Remove Zego portal share-modal junk
         for pattern in self._ZEGO_JUNK_PATTERNS:
             text = pattern.sub("", text)
-        # Collapse multiple blank lines / trailing whitespace per line
+        # Collapse multiple blank lines
         lines = [line.strip() for line in text.splitlines()]
         text = "\n".join(line for line in lines if line)
         return text.strip()

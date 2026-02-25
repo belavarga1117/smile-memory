@@ -18,6 +18,7 @@ Usage:
 """
 
 import logging
+import re
 from datetime import timedelta
 
 from django.core.management.base import BaseCommand
@@ -558,26 +559,41 @@ class Command(BaseCommand):
 
     def _upsert_images(self, tour, image_urls):
         """Sync TourImage records: add new, remove stale, update sort order."""
-        new_urls = [u for u in image_urls if u]  # filter empty
+        new_urls = [u for u in image_urls if u]
         new_set = set(new_urls)
         existing = dict(tour.images.values_list("image_url", "id"))
 
-        # Remove images no longer in the import
         stale_ids = [pk for url, pk in existing.items() if url not in new_set]
         if stale_ids:
             tour.images.filter(id__in=stale_ids).delete()
 
-        # Add new images with correct sort order
         for i, url in enumerate(new_urls):
             if url not in existing:
-                TourImage.objects.create(
-                    tour=tour,
-                    image_url=url,
-                    sort_order=i,
-                )
+                TourImage.objects.create(tour=tour, image_url=url, sort_order=i)
             else:
-                # Update sort_order if it changed
                 tour.images.filter(image_url=url).update(sort_order=i)
+
+    def _sanitize_tour_data(self, data, scraper):
+        """Strip HTML and portal junk from text fields before saving."""
+        html_cleaner = getattr(scraper, "_html_to_text", None)
+
+        def clean(val):
+            if not val or not isinstance(val, str):
+                return val
+            if html_cleaner:
+                return html_cleaner(val)
+            return re.sub(r"<[^>]+>", "", val).strip()
+
+        for field in ("highlight", "highlight_th", "description", "description_th"):
+            if data.get(field) is not None:
+                data[field] = clean(data[field])
+
+        for day in data.get("_itinerary", []):
+            for field in ("description", "description_th"):
+                if day.get(field) is not None:
+                    day[field] = clean(day[field])
+
+        return data
 
     def _print_tour_data(self, data):
         """Pretty-print tour data for dry run."""

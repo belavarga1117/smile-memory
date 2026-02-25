@@ -12,6 +12,7 @@ The listing endpoint returns one row per departure (TourID), grouped by programt
 Multiple departures share the same program details (title, code, duration, etc.)
 """
 
+import html as html_module
 import json
 import logging
 import re
@@ -19,6 +20,8 @@ import urllib.parse
 import urllib.request
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
+
+from bs4 import BeautifulSoup
 
 from .base import BaseScraper
 
@@ -277,8 +280,8 @@ class ZegoScraper(BaseScraper):
         total_meals = self._to_int(first.get("totalMeals"))
         plane_meals = first.get("planeMeals", "0") != "0"
 
-        # Highlight
-        highlight = first.get("highlight", "")
+        # Highlight (strip HTML + portal junk)
+        highlight = self._html_to_text(first.get("highlight", ""))
 
         # Hero image
         pg_image = first.get("pg_image", "")
@@ -528,20 +531,33 @@ class ZegoScraper(BaseScraper):
             pass
         return ""
 
+    # Known junk patterns that leak from Zego portal UI into text fields
+    _ZEGO_JUNK_PATTERNS = [
+        re.compile(r"[×✕]\s*ส่งโปรแกรมทัวร์.*", re.DOTALL),  # share modal
+        re.compile(r"Email\s+ผู้รับ.*", re.DOTALL),
+        re.compile(r"\bClose\s+Send\b.*", re.DOTALL),
+        re.compile(r"ส่งโปรแกรมทัวร์\s+Email.*", re.DOTALL),
+        re.compile(r"py\s+text\b", re.IGNORECASE),
+    ]
+
     def _html_to_text(self, html: str) -> str:
-        """Strip HTML tags and convert to plain text."""
+        """Strip HTML tags and convert to clean plain text using BeautifulSoup."""
         if not html:
             return ""
-        # Remove HTML tags
-        text = re.sub(r"<br\s*/?>", "\n", html)
-        text = re.sub(r"<[^>]+>", "", text)
-        # Decode HTML entities
-        text = text.replace("&nbsp;", " ")
-        text = text.replace("&ndash;", "–")
-        text = text.replace("&amp;", "&")
-        text = text.replace("&lt;", "<")
-        text = text.replace("&gt;", ">")
-        text = text.replace("&quot;", '"')
+        # Decode HTML entities first (handles double-encoded content)
+        decoded = html_module.unescape(html)
+        # Parse with BeautifulSoup for robust tag stripping
+        soup = BeautifulSoup(decoded, "html.parser")
+        # Replace <br> with newline before extracting text
+        for br in soup.find_all("br"):
+            br.replace_with("\n")
+        text = soup.get_text(separator="\n")
+        # Remove Zego portal junk (share modal text, etc.)
+        for pattern in self._ZEGO_JUNK_PATTERNS:
+            text = pattern.sub("", text)
+        # Collapse multiple blank lines / trailing whitespace per line
+        lines = [line.strip() for line in text.splitlines()]
+        text = "\n".join(line for line in lines if line)
         return text.strip()
 
     def _to_decimal(self, val) -> Decimal | None:

@@ -5,7 +5,13 @@
 
             <!-- Brand -->
             <div class="sm:col-span-2 lg:col-span-1">
-                <h3 class="text-xl font-bold text-white mb-4">Smile Memory</h3>
+                <div class="flex items-center gap-3 mb-4">
+                    <img src="{% static 'images/logo-icon-color.svg' %}" alt="" class="h-10 w-10 flex-shrink-0" aria-hidden="true">
+                    <div class="flex flex-col leading-none">
+                        <span class="font-brand text-xl font-bold text-white">Smile</span>
+                        <span class="font-brand text-[10px] font-normal text-brand-gold tracking-[0.3em] uppercase mt-0.5">Memory</span>
+                    </div>
+                </div>
                 <p class="text-sm leading-relaxed text-white/60 mb-4">
                     {% trans "Turn every journey into an everlasting memory." %}
                 </p>

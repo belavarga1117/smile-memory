@@ -1,0 +1,54 @@
+<!-- Smile Memory — brand icon, dark version (for light/white backgrounds) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <radialGradient id="fg-d" cx="38%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#F2CECE"/>
+      <stop offset="100%" stop-color="#D4B0AC"/>
+    </radialGradient>
+    <linearGradient id="cg-d" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#7A4751"/>
+      <stop offset="100%" stop-color="#3D2530"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Globe lines -->
+  <circle cx="100" cy="118" r="76" stroke="#7A4751" stroke-width="1.2" opacity="0.35"/>
+  <ellipse cx="100" cy="118" rx="76" ry="26" stroke="#7A4751" stroke-width="1" opacity="0.28"/>
+  <ellipse cx="100" cy="118" rx="76" ry="54" stroke="#7A4751" stroke-width="0.8" opacity="0.18"/>
+  <line x1="100" y1="42" x2="100" y2="194" stroke="#7A4751" stroke-width="1" opacity="0.22"/>
+  <line x1="24" y1="118" x2="176" y2="118" stroke="#7A4751" stroke-width="0.8" opacity="0.18"/>
+
+  <!-- Face circle -->
+  <circle cx="100" cy="118" r="58" fill="url(#fg-d)" stroke="#D4B0AC" stroke-width="1.8"/>
+
+  <!-- Rosy cheeks -->
+  <ellipse cx="73" cy="126" rx="11" ry="8" fill="#7A4751" opacity="0.12"/>
+  <ellipse cx="127" cy="126" rx="11" ry="8" fill="#7A4751" opacity="0.12"/>
+
+  <!-- Eyes -->
+  <circle cx="84" cy="111" r="5.5" fill="#3D2530"/>
+  <circle cx="116" cy="111" r="5.5" fill="#3D2530"/>
+  <circle cx="86.2" cy="109" r="1.8" fill="white" opacity="0.6"/>
+  <circle cx="118.2" cy="109" r="1.8" fill="white" opacity="0.6"/>
+
+  <!-- Smile -->
+  <path d="M 79 128 Q 100 148 121 128" stroke="#3D2530" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Crown base band -->
+  <rect x="55" y="74" width="90" height="8" rx="4" fill="#3D2530"/>
+
+  <!-- Crown body -->
+  <path d="M 55 79 L 63 50 L 79 67 L 100 34 L 121 67 L 137 50 L 145 79 Z" fill="url(#cg-d)"/>
+
+  <!-- Crown jewels -->
+  <circle cx="63" cy="49" r="5.5" fill="white" stroke="#D4B0AC" stroke-width="1.2"/>
+  <circle cx="63" cy="49" r="2.8" fill="#7A4751"/>
+  <circle cx="100" cy="33" r="6.5" fill="white" stroke="#D4B0AC" stroke-width="1.4"/>
+  <circle cx="100" cy="33" r="3.2" fill="#7A4751"/>
+  <circle cx="137" cy="49" r="5.5" fill="white" stroke="#D4B0AC" stroke-width="1.2"/>
+  <circle cx="137" cy="49" r="2.8" fill="#7A4751"/>
+
+  <!-- Crown inner jewels -->
+  <circle cx="79" cy="66" r="3.8" fill="white" stroke="#D4B0AC" stroke-width="0.9" opacity="0.85"/>
+  <circle cx="121" cy="66" r="3.8" fill="white" stroke="#D4B0AC" stroke-width="0.9" opacity="0.85"/>
+</svg>

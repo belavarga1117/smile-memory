@@ -42,8 +42,7 @@ Thumbs.db
 node_modules/
 package-lock.json
 
-# Tailwind compiled output (regenerated)
-static/css/output.css
+# Tailwind: output.css is committed for deployment (rebuild locally with npm run css:build)
 
 # Celery
 celerybeat-schedule

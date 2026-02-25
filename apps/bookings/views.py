@@ -1,4 +1,3 @@
-from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views import View
@@ -70,12 +69,7 @@ class InquiryCreateView(View):
             except Exception:
                 pass  # Email failures shouldn't break the inquiry
 
-            messages.success(
-                request,
-                f"Thank you! Your inquiry ({inquiry.reference_number}) has been submitted. "
-                "We'll get back to you within 24 hours.",
-            )
-            return redirect(tour.get_absolute_url())
+            return redirect("bookings:success", reference=inquiry.reference_number)
 
         # If form invalid, re-render the tour detail page with errors
         from apps.tours.views import TourDetailView

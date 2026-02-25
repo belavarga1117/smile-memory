@@ -31,6 +31,7 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp-relay.brevo.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+EMAIL_TIMEOUT = 10  # fail fast so gunicorn worker doesn't time out
 EMAIL_HOST_USER = env("BREVO_SMTP_LOGIN", default="")  # noqa: F405
 EMAIL_HOST_PASSWORD = env("BREVO_SMTP_KEY", default="")  # noqa: F405
 

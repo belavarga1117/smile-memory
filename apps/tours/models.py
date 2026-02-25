@@ -165,7 +165,7 @@ class Tour(TimeStampedModel):
     external_id = models.CharField(
         max_length=200, blank=True, help_text="Product ID from source"
     )
-    source_url = models.URLField(blank=True)
+    source_url = models.URLField(max_length=500, blank=True)
     last_synced_at = models.DateTimeField(null=True, blank=True)
 
     # SEO

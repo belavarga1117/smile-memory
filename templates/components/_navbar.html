@@ -1,6 +1,6 @@
 {% load static i18n i18n_fields %}
-<!-- Responsive navbar: hamburger on mobile, full nav on desktop -->
-<nav class="bg-brand-cocoa text-brand-surface sticky top-0 z-40 shadow-md" x-data="{ mobileOpen: false }">
+<!-- Responsive navbar: white/light with vivid pink accents (VS light aesthetic) -->
+<nav class="bg-white border-b border-brand-taupe/30 sticky top-0 z-40 shadow-sm" x-data="{ mobileOpen: false }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16 lg:h-20">
 
@@ -8,26 +8,26 @@
             <a href="{% url 'pages:home' %}" class="flex items-center gap-3 shrink-0">
                 <img src="{% static 'images/logo-icon-color.svg' %}" alt="" class="h-10 w-10 flex-shrink-0" aria-hidden="true">
                 <div class="flex flex-col leading-none">
-                    <span class="font-brand text-xl lg:text-2xl font-bold text-white tracking-wide">Smile</span>
+                    <span class="font-brand text-xl lg:text-2xl font-bold text-brand-text tracking-wide">Smile</span>
                     <span class="font-brand text-[10px] font-normal text-brand-gold tracking-[0.3em] uppercase mt-0.5">Memory</span>
                 </div>
             </a>
 
             <!-- Desktop nav links -->
             <div class="hidden lg:flex items-center gap-8">
-                <a href="{% url 'pages:home' %}" class="text-white/70 hover:text-white transition-colors font-medium">
+                <a href="{% url 'pages:home' %}" class="text-brand-muted hover:text-brand-rose transition-colors font-medium">
                     {% trans "Home" %}
                 </a>
-                <a href="{% url 'tours:list' %}" class="text-white/70 hover:text-white transition-colors font-medium">
+                <a href="{% url 'tours:list' %}" class="text-brand-muted hover:text-brand-rose transition-colors font-medium">
                     {% trans "Tours" %}
                 </a>
-                <a href="{% url 'blog:list' %}" class="text-white/70 hover:text-white transition-colors font-medium">
+                <a href="{% url 'blog:list' %}" class="text-brand-muted hover:text-brand-rose transition-colors font-medium">
                     {% trans "Blog" %}
                 </a>
-                <a href="{% url 'pages:about' %}" class="text-white/70 hover:text-white transition-colors font-medium">
+                <a href="{% url 'pages:about' %}" class="text-brand-muted hover:text-brand-rose transition-colors font-medium">
                     {% trans "About" %}
                 </a>
-                <a href="{% url 'pages:contact' %}" class="text-white/70 hover:text-white transition-colors font-medium">
+                <a href="{% url 'pages:contact' %}" class="text-brand-muted hover:text-brand-rose transition-colors font-medium">
                     {% trans "Contact" %}
                 </a>
             </div>
@@ -38,9 +38,9 @@
                 <div class="flex items-center gap-1 text-sm">
                     {% switch_language_url "th" as th_url %}
                     {% switch_language_url "en" as en_url %}
-                    <a href="{{ th_url }}" class="{% if LANGUAGE_CODE == 'th' %}text-white font-semibold{% else %}text-white/70 hover:text-white{% endif %} transition-colors">TH</a>
+                    <a href="{{ th_url }}" class="{% if LANGUAGE_CODE == 'th' %}text-brand-rose font-semibold{% else %}text-brand-muted hover:text-brand-rose{% endif %} transition-colors">TH</a>
                     <span class="text-brand-taupe">|</span>
-                    <a href="{{ en_url }}" class="{% if LANGUAGE_CODE == 'en' %}text-white font-semibold{% else %}text-white/70 hover:text-white{% endif %} transition-colors">EN</a>
+                    <a href="{{ en_url }}" class="{% if LANGUAGE_CODE == 'en' %}text-brand-rose font-semibold{% else %}text-brand-muted hover:text-brand-rose{% endif %} transition-colors">EN</a>
                 </div>
 
                 <!-- CTA button -->
@@ -51,7 +51,7 @@
 
             <!-- Mobile: hamburger button -->
             <button @click="mobileOpen = !mobileOpen"
-                    class="lg:hidden p-2 rounded-md text-white/70 hover:text-white hover:bg-brand-taupe/30 transition-colors"
+                    class="lg:hidden p-2 rounded-md text-brand-muted hover:text-brand-rose hover:bg-brand-blush/40 transition-colors"
                     aria-label="Toggle navigation">
                 <svg x-show="!mobileOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
@@ -71,21 +71,21 @@
          x-transition:leave="transition ease-in duration-150"
          x-transition:leave-start="opacity-100 translate-y-0"
          x-transition:leave-end="opacity-0 -translate-y-2"
-         class="lg:hidden border-t border-brand-taupe/30">
-        <div class="px-4 py-4 space-y-2">
-            <a href="{% url 'pages:home' %}" class="block px-3 py-2 rounded-md text-white/70 hover:text-white hover:bg-brand-taupe/30 transition-colors">
+         class="lg:hidden border-t border-brand-taupe/30 bg-white">
+        <div class="px-4 py-4 space-y-1">
+            <a href="{% url 'pages:home' %}" class="block px-3 py-2 rounded-md text-brand-muted hover:text-brand-rose hover:bg-brand-blush/30 transition-colors font-medium">
                 {% trans "Home" %}
             </a>
-            <a href="{% url 'tours:list' %}" class="block px-3 py-2 rounded-md text-white/70 hover:text-white hover:bg-brand-taupe/30 transition-colors">
+            <a href="{% url 'tours:list' %}" class="block px-3 py-2 rounded-md text-brand-muted hover:text-brand-rose hover:bg-brand-blush/30 transition-colors font-medium">
                 {% trans "Tours" %}
             </a>
-            <a href="{% url 'blog:list' %}" class="block px-3 py-2 rounded-md text-white/70 hover:text-white hover:bg-brand-taupe/30 transition-colors">
+            <a href="{% url 'blog:list' %}" class="block px-3 py-2 rounded-md text-brand-muted hover:text-brand-rose hover:bg-brand-blush/30 transition-colors font-medium">
                 {% trans "Blog" %}
             </a>
-            <a href="{% url 'pages:about' %}" class="block px-3 py-2 rounded-md text-white/70 hover:text-white hover:bg-brand-taupe/30 transition-colors">
+            <a href="{% url 'pages:about' %}" class="block px-3 py-2 rounded-md text-brand-muted hover:text-brand-rose hover:bg-brand-blush/30 transition-colors font-medium">
                 {% trans "About" %}
             </a>
-            <a href="{% url 'pages:contact' %}" class="block px-3 py-2 rounded-md text-white/70 hover:text-white hover:bg-brand-taupe/30 transition-colors">
+            <a href="{% url 'pages:contact' %}" class="block px-3 py-2 rounded-md text-brand-muted hover:text-brand-rose hover:bg-brand-blush/30 transition-colors font-medium">
                 {% trans "Contact" %}
             </a>
 
@@ -93,9 +93,9 @@
             <div class="flex items-center gap-3 px-3 py-2 text-sm">
                 {% switch_language_url "th" as th_url %}
                 {% switch_language_url "en" as en_url %}
-                <a href="{{ th_url }}" class="{% if LANGUAGE_CODE == 'th' %}text-white font-semibold{% else %}text-white/70{% endif %}">ภาษาไทย</a>
+                <a href="{{ th_url }}" class="{% if LANGUAGE_CODE == 'th' %}text-brand-rose font-semibold{% else %}text-brand-muted{% endif %}">ภาษาไทย</a>
                 <span class="text-brand-taupe">|</span>
-                <a href="{{ en_url }}" class="{% if LANGUAGE_CODE == 'en' %}text-white font-semibold{% else %}text-white/70{% endif %}">English</a>
+                <a href="{{ en_url }}" class="{% if LANGUAGE_CODE == 'en' %}text-brand-rose font-semibold{% else %}text-brand-muted{% endif %}">English</a>
             </div>
 
             <!-- Mobile CTA -->

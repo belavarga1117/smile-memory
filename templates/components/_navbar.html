@@ -5,10 +5,12 @@
         <div class="flex items-center justify-between h-16 lg:h-20">
 
             <!-- Logo -->
-            <a href="{% url 'pages:home' %}" class="flex items-center gap-2 shrink-0">
-                <span class="text-xl lg:text-2xl font-bold tracking-tight text-white">
-                    Smile Memory
-                </span>
+            <a href="{% url 'pages:home' %}" class="flex items-center gap-3 shrink-0">
+                <img src="{% static 'images/logo-icon-color.svg' %}" alt="" class="h-10 w-10 flex-shrink-0" aria-hidden="true">
+                <div class="flex flex-col leading-none">
+                    <span class="font-brand text-xl lg:text-2xl font-bold text-white tracking-wide">Smile</span>
+                    <span class="font-brand text-[10px] font-normal text-brand-gold tracking-[0.3em] uppercase mt-0.5">Memory</span>
+                </div>
             </a>
 
             <!-- Desktop nav links -->

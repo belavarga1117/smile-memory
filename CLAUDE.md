@@ -45,7 +45,7 @@ python manage.py seed_tours         # seed 10 tours + fixtures
 python manage.py createsuperuser
 
 # ── Tests ──────────────────────────────────────────────────────────────────────
-pytest                              # full suite (272 tests, PostgreSQL)
+pytest                              # full suite (458 tests, PostgreSQL)
 pytest -x -q                        # stop on first failure, quiet
 
 # ── Code quality ───────────────────────────────────────────────────────────────
@@ -177,8 +177,31 @@ Pipeline: `Trigger → Parser → Field Mapper → Validator → Upsert Tour →
 
 ### Design System
 
-- **Colors**: Rose-bézsz luxury palette — brand-cocoa (#6B4F54, dark mauve nav), brand-rose (#B25E68, dusty rose CTA), brand-clay (#964D57, deep rose hover), brand-blush (#EDCFCC, soft mauve-blush hero sections), brand-bg (#F3EAE6, blush cream background), brand-surface (#FDF9F7, near-white cards), brand-taupe (#C4ADA8, rosewood borders), brand-text (#3A2D31, charcoal-rose), brand-muted (#756469, rose-gray), brand-hint (#A08E93, light rose-gray), brand-gold (#D4A494, rose gold accent). On dark backgrounds use text-white/70 or text-white/60 instead of brand-hint.
-- **Fonts**: Inter (Latin) + Noto Sans Thai — loaded from Google Fonts
+- **Colors**: True pink luxury palette — all in `@theme` in `static/src/input.css` (owner loves pink, NO brown tones!):
+  - `brand-bg` (#FEF0F3) — very light blush pink body background
+  - `brand-surface` (#FFF5F7) — near-white pink tint for cards
+  - `brand-blush` (#FCDDE4) — soft petal pink sections
+  - `brand-petal` (#F5A8B8) — medium pink accent
+  - `brand-rose` (#E05270) — primary CTA, vibrant rose
+  - `brand-clay` (#C43A58) — CTA hover, deeper rose
+  - `brand-taupe` (#EEB8C5) — borders, separators (pink-rose)
+  - `brand-cocoa` (#8C2050) — navbar/footer/dark sections (deep berry)
+  - `brand-text` (#2E0A1A) — main text (near-black berry)
+  - `brand-muted` (#804060) — secondary text (medium berry-rose)
+  - `brand-hint` (#B87090) — subtle text on light bg
+  - `brand-gold` (#E8A878) — rose-gold/peach accent
+  - `brand-deep` (#14050E) — near-black berry for hero gradients
+  - On dark backgrounds use `text-white/70` or `text-white/60`
+- **Fonts**:
+  - `font-sans` → Inter + Noto Sans Thai (body/UI text)
+  - `font-brand` → Playfair Display (brand name "Smile Memory", section headings) — elegant serif
+  - Both loaded from Google Fonts in `base.html`
+- **Logo**: SVG icons in `static/images/` — 3 variants:
+  - `logo-icon-color.svg` — full rose-gold palette (navbar, footer, favicon)
+  - `logo-icon-white.svg` — white variant (optional for dark overlays)
+  - `logo-icon-dark.svg` — dark mauve variant (for light/white backgrounds)
+  - Brand name rendered in HTML next to icon using `font-brand` class
+  - Navbar: `<img logo> + "Smile" (bold 22px) + "MEMORY" (10px tracking-wide uppercase)`
 - **Layout**: Mobile-first responsive with Tailwind CSS
 - **Components**: Alpine.js for interactivity (dropdowns, modals, form handling)
 

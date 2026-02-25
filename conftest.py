@@ -65,6 +65,7 @@ def tour(db, destination, category, airline):
         description_th="สำรวจโตเกียวและโอซาก้า",
         short_description="5-day Japan tour",
         status=Tour.Status.PUBLISHED,
+        pdf_url="https://example.com/tokyo-explorer.pdf",
         airline=airline,
         price_from=Decimal("29900.00"),
         duration_days=5,

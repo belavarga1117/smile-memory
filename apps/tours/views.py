@@ -24,6 +24,7 @@ class TourListView(ListView):
     def get_queryset(self):
         qs = (
             Tour.objects.filter(status=Tour.Status.PUBLISHED)
+            .exclude(pdf_url="")
             .filter(Exists(_has_available_departure()))
             .select_related("airline")
             .prefetch_related("destinations", "categories")
@@ -99,6 +100,7 @@ class TourDetailView(DetailView):
     def get_queryset(self):
         return (
             Tour.objects.filter(status=Tour.Status.PUBLISHED)
+            .exclude(pdf_url="")
             .select_related("airline")
             .prefetch_related(
                 "images",
@@ -119,6 +121,7 @@ class TourDetailView(DetailView):
                 status=Tour.Status.PUBLISHED,
                 destinations__in=tour.destinations.all(),
             )
+            .exclude(pdf_url="")
             .filter(Exists(_has_available_departure()))
             .exclude(pk=tour.pk)
             .select_related("airline")

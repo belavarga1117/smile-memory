@@ -29,8 +29,8 @@ class Command(BaseCommand):
         )
         parser.add_argument(
             "--source",
-            default="zego",
-            help="Only clean tours from this source (default: zego)",
+            default="all",
+            help="Source to clean: zego, realjourney, go365, or 'all' (default: all)",
         )
 
     def handle(self, *args, **options):
@@ -40,11 +40,16 @@ class Command(BaseCommand):
         if dry_run:
             self.stdout.write(self.style.WARNING("DRY RUN — not saving\n"))
 
-        # We use ZegoScraper._html_to_text() without authenticating
+        # We use ZegoScraper._html_to_text() — handles HTML + Zego junk patterns
         scraper = ZegoScraper()
 
-        self._clean_highlights(scraper, source, dry_run)
-        self._clean_itinerary_descriptions(scraper, source, dry_run)
+        if source == "all":
+            for src in ["zego", "go365", "realjourney"]:
+                self._clean_highlights(scraper, src, dry_run)
+                self._clean_itinerary_descriptions(scraper, src, dry_run)
+        else:
+            self._clean_highlights(scraper, source, dry_run)
+            self._clean_itinerary_descriptions(scraper, source, dry_run)
 
     def _clean_highlights(self, scraper, source, dry_run):
         tours = Tour.objects.filter(source=source).exclude(highlight="")

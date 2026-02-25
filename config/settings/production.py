@@ -26,13 +26,13 @@ STORAGES = {
     },
 }
 
-# Email - SendGrid
+# Email - Brevo (free tier: 300 emails/day forever)
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.sendgrid.net"
+EMAIL_HOST = "smtp-relay.brevo.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "apikey"
-EMAIL_HOST_PASSWORD = env("SENDGRID_API_KEY", default="")  # noqa: F405
+EMAIL_HOST_USER = env("BREVO_SMTP_LOGIN", default="")  # noqa: F405
+EMAIL_HOST_PASSWORD = env("BREVO_SMTP_KEY", default="")  # noqa: F405
 
 # Media storage - S3/R2 (uncomment when configured)
 # DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"

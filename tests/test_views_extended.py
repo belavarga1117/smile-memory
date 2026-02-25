@@ -64,7 +64,6 @@ class TestTourDetailView:
         assert "inquiry_form" in resp.context
 
     def test_detail_pdf_url(self, client, tour):
-
         tour.pdf_url = "https://example.com/tour.pdf"
         tour.save()
         resp = client.get(f"/en/tours/{tour.slug}/")
@@ -84,7 +83,6 @@ class TestHomepageView:
         assert resp.status_code == 200
 
     def test_homepage_has_featured_tours(self, client, tour, hero_slide):
-
         tour.is_featured = True
         tour.save()
         resp = client.get("/en/")

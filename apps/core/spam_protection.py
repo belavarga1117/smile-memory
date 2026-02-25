@@ -36,7 +36,10 @@ class HoneypotFormMixin:
             ...
     """
 
-    website_url = HoneypotField()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add field at runtime so Django's metaclass registers it as a BoundField
+        self.fields["website_url"] = HoneypotField()
 
     def clean_website_url(self):
         value = self.cleaned_data.get("website_url", "")

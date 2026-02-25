@@ -223,6 +223,7 @@ class CampaignFactory(factory.django.DjangoModelFactory):
     name = factory.Sequence(lambda n: f"Campaign {n}")
     template = factory.SubFactory(EmailTemplateFactory)
     status = Campaign.Status.DRAFT
+    send_to_all_opted_in = True
 
 
 class SubscriberFactory(factory.django.DjangoModelFactory):

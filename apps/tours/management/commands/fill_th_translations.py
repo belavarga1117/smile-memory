@@ -154,46 +154,46 @@ AIRLINE_TH = {
     "Various Airlines": "หลายสายการบิน",
     "TBA": "ยังไม่กำหนด",
     # IATA codes (stored by scraper imports)
-    "3U": "เสฉวนแอร์ไลน์ส",      # Sichuan Airlines
-    "5J": "เซบูแปซิฟิก",          # Cebu Pacific
-    "AI": "แอร์อินเดีย",           # Air India
-    "AQ": "9 แอร์",               # 9 Air
-    "BR": "อีวาแอร์",             # Eva Air
-    "CA": "แอร์ไชน่า",            # Air China
-    "CI": "ไชน่าแอร์ไลน์ส",       # China Airlines
-    "CZ": "ไชน่าเซาเทิร์น",       # China Southern
-    "DR": "รุยลี่แอร์ไลน์ส",      # Ruili Airlines
-    "E9": "อีเอ็นไอแอร์",         # ENI Air
-    "ET": "เอธิโอเปียนแอร์ไลน์ส", # Ethiopian Airlines
-    "EU": "เฉิงตูแอร์ไลน์ส",      # Chengdu Airlines
-    "EY": "เอทิฮัดแอร์เวย์ส",     # Etihad Airways
-    "FD": "ไทยแอร์เอเชีย",        # Thai AirAsia
-    "FM": "เซี่ยงไฮ้แอร์ไลน์ส",   # Shanghai Airlines
-    "GF": "กัลฟ์แอร์",            # Gulf Air
-    "GJ": "กรีนแลนด์แอร์",        # Loong Air (GJ)
-    "HO": "จุนเหยาแอร์ไลน์ส",     # Juneyao Airlines
-    "HU": "ไหหนานแอร์ไลน์ส",      # Hainan Airlines
-    "HX": "ฮ่องกงแอร์ไลน์ส",      # Hong Kong Airlines
+    "3U": "เสฉวนแอร์ไลน์ส",  # Sichuan Airlines
+    "5J": "เซบูแปซิฟิก",  # Cebu Pacific
+    "AI": "แอร์อินเดีย",  # Air India
+    "AQ": "9 แอร์",  # 9 Air
+    "BR": "อีวาแอร์",  # Eva Air
+    "CA": "แอร์ไชน่า",  # Air China
+    "CI": "ไชน่าแอร์ไลน์ส",  # China Airlines
+    "CZ": "ไชน่าเซาเทิร์น",  # China Southern
+    "DR": "รุยลี่แอร์ไลน์ส",  # Ruili Airlines
+    "E9": "อีเอ็นไอแอร์",  # ENI Air
+    "ET": "เอธิโอเปียนแอร์ไลน์ส",  # Ethiopian Airlines
+    "EU": "เฉิงตูแอร์ไลน์ส",  # Chengdu Airlines
+    "EY": "เอทิฮัดแอร์เวย์ส",  # Etihad Airways
+    "FD": "ไทยแอร์เอเชีย",  # Thai AirAsia
+    "FM": "เซี่ยงไฮ้แอร์ไลน์ส",  # Shanghai Airlines
+    "GF": "กัลฟ์แอร์",  # Gulf Air
+    "GJ": "กรีนแลนด์แอร์",  # Loong Air (GJ)
+    "HO": "จุนเหยาแอร์ไลน์ส",  # Juneyao Airlines
+    "HU": "ไหหนานแอร์ไลน์ส",  # Hainan Airlines
+    "HX": "ฮ่องกงแอร์ไลน์ส",  # Hong Kong Airlines
     "JX": "สตาร์ลักซ์แอร์ไลน์ส",  # Starlux Airlines
-    "KC": "แอร์อัสตาน่า",          # Air Astana
-    "KY": "คุนหมิงแอร์ไลน์ส",     # Kunming Airlines
+    "KC": "แอร์อัสตาน่า",  # Air Astana
+    "KY": "คุนหมิงแอร์ไลน์ส",  # Kunming Airlines
     "LX": "สวิสอินเตอร์เนชันแนล",  # SWISS
-    "MM": "พีชแอวิเอชัน",          # Peach Aviation
-    "MU": "ไชน่าอีสเทิร์น",        # China Eastern
-    "NH": "ออลนิปปอนแอร์เวย์ส",    # ANA
-    "NX": "แอร์มาเก๊า",           # Air Macau
-    "OS": "ออสเตรียนแอร์ไลน์ส",    # Austrian Airlines
-    "OZ": "อาซีอาน่าแอร์ไลน์ส",   # Asiana Airlines
-    "QR": "กาตาร์แอร์เวย์ส",       # Qatar Airways
-    "QW": "บลูวิงแอร์ไลน์ส",       # Blue Wing / Qingdao Airlines
-    "RJ": "รอยัลจอร์แดเนียน",      # Royal Jordanian
-    "SC": "ชานตงแอร์ไลน์ส",        # Shandong Airlines
-    "SQ": "สิงคโปร์แอร์ไลน์ส",     # Singapore Airlines
-    "SV": "เซาดี",                 # Saudia
-    "UQ": "ยูเนี่ยนแอร์",           # Union Air (UQ)
-    "VJ": "เวียตเจ็ทแอร์",         # VietJet Air
-    "VN": "เวียตนามแอร์ไลน์ส",     # Vietnam Airlines
-    "XJ": "ไทยแอร์เอเชียเอ็กซ์",   # Thai AirAsia X
+    "MM": "พีชแอวิเอชัน",  # Peach Aviation
+    "MU": "ไชน่าอีสเทิร์น",  # China Eastern
+    "NH": "ออลนิปปอนแอร์เวย์ส",  # ANA
+    "NX": "แอร์มาเก๊า",  # Air Macau
+    "OS": "ออสเตรียนแอร์ไลน์ส",  # Austrian Airlines
+    "OZ": "อาซีอาน่าแอร์ไลน์ส",  # Asiana Airlines
+    "QR": "กาตาร์แอร์เวย์ส",  # Qatar Airways
+    "QW": "บลูวิงแอร์ไลน์ส",  # Blue Wing / Qingdao Airlines
+    "RJ": "รอยัลจอร์แดเนียน",  # Royal Jordanian
+    "SC": "ชานตงแอร์ไลน์ส",  # Shandong Airlines
+    "SQ": "สิงคโปร์แอร์ไลน์ส",  # Singapore Airlines
+    "SV": "เซาดี",  # Saudia
+    "UQ": "ยูเนี่ยนแอร์",  # Union Air (UQ)
+    "VJ": "เวียตเจ็ทแอร์",  # VietJet Air
+    "VN": "เวียตนามแอร์ไลน์ส",  # Vietnam Airlines
+    "XJ": "ไทยแอร์เอเชียเอ็กซ์",  # Thai AirAsia X
 }
 
 
@@ -235,15 +235,21 @@ class Command(BaseCommand):
                 if not dry_run:
                     setattr(obj, th_field, new_th)
                     obj.save(update_fields=[th_field])
-                self.stdout.write(f"  {'[DRY] ' if dry_run else ''}✅ {model_name}: {en_value} → {new_th}")
+                self.stdout.write(
+                    f"  {'[DRY] ' if dry_run else ''}✅ {model_name}: {en_value} → {new_th}"
+                )
                 updated += 1
             else:
                 unknown.append(en_value)
 
         self.stdout.write(
-            self.style.SUCCESS(f"\n{model_name}: {updated} frissítve, {skipped} már megvolt")
+            self.style.SUCCESS(
+                f"\n{model_name}: {updated} frissítve, {skipped} már megvolt"
+            )
         )
         if unknown:
             self.stdout.write(
-                self.style.WARNING(f"  Ismeretlen (kézi fordítás kell): {', '.join(unknown)}")
+                self.style.WARNING(
+                    f"  Ismeretlen (kézi fordítás kell): {', '.join(unknown)}"
+                )
             )

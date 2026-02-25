@@ -677,16 +677,37 @@ class GS25Scraper(BaseScraper):
         return ""
 
     def _parse_pdf_url(self, soup: BeautifulSoup) -> str:
-        """Parse PDF download link for the program."""
-        # Look for PDF link in the page
-        for a in soup.find_all("a", href=True):
-            href = a["href"]
+        """Parse program tour PDF URL.
+
+        GS25 stores PDFs at /programs/files/programtour/{program_group_id}/program_pdf_{id}.
+        The program_group_id is embedded in the programGroupModel JS variable on the page.
+        Tours without departures (expired) won't have this variable → return "".
+        """
+        import json as _json
+
+        for script in soup.find_all("script"):
+            content = script.string or ""
             if (
-                "programtour" in href
-                or href.lower().endswith(".pdf")
-                or "pdf" in href.lower()
+                "programGroupModel" not in content
+                or "selectedEntranceCity" not in content
             ):
-                return self._abs_url(href)
+                continue
+            m = re.search(r"var programGroupModel\s*=\s*(\{.+?\});", content, re.DOTALL)
+            if not m:
+                continue
+            try:
+                pgm = _json.loads(m.group(1))
+                first_key = next(iter(pgm), None)
+                if not first_key or not pgm[first_key]:
+                    continue
+                pg_id = pgm[first_key][0].get("program_group_id")
+                if pg_id:
+                    return (
+                        f"https://gs25travel.com/programs/files/programtour/"
+                        f"{pg_id}/program_pdf_{pg_id}"
+                    )
+            except (ValueError, KeyError, IndexError):
+                pass
 
         return ""
 

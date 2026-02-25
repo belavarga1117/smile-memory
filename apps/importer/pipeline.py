@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 
 from apps.tours.models import Airline, Category, Destination, Tour, TourDeparture
+from apps.tours.th_names import CATEGORY_TH, DESTINATION_TH
 
 from .mappers import TourMapper
 from .models import ImportJob, ImportLog
@@ -263,24 +264,24 @@ class ImportPipeline:
         tour.update_price_from()
 
     def _resolve_destination(self, name):
-        """Find or create a Destination by name."""
+        """Find or create a Destination by name, auto-filling name_th if known."""
         if not name:
             return None
         name = str(name).strip()
         dest, _ = Destination.objects.get_or_create(
             slug=slugify(name),
-            defaults={"name": name},
+            defaults={"name": name, "name_th": DESTINATION_TH.get(name, "")},
         )
         return dest
 
     def _resolve_category(self, name):
-        """Find or create a Category by name."""
+        """Find or create a Category by name, auto-filling name_th if known."""
         if not name:
             return None
         name = str(name).strip()
         cat, _ = Category.objects.get_or_create(
             slug=slugify(name),
-            defaults={"name": name},
+            defaults={"name": name, "name_th": CATEGORY_TH.get(name, "")},
         )
         return cat
 

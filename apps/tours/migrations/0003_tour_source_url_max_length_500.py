@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('tours', '0002_tour_tours_tour_status_4c9033_idx_and_more'),
+        ("tours", "0002_tour_tours_tour_status_4c9033_idx_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='tour',
-            name='source_url',
+            model_name="tour",
+            name="source_url",
             field=models.URLField(blank=True, max_length=500),
         ),
     ]

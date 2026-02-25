@@ -437,17 +437,20 @@ class ZegoScraper(BaseScraper):
             lunch = self._parse_meal_icon(day.get("pgt_midday", ""))
             dinner = self._parse_meal_icon(day.get("pgt_evening", ""))
 
-            # Meal descriptions
-            breakfast_desc = day.get("pgt_morning_des", "")
-            lunch_desc = day.get("pgt_midday_des", "")
-            dinner_desc = day.get("pgt_evening_des", "")
+            # Meal descriptions — strip any embedded HTML before storing
+            breakfast_desc = self._html_to_text(day.get("pgt_morning_des", ""))
+            lunch_desc = self._html_to_text(day.get("pgt_midday_des", ""))
+            dinner_desc = self._html_to_text(day.get("pgt_evening_des", ""))
 
-            # Hotel
+            # Hotel — API may embed Font Awesome star icons as HTML in the name
             hotel = day.get("pgt_hotel", "")
             equivalent = day.get("pgt_equivalent", "")
             hotel_name = hotel
             if equivalent:
                 hotel_name = f"{hotel} ({equivalent})"
+            hotel_name = self._html_to_text(
+                hotel_name
+            )  # strip <i class='fas fa-star'> etc.
 
             itinerary.append(
                 {

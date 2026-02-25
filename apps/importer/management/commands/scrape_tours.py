@@ -589,7 +589,14 @@ class Command(BaseCommand):
                 data[field] = clean(data[field])
 
         for day in data.get("_itinerary", []):
-            for field in ("description", "description_th"):
+            for field in (
+                "description",
+                "description_th",
+                "hotel",  # stored as hotel_name in DB
+                "breakfast_description",
+                "lunch_description",
+                "dinner_description",
+            ):
                 if day.get(field) is not None:
                     day[field] = clean(day[field])
 

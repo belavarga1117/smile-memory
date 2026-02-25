@@ -162,3 +162,4 @@ ADMIN_EMAIL = env("ADMIN_EMAIL", default="admin@smilememory.com")
 
 # Site configuration
 SITE_NAME = "Smile Memory"
+SITE_URL = env("SITE_URL", default="https://smilememorytravel.com")

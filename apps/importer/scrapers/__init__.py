@@ -1,11 +1,13 @@
 """Web scrapers for wholesaler tour data."""
 
 from .go365 import Go365Scraper
+from .gs25 import GS25Scraper
 from .realjourney import RealJourneyScraper
 from .zego import ZegoScraper
 
 SCRAPERS = {
     "go365": Go365Scraper,
+    "gs25": GS25Scraper,
     "realjourney": RealJourneyScraper,
     "zego": ZegoScraper,
 }

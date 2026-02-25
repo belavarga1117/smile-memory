@@ -74,6 +74,14 @@ class Command(BaseCommand):
             "--zego-pass",
             help="Zego portal password (or set ZEGO_PASSWORD env var)",
         )
+        parser.add_argument(
+            "--gs25-user",
+            help="GS25 portal username (or set GS25_USERNAME env var)",
+        )
+        parser.add_argument(
+            "--gs25-pass",
+            help="GS25 portal password (or set GS25_PASSWORD env var)",
+        )
 
     def handle(self, *args, **options):
         source = options["source"]
@@ -108,6 +116,15 @@ class Command(BaseCommand):
             )
             scraper_kwargs["password"] = options.get("zego_pass") or os.environ.get(
                 "ZEGO_PASSWORD", ""
+            )
+        elif source.lower() == "gs25":
+            import os
+
+            scraper_kwargs["username"] = options.get("gs25_user") or os.environ.get(
+                "GS25_USERNAME", ""
+            )
+            scraper_kwargs["password"] = options.get("gs25_pass") or os.environ.get(
+                "GS25_PASSWORD", ""
             )
 
         # Get scraper

@@ -1,6 +1,8 @@
 """Admin configuration for the import pipeline."""
 
 from django.contrib import admin, messages
+from django.shortcuts import redirect
+from django.urls import path
 from django.utils.html import format_html
 
 from .models import ImportJob, ImportLog
@@ -35,6 +37,35 @@ class ImportLogInline(admin.TabularInline):
 
 @admin.register(ImportJob)
 class ImportJobAdmin(admin.ModelAdmin):
+    change_list_template = "admin/importer/importjob/change_list.html"
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom = [
+            path(
+                "sync/<str:source>/",
+                self.admin_site.admin_view(self.sync_view),
+                name="importer_run_sync",
+            ),
+        ]
+        return custom + urls
+
+    def sync_view(self, request, source):
+        from .tasks import sync_all_tours
+
+        if request.method != "POST":
+            return redirect("..")
+
+        sources = None if source == "all" else [source]
+        result = sync_all_tours.delay(sources=sources)
+        label = "all sources" if sources is None else source
+        self.message_user(
+            request,
+            f"✅ Sync queued ({label}). Task ID: {result.id} — check worker logs for progress.",
+            messages.SUCCESS,
+        )
+        return redirect("..")
+
     list_display = (
         "name",
         "source",

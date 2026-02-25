@@ -1,6 +1,6 @@
 [build]
 builder = "nixpacks"
-buildCommand = "npm install && npm run css:build && pip install -r requirements/production.txt && python manage.py collectstatic --noinput && python manage.py migrate"
+buildCommand = "npm run css:build && python manage.py collectstatic --noinput && python manage.py migrate"
 
 [deploy]
 startCommand = "gunicorn config.wsgi --bind 0.0.0.0:$PORT"

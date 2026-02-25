@@ -36,6 +36,10 @@ def thumbnail(image_field, width=0):
         return ""
 
     if not os.path.exists(source_path):
+        # Fallback: check static/media/ for production (media files committed as static)
+        static_path = os.path.join(settings.BASE_DIR, "static", "media", image_field.name)
+        if os.path.exists(static_path):
+            return f"{settings.STATIC_URL}media/{image_field.name}"
         try:
             return image_field.url
         except ValueError:

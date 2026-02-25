@@ -6,15 +6,9 @@
 
 {% block content %}
 
-<!-- Hero -->
-<section class="bg-brand-blush py-16 lg:py-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="text-3xl md:text-5xl font-bold mb-4 text-brand-text">{% trans "Contact Us" %}</h1>
-        <p class="text-lg text-brand-muted max-w-2xl mx-auto">
-            {% trans "We'd love to hear from you. Reach out and let's plan your next adventure." %}
-        </p>
-    </div>
-</section>
+{% trans "Contact Us" as hero_title %}
+{% trans "We'd love to hear from you. Reach out and let's plan your next adventure." as hero_subtitle %}
+{% include "components/_hero_simple.html" with title=hero_title subtitle=hero_subtitle %}
 
 <section class="py-16 lg:py-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -160,25 +154,7 @@
         <div class="text-center mb-10">
             <h2 class="text-2xl md:text-3xl font-bold text-brand-text">{% trans "Frequently Asked Questions" %}</h2>
         </div>
-        <div class="space-y-3" x-data="{ openFaq: null }">
-            {% for faq in faqs %}
-            <div class="border border-brand-taupe/30 rounded-lg overflow-hidden">
-                <button @click="openFaq = openFaq === {{ forloop.counter }} ? null : {{ forloop.counter }}"
-                        class="w-full flex items-center justify-between px-6 py-4 text-left bg-brand-surface hover:bg-brand-bg transition-colors">
-                    <span class="font-medium text-brand-text">{% trans_field faq 'question' %}</span>
-                    <svg class="w-5 h-5 text-brand-hint shrink-0 ml-4 transition-transform duration-200"
-                         :class="openFaq === {{ forloop.counter }} && 'rotate-180'"
-                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </button>
-                <div x-show="openFaq === {{ forloop.counter }}" x-transition x-cloak
-                     class="px-6 pb-4 text-sm text-brand-muted leading-relaxed bg-brand-surface">
-                    {% trans_field faq 'answer' %}
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+        {% include "components/_faq_accordion.html" with faqs=faqs %}
     </div>
 </section>
 {% endif %}

@@ -205,7 +205,7 @@ Pipeline: `Trigger → Parser → Field Mapper → Validator → Upsert Tour →
 - **Build**: `collectstatic` | **Start**: `migrate && gunicorn`
 - **Static**: WhiteNoise serves from `staticfiles/`, seed images in `static/media/`
 - **Media**: Ephemeral filesystem — seed images committed as static, tour images are external URLs
-- **Admin**: https://web-production-86e1f.up.railway.app/admin/ (admin / SmileMemory2026!)
+- **Admin**: https://web-production-86e1f.up.railway.app/admin/ (credentials in .env / Railway variables)
 - **Railway CLI**: `railway logs`, `railway variables`, `railway status`
 - **Key env vars**: DJANGO_SETTINGS_MODULE, SECRET_KEY, DATABASE_URL, ALLOWED_HOSTS, PIP_ONLY_BINARY=pycairo
 
@@ -216,18 +216,39 @@ Pipeline: `Trigger → Parser → Field Mapper → Validator → Upsert Tour →
 - Bilingual fields use `_th` suffix: `title` (English) + `title_th` (Thai)
 - Custom User model: `apps.accounts.User` (`AUTH_USER_MODEL = "accounts.User"`)
 - Template partials prefixed with underscore: `_tour_card.html`, `_navbar.html`
-- Admin credentials (dev): username=`admin`, password=`admin123`
-- Admin credentials (prod): username=`admin`, password=`SmileMemory2026!`
+- Admin credentials: stored in `.env` (dev) and Railway variables (prod) — never commit to repo
 - Seed images served from `static/media/` via `thumbnail` tag fallback (ephemeral media/ on Railway)
 
 ## Development Workflow
 
-1. Activate venv: `source venv/bin/activate`
-2. Start Tailwind watcher: `npm run css:watch` (separate terminal)
-3. Run dev server: `python manage.py runserver`
-4. Admin panel: http://localhost:8000/admin/
-5. After model changes: `python manage.py makemigrations && python manage.py migrate`
-6. Before commit: `./scripts/qa.sh` (or at minimum: `ruff check . && ruff format .`)
+### Branch Strategy (GitHub Flow)
+
+- **`main`** = production (protected, auto-deploys to Railway)
+- **Feature branches** (`feat/...`, `fix/...`, `refactor/...`) for all work
+- **Pull Requests** required to merge into `main` — CI must pass
+- **Railway PR Previews** — each PR gets a temporary preview URL for testing
+- **NEVER push directly to `main`** — always create a PR
+
+### Workflow Steps
+
+1. Create feature branch: `git checkout -b feat/my-feature`
+2. Activate venv: `source venv/bin/activate`
+3. Start Tailwind watcher: `npm run css:watch` (separate terminal)
+4. Run dev server: `python manage.py runserver`
+5. Admin panel: http://localhost:8000/admin/
+6. After model changes: `python manage.py makemigrations && python manage.py migrate`
+7. Before commit: `./scripts/qa.sh` (or at minimum: `ruff check . && ruff format .`)
+8. Push branch & create PR: `git push -u origin feat/my-feature && gh pr create`
+9. Wait for CI + review Railway preview URL
+10. Merge PR → auto-deploy to production
+
+### Branch Naming
+
+- `feat/...` — new features
+- `fix/...` — bug fixes
+- `refactor/...` — code refactoring
+- `docs/...` — documentation changes
+- `chore/...` — maintenance, dependencies
 
 ## API Endpoints
 

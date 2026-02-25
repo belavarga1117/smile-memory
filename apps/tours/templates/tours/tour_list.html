@@ -5,13 +5,9 @@
 
 {% block content %}
 <div class="min-h-screen">
-    <!-- Page header -->
-    <div class="bg-brand-blush py-12 lg:py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl lg:text-4xl font-bold mb-2 text-brand-text">{% trans "Explore Our Tours" %}</h1>
-            <p class="text-brand-muted text-lg">{% trans "Discover handpicked travel experiences" %}</p>
-        </div>
-    </div>
+    {% trans "Explore Our Tours" as hero_title %}
+    {% trans "Discover handpicked travel experiences" as hero_subtitle %}
+    {% include "components/_hero_simple.html" with title=hero_title subtitle=hero_subtitle size="sm" center=False %}
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="lg:flex lg:gap-8">
@@ -110,37 +106,7 @@
                     {% endfor %}
                 </div>
 
-                <!-- Pagination -->
-                {% if page_obj.has_other_pages %}
-                <nav class="mt-10 flex justify-center" aria-label="Pagination">
-                    <div class="flex items-center gap-1">
-                        {% if page_obj.has_previous %}
-                        <a href="?{% for key, val in current_filters.items %}{% if val %}{{ key }}={{ val }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}"
-                           class="px-3 py-2 rounded-lg border border-brand-taupe/30 text-brand-muted hover:bg-brand-surface text-sm transition-colors">
-                            &laquo; {% trans "Prev" %}
-                        </a>
-                        {% endif %}
-
-                        {% for num in page_obj.paginator.page_range %}
-                            {% if page_obj.number == num %}
-                            <span class="px-3.5 py-2 rounded-lg bg-brand-rose text-white text-sm font-semibold">{{ num }}</span>
-                            {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
-                            <a href="?{% for key, val in current_filters.items %}{% if val %}{{ key }}={{ val }}&{% endif %}{% endfor %}page={{ num }}"
-                               class="px-3.5 py-2 rounded-lg border border-brand-taupe/30 text-brand-muted hover:bg-brand-surface text-sm transition-colors">
-                                {{ num }}
-                            </a>
-                            {% endif %}
-                        {% endfor %}
-
-                        {% if page_obj.has_next %}
-                        <a href="?{% for key, val in current_filters.items %}{% if val %}{{ key }}={{ val }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}"
-                           class="px-3 py-2 rounded-lg border border-brand-taupe/30 text-brand-muted hover:bg-brand-surface text-sm transition-colors">
-                            {% trans "Next" %} &raquo;
-                        </a>
-                        {% endif %}
-                    </div>
-                </nav>
-                {% endif %}
+                {% include "components/_pagination.html" %}
 
                 {% else %}
                 <!-- Empty state -->

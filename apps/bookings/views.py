@@ -1,3 +1,5 @@
+import logging
+
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import get_language
@@ -10,6 +12,8 @@ from apps.tours.models import Tour, TourDeparture
 from .forms import InquiryForm
 from .models import Inquiry
 from .notifications import send_inquiry_notification_to_admin, send_inquiry_thank_you
+
+logger = logging.getLogger(__name__)
 
 
 class InquiryCreateView(View):
@@ -69,7 +73,11 @@ class InquiryCreateView(View):
                 send_inquiry_thank_you(inquiry)
                 send_inquiry_notification_to_admin(inquiry)
             except Exception:
-                pass  # Email failures shouldn't break the inquiry
+                logger.error(
+                    "Email notification failed for inquiry %s",
+                    inquiry.reference_number,
+                    exc_info=True,
+                )
 
             return redirect("bookings:success", reference=inquiry.reference_number)
 

@@ -122,21 +122,37 @@ class InquiryAdmin(admin.ModelAdmin):
 
     status_badge.short_description = "Status"
 
-    @admin.action(description="Mark as Confirmed")
+    @admin.action(description="✅ Mark as Confirmed + send confirmation email")
     def action_confirm(self, request, queryset):
-        count = queryset.filter(status__in=["new", "contacted"]).update(
-            status=Inquiry.Status.CONFIRMED,
-            confirmed_at=timezone.now(),
-        )
-        self.message_user(request, f"{count} inquiry(ies) confirmed.")
+        from .notifications import send_booking_confirmation
 
-    @admin.action(description="Mark as Rejected")
+        count = 0
+        for inquiry in queryset.filter(status__in=["new", "contacted"]):
+            inquiry.status = Inquiry.Status.CONFIRMED
+            inquiry.confirmed_at = timezone.now()
+            inquiry.save(update_fields=["status", "confirmed_at"])
+            try:
+                send_booking_confirmation(inquiry)
+            except Exception:
+                pass  # logged inside send_booking_confirmation
+            count += 1
+        self.message_user(request, f"{count} inquiry(ies) confirmed and emailed.")
+
+    @admin.action(description="❌ Mark as Rejected + send rejection email")
     def action_reject(self, request, queryset):
-        count = queryset.filter(status__in=["new", "contacted"]).update(
-            status=Inquiry.Status.REJECTED,
-            rejected_at=timezone.now(),
-        )
-        self.message_user(request, f"{count} inquiry(ies) rejected.")
+        from .notifications import send_booking_rejection
+
+        count = 0
+        for inquiry in queryset.filter(status__in=["new", "contacted"]):
+            inquiry.status = Inquiry.Status.REJECTED
+            inquiry.rejected_at = timezone.now()
+            inquiry.save(update_fields=["status", "rejected_at"])
+            try:
+                send_booking_rejection(inquiry)
+            except Exception:
+                pass  # logged inside send_booking_rejection
+            count += 1
+        self.message_user(request, f"{count} inquiry(ies) rejected and emailed.")
 
     @admin.action(description="Mark as Contacted")
     def action_mark_contacted(self, request, queryset):

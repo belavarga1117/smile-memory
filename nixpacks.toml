@@ -1,4 +1,4 @@
 providers = ["python", "node"]
 
 [phases.setup]
-aptPkgs = ["libcairo2-dev", "pkg-config"]
+nixPkgs = ["cairo", "pkg-config", "gcc"]

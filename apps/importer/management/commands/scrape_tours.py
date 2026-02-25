@@ -346,6 +346,9 @@ class Command(BaseCommand):
                 tour.source = source
                 tour.external_id = data.get("external_id", tour.external_id)
                 tour.last_synced_at = timezone.now()
+                # Auto-promote DRAFT → PUBLISHED if tour now has a PDF
+                if publish and data.get("pdf_url") and tour.status == Tour.Status.DRAFT:
+                    tour.status = Tour.Status.PUBLISHED
                 tour.save()
             else:
                 # Generate unique slug

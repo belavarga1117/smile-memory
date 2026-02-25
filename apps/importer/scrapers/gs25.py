@@ -194,11 +194,18 @@ class GS25Scraper(BaseScraper):
         results = []
         seen_urls: set[str] = set()
 
-        # Try common tour listing endpoints (thaioutbound platform variants)
-        listing_paths = ["/programs", "/program", "/tourprogram", "/tour", "/packages"]
+        # GS25 (thaioutbound platform) groups programs by category.
+        # Login redirects to /programs/promotion — so the tour categories are
+        # subpaths of /programs.  We scrape each known category in order.
+        listing_paths = [
+            "/programs/promotion",  # Login redirect lands here — most tours
+            "/programs/regular",  # Regular (non-promo) programs
+            "/programs/group",  # Group tours
+            "/programs/package",  # Package tours
+            "/programs",  # Root listing (may aggregate or redirect)
+        ]
 
-        working_path = None
-        soup = None
+        found_any = False
 
         for path in listing_paths:
             try:
@@ -211,32 +218,29 @@ class GS25Scraper(BaseScraper):
                     logger.info(
                         "Found %d tour links at %s%s", len(links), self.base_url, path
                     )
-                    working_path = path
-                    break
+                    found_any = True
+                    for link in links:
+                        if link["url"] not in seen_urls:
+                            seen_urls.add(link["url"])
+                            results.append(link)
+                    # Follow pagination for this category
+                    results.extend(self._paginate(soup, seen_urls))
                 else:
-                    logger.debug("No tour links found at %s — trying next path", path)
+                    logger.debug(
+                        "No tour links at %s%s — trying next path", self.base_url, path
+                    )
             except Exception as e:
                 logger.warning(
                     "Listing endpoint %s%s failed: %s", self.base_url, path, e
                 )
 
-        if not working_path or soup is None:
+        if not found_any:
             logger.error(
                 "Could not find GS25 tour listing. Tried: %s. "
-                "Browse gs25travel.com manually to find the correct tour list URL.",
+                "Browse gs25travel.com after login to find the correct tour list URL.",
                 ", ".join(listing_paths),
             )
             return []
-
-        # Collect links from first page
-        for link in self._extract_tour_links(soup):
-            if link["url"] not in seen_urls:
-                seen_urls.add(link["url"])
-                results.append(link)
-
-        # Follow pagination to get all tours
-        page_results = self._paginate(soup, seen_urls)
-        results.extend(page_results)
 
         # Country filter (post-discovery, since we can't filter before fetching)
         if country:
@@ -253,17 +257,28 @@ class GS25Scraper(BaseScraper):
         return results
 
     def _extract_tour_links(self, soup: BeautifulSoup) -> list[dict]:
-        """Extract tour program links from a listing page."""
+        """Extract tour program links from a listing page.
+
+        GS25 URL patterns observed:
+          /programs/promotion/549      ← category subpath + numeric ID
+          /programs/regular/123        ← same pattern for other categories
+          /programs/549                ← flat numeric ID (fallback)
+        """
         results = []
+        seen_ids: set[str] = set()
 
         for a in soup.find_all("a", href=True):
             href = a["href"]
-            # Match /programs/123 or /program/123 patterns
-            match = re.search(r"/programs?/(\d+)", href)
+            # Match /programs/{optional-category}/123
+            match = re.search(r"/programs?/(?:[a-z]+/)?(\d+)", href)
             if not match:
                 continue
 
             ext_id = match.group(1)
+            if ext_id in seen_ids:
+                continue
+            seen_ids.add(ext_id)
+
             url = self._abs_url(href)
             title = a.get_text(strip=True)[:200] or f"GS25 Program {ext_id}"
 

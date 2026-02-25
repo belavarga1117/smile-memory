@@ -241,7 +241,7 @@ class ZegoScraper(BaseScraper):
     #  Tour parsing (from raw API data)
     # ------------------------------------------------------------------ #
 
-    def scrape_tour(self, url: str) -> dict | None:
+    def scrape_tour(self, url: str) -> dict | None:  # noqa: ARG002
         """Parse tour from raw API rows (pre-fetched by discover_tours).
 
         Unlike Go365/RealJourney, Zego data is already structured JSON.
@@ -551,9 +551,11 @@ class ZegoScraper(BaseScraper):
 
     # Font Awesome icon class → Unicode replacement.
     # Applied before HTML stripping so meaningful icons are preserved as text.
+    # Order matters: more specific patterns must come before general ones.
     _FA_ICON_REPLACEMENTS = [
-        ("fa-star", "★"),
-        ("fa-circle", "●"),
+        ("fa-star-half", "✭"),  # half star (before fa-star to match first)
+        ("fa-star", "★"),  # full star (hotel ratings)
+        ("fa-circle", "●"),  # filled circle (bullet indicators)
     ]
 
     # Pattern matching <i class='...'></i> or <i class="..."></i>

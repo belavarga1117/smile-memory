@@ -186,7 +186,7 @@ class ImportJobAdmin(admin.ModelAdmin):
         if obj.total_rows == 0:
             return "—"
         color = "#16a34a" if rate >= 90 else "#d97706" if rate >= 50 else "#dc2626"
-        return format_html('<span style="color:{}">{:.0f}%</span>', color, rate)
+        return format_html('<span style="color:{}">{}</span>', color, f"{rate:.0f}%")
 
     @admin.display(description="Detected Headers")
     def parsed_headers_display(self, obj):

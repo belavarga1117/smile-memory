@@ -20,7 +20,12 @@ class TestSyncAllToursTask:
         for call in mock_call_command.call_args_list:
             assert call.args[0] == "scrape_tours"
 
-        assert result == {"zego": "ok", "go365": "ok", "realjourney": "ok", "gs25": "ok"}
+        assert result == {
+            "zego": "ok",
+            "go365": "ok",
+            "realjourney": "ok",
+            "gs25": "ok",
+        }
 
     @patch("apps.importer.tasks.call_command")
     def test_partial_failure_continues(self, mock_call_command):

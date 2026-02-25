@@ -17,7 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Search**: PostgreSQL Full-Text Search
 - **Hosting**: Railway (nixpacks, git push = auto-deploy)
 - **Static Files**: WhiteNoise `CompressedStaticFilesStorage` (prod)
-- **Email**: SendGrid (transactional + marketing)
+- **Email**: Brevo REST API (transactional) + Brevo bulk (campaigns) — `apps/core/email_backends.BrevoEmailBackend`
 - **CI/CD**: GitHub Actions
 - **Production URL**: https://web-production-86e1f.up.railway.app
 
@@ -85,7 +85,7 @@ travel-agency/
 │   ├── settings/
 │   │   ├── base.py            # Shared settings (all envs)
 │   │   ├── development.py     # Dev: DEBUG=True, SQLite, console email
-│   │   └── production.py      # Prod: Railway, WhiteNoise, SendGrid, Sentry
+│   │   └── production.py      # Prod: Railway, WhiteNoise, Brevo, Sentry
 │   ├── celery.py              # Celery app init
 │   ├── urls.py                # Root URL routing
 │   └── wsgi.py / asgi.py
@@ -194,7 +194,7 @@ Pipeline: `Trigger → Parser → Field Mapper → Validator → Upsert Tour →
 ## Settings
 
 - Dev settings: `config.settings.development` (SQLite, console email, DEBUG=True)
-- Prod settings: `config.settings.production` (PostgreSQL, SendGrid, WhiteNoise, Sentry, logging to stdout)
+- Prod settings: `config.settings.production` (PostgreSQL, Brevo REST API, WhiteNoise, Sentry, logging to stdout)
 - Settings module controlled by `DJANGO_SETTINGS_MODULE` env var
 - All secrets in `.env` file (never committed)
 

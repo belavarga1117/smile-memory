@@ -359,11 +359,14 @@ class Go365Scraper(BaseScraper):
         seat_tl = self._to_int(period.get("seatTL")) or 0
         booked = seat_hold + seat_tl if quota else None
 
-        # PDF
+        # PDF — fileNameListPDF may be an absolute URL or a bare filename
         pdf_file = period.get("fileNameListPDF", "")
         pdf_url = ""
         if pdf_file:
-            pdf_url = f"https://www.qualityb2bpackage.com/upload_doc/{pdf_file}"
+            if pdf_file.startswith("http"):
+                pdf_url = pdf_file
+            else:
+                pdf_url = f"https://www.qualityb2bpackage.com/upload_doc/{pdf_file}"
 
         return {
             "departure_date": dep_date,

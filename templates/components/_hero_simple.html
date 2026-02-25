@@ -1,0 +1,13 @@
+{% comment %}
+Simple hero banner — used on about, contact, payment, tour list, blog list.
+Usage: {% include "components/_hero_simple.html" with title="Page Title" subtitle="Subtitle" %}
+Optional: center=True (default True), size="lg" (default) or "sm"
+{% endcomment %}
+<section class="bg-brand-blush {% if size == 'sm' %}py-12 lg:py-16{% else %}py-16 lg:py-20{% endif %}">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 {% if center != False %}text-center{% endif %}">
+        <h1 class="{% if size == 'sm' %}text-3xl lg:text-4xl mb-2{% else %}text-3xl md:text-5xl font-bold mb-4{% endif %} font-bold text-brand-text">{{ title }}</h1>
+        {% if subtitle %}
+        <p class="text-lg text-brand-muted {% if center != False %}max-w-2xl mx-auto{% endif %}">{{ subtitle }}</p>
+        {% endif %}
+    </div>
+</section>

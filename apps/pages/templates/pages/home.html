@@ -305,29 +305,7 @@
             </h2>
         </div>
 
-        <div class="space-y-3" x-data="{ openFaq: null }">
-            {% for faq in faqs %}
-            <div class="border border-brand-taupe/20 rounded-xl overflow-hidden">
-                <button @click="openFaq = openFaq === {{ forloop.counter }} ? null : {{ forloop.counter }}"
-                        class="w-full flex items-center justify-between px-6 py-4 text-left bg-brand-surface hover:bg-brand-bg transition-colors">
-                    <span class="font-medium text-brand-text">{% trans_field faq 'question' %}</span>
-                    <svg class="w-5 h-5 text-brand-hint shrink-0 ml-4 transition-transform duration-200"
-                         :class="openFaq === {{ forloop.counter }} && 'rotate-180'"
-                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </button>
-                <div x-show="openFaq === {{ forloop.counter }}"
-                     x-transition:enter="transition ease-out duration-200"
-                     x-transition:enter-start="opacity-0 -translate-y-1"
-                     x-transition:enter-end="opacity-100 translate-y-0"
-                     x-cloak
-                     class="px-6 pb-4 text-sm text-brand-muted leading-relaxed bg-brand-surface">
-                    {% trans_field faq 'answer' %}
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+        {% include "components/_faq_accordion.html" with faqs=faqs %}
     </div>
 </section>
 {% endif %}

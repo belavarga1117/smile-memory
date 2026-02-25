@@ -6,15 +6,9 @@
 
 {% block content %}
 
-<!-- Hero -->
-<section class="bg-brand-blush py-16 lg:py-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="text-3xl md:text-5xl font-bold mb-4 text-brand-text">{% trans "About Smile Memory" %}</h1>
-        <p class="text-lg text-brand-muted max-w-2xl mx-auto">
-            {% trans "Turning every journey into an everlasting memory since day one." %}
-        </p>
-    </div>
-</section>
+{% trans "About Smile Memory" as hero_title %}
+{% trans "Turning every journey into an everlasting memory since day one." as hero_subtitle %}
+{% include "components/_hero_simple.html" with title=hero_title subtitle=hero_subtitle %}
 
 <!-- Our Story -->
 <section class="py-16 lg:py-20">

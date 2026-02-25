@@ -1,0 +1,36 @@
+{% comment %}
+Reusable pagination — works with any paginated ListView.
+Expects: page_obj, current_filters (dict of active query params)
+Usage: {% include "components/_pagination.html" %}
+{% endcomment %}
+{% load i18n %}
+{% if page_obj.has_other_pages %}
+<nav class="mt-10 flex justify-center" aria-label="Pagination">
+    <div class="flex items-center gap-1">
+        {% if page_obj.has_previous %}
+        <a href="?{% for key, val in current_filters.items %}{% if val %}{{ key }}={{ val }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}"
+           class="px-3 py-2 rounded-lg border border-brand-taupe/30 text-brand-muted hover:bg-brand-surface text-sm transition-colors">
+            &laquo; {% trans "Prev" %}
+        </a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <span class="px-3.5 py-2 rounded-lg bg-brand-rose text-white text-sm font-semibold">{{ num }}</span>
+            {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+            <a href="?{% for key, val in current_filters.items %}{% if val %}{{ key }}={{ val }}&{% endif %}{% endfor %}page={{ num }}"
+               class="px-3.5 py-2 rounded-lg border border-brand-taupe/30 text-brand-muted hover:bg-brand-surface text-sm transition-colors">
+                {{ num }}
+            </a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <a href="?{% for key, val in current_filters.items %}{% if val %}{{ key }}={{ val }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}"
+           class="px-3 py-2 rounded-lg border border-brand-taupe/30 text-brand-muted hover:bg-brand-surface text-sm transition-colors">
+            {% trans "Next" %} &raquo;
+        </a>
+        {% endif %}
+    </div>
+</nav>
+{% endif %}

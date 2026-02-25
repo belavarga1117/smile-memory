@@ -6,13 +6,9 @@
 
 {% block content %}
 
-<!-- Hero -->
-<section class="bg-brand-blush py-12 lg:py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl md:text-4xl font-bold mb-3 text-brand-text">{% trans "Travel Blog" %}</h1>
-        <p class="text-brand-muted text-lg">{% trans "Tips, guides, and inspiration for your next journey" %}</p>
-    </div>
-</section>
+{% trans "Travel Blog" as hero_title %}
+{% trans "Tips, guides, and inspiration for your next journey" as hero_subtitle %}
+{% include "components/_hero_simple.html" with title=hero_title subtitle=hero_subtitle size="sm" center=False %}
 
 <section class="py-12 lg:py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -97,37 +93,7 @@
                     {% endfor %}
                 </div>
 
-                <!-- Pagination -->
-                {% if is_paginated %}
-                <nav class="mt-10 flex justify-center" aria-label="Pagination">
-                    <ul class="inline-flex items-center gap-1">
-                        {% if page_obj.has_previous %}
-                        <li>
-                            <a href="?page={{ page_obj.previous_page_number }}{% if current_filters.category %}&category={{ current_filters.category }}{% endif %}{% if current_filters.q %}&q={{ current_filters.q }}{% endif %}"
-                               class="px-3 py-2 rounded-lg text-sm text-brand-muted hover:bg-brand-bg transition-colors">
-                                {% trans "Previous" %}
-                            </a>
-                        </li>
-                        {% endif %}
-                        {% for num in page_obj.paginator.page_range %}
-                        <li>
-                            <a href="?page={{ num }}{% if current_filters.category %}&category={{ current_filters.category }}{% endif %}{% if current_filters.q %}&q={{ current_filters.q }}{% endif %}"
-                               class="px-3 py-2 rounded-lg text-sm {% if page_obj.number == num %}bg-brand-cocoa text-white{% else %}text-brand-muted hover:bg-brand-bg{% endif %} transition-colors">
-                                {{ num }}
-                            </a>
-                        </li>
-                        {% endfor %}
-                        {% if page_obj.has_next %}
-                        <li>
-                            <a href="?page={{ page_obj.next_page_number }}{% if current_filters.category %}&category={{ current_filters.category }}{% endif %}{% if current_filters.q %}&q={{ current_filters.q }}{% endif %}"
-                               class="px-3 py-2 rounded-lg text-sm text-brand-muted hover:bg-brand-bg transition-colors">
-                                {% trans "Next" %}
-                            </a>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-                {% endif %}
+                {% include "components/_pagination.html" %}
 
                 {% else %}
                 <!-- Empty state -->

@@ -4,12 +4,12 @@
 {% block object-tools-items %}
   {{ block.super }}
 
-  <li>
+  <li style="position:relative;">
     <details style="display:inline-block;">
       <summary class="addlink" style="cursor:pointer; padding:4px 10px; background:#6B4F54; color:#fff; border-radius:4px; font-size:13px; list-style:none;">
         🔄 Sync from API
       </summary>
-      <div style="position:absolute; z-index:999; background:#fff; border:1px solid #ccc; border-radius:6px; padding:12px; min-width:260px; box-shadow:0 4px 12px rgba(0,0,0,.15); margin-top:4px;">
+      <div style="position:absolute; right:0; z-index:9999; background:#fff; border:1px solid #ccc; border-radius:6px; padding:12px; width:280px; box-shadow:0 4px 12px rgba(0,0,0,.15); margin-top:4px;">
         <p style="margin:0 0 10px; font-weight:600; font-size:13px; color:#333;">🌐 Run API Scraper</p>
         <p style="margin:0 0 10px; font-size:12px; color:#666;">Sends a task to the Celery worker. Results appear in the job list below.</p>
         <form method="post" action="{% url 'admin:importer_run_sync' 'all' %}" style="margin-bottom:6px;">

@@ -19,7 +19,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Static Files**: WhiteNoise `CompressedStaticFilesStorage` (prod)
 - **Email**: Brevo REST API (transactional) + Brevo bulk (campaigns) — `apps/core/email_backends.BrevoEmailBackend`
 - **CI/CD**: GitHub Actions
-- **Production URL**: https://web-production-86e1f.up.railway.app
+- **Production URL**: https://smilememorytravel.com (Railway internal: web-production-86e1f.up.railway.app)
 
 ## Common Commands
 
@@ -73,7 +73,7 @@ travel-agency/
 ├── config/                     # Django project config
 │   ├── settings/
 │   │   ├── base.py            # Shared settings (all envs)
-│   │   ├── development.py     # Dev: DEBUG=True, SQLite, console email
+│   │   ├── development.py     # Dev: DEBUG=True, PostgreSQL (local), console email
 │   │   └── production.py      # Prod: Railway, WhiteNoise, Brevo, Sentry
 │   ├── celery.py              # Celery app init
 │   ├── urls.py                # Root URL routing
@@ -196,7 +196,7 @@ Pipeline: `Trigger → Parser → Field Mapper → Validator → Upsert Tour →
 - **Build**: `collectstatic` | **Start**: `migrate && gunicorn`
 - **Static**: WhiteNoise serves from `staticfiles/`, seed images in `static/media/`
 - **Media**: Ephemeral filesystem — seed images committed as static, tour images are external URLs
-- **Admin**: https://web-production-86e1f.up.railway.app/admin/ (credentials in .env / Railway variables)
+- **Admin**: https://smilememorytravel.com/admin/ (credentials in Railway env vars: ADMIN_PASSWORD)
 - **Railway CLI**: `railway logs`, `railway variables`, `railway status`
 - **Key env vars**: DJANGO_SETTINGS_MODULE, SECRET_KEY, DATABASE_URL, ALLOWED_HOSTS, PIP_ONLY_BINARY=pycairo
 
@@ -239,10 +239,12 @@ Pipeline: `Trigger → Parser → Field Mapper → Validator → Upsert Tour →
 | Admin, templates, forms | ✅ Full testing | ✅ Final verify |
 | PostgreSQL migrations | ✅ Real behavior | ✅ Apply on deploy |
 | Celery tasks | ✅ Test logic | ✅ Real workers |
-| **Scrapers** | ❌ No real data | ✅ 537+ tours, run here |
-| **Wholesaler API calls** | ❌ Local only | ✅ Production only |
+| Real Journey (no auth) | ✅ Can scrape locally | ✅ Scheduled daily |
+| Zego / Go365 / GS25 | ⚠️ Need credentials from Railway | ✅ Full sync daily |
+| **537+ real tour data** | ❌ Local: only seed/test data | ✅ Full catalog here |
 
-**Rule**: Scrapers (scrape_tours, validate_scrapers) ONLY run on production via Celery worker or admin panel. Local has only seed data (10 tours).
+**Rule**: For production data quality → use production. Local scraping = code testing only, not data management.
+**PDF rule**: A tour is only published (`status=PUBLISHED`) if it has a `pdf_url`. Tours without PDF stay DRAFT for admin review.
 
 ### Branch Naming
 

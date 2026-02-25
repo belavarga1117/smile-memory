@@ -150,9 +150,13 @@ CELERY_TIMEZONE = TIME_ZONE
 from celery.schedules import crontab  # noqa: E402
 
 CELERY_BEAT_SCHEDULE = {
-    "sync-all-tours-daily": {
+    "sync-all-tours-morning": {
         "task": "importer.sync_all_tours",
-        "schedule": crontab(hour=15, minute=0),  # 15:00 ICT daily
+        "schedule": crontab(hour=20, minute=0),  # 03:00 ICT = 20:00 UTC
+    },
+    "sync-all-tours-afternoon": {
+        "task": "importer.sync_all_tours",
+        "schedule": crontab(hour=8, minute=0),  # 15:00 ICT = 08:00 UTC
     },
 }
 

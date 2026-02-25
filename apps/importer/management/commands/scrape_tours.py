@@ -117,6 +117,18 @@ class Command(BaseCommand):
             self.stderr.write(self.style.ERROR(str(e)))
             return
 
+        # Mark any previously stuck jobs for this source as failed
+        if not dry_run:
+            stuck_statuses = [
+                ImportJob.Status.IMPORTING,
+                ImportJob.Status.PARSING,
+                ImportJob.Status.MAPPING,
+            ]
+            ImportJob.objects.filter(source=source.lower(), status__in=stuck_statuses).update(
+                status=ImportJob.Status.FAILED,
+                error_message="Interrupted — process was killed before completion (e.g. container restart).",
+            )
+
         # Create ImportJob for tracking (unless dry run)
         job = None
         if not dry_run:

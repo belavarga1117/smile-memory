@@ -124,7 +124,9 @@ class Command(BaseCommand):
                 ImportJob.Status.PARSING,
                 ImportJob.Status.MAPPING,
             ]
-            ImportJob.objects.filter(source=source.lower(), status__in=stuck_statuses).update(
+            ImportJob.objects.filter(
+                source=source.lower(), status__in=stuck_statuses
+            ).update(
                 status=ImportJob.Status.FAILED,
                 error_message="Interrupted — process was killed before completion (e.g. container restart).",
             )

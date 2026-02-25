@@ -15,7 +15,6 @@ def mark_stuck_jobs_failed(apps, _schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("importer", "0002_alter_importjob_source"),
     ]

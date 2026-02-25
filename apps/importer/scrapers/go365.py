@@ -85,9 +85,7 @@ class Go365Scraper(BaseScraper):
             ),
         }
 
-        req = urllib.request.Request(
-            f"{self.base_url}/search/coverk", headers=headers
-        )
+        req = urllib.request.Request(f"{self.base_url}/search/coverk", headers=headers)
         resp = self._opener.open(req, timeout=30)
         coverk_data = json.loads(resp.read().decode("utf-8"))
 
@@ -289,7 +287,6 @@ class Go365Scraper(BaseScraper):
         price_adult = self._to_decimal(row.get("tourPrice"))
 
         # Discount
-        discount = self._to_decimal(row.get("discountPrice"))
         price_adult_promo = None
         price_dc = self._to_decimal(row.get("tourPriceDC"))
         if price_dc and price_adult and price_dc < price_adult:

@@ -71,6 +71,9 @@ python manage.py collectstatic --noinput
 # Generate translation files
 python manage.py makemessages -l th
 python manage.py compilemessages
+
+# QA pipeline (all checks: lint, format, Django check, tests, coverage)
+./scripts/qa.sh
 ```
 
 ## Project Structure
@@ -99,12 +102,18 @@ travel-agency/
 │   ├── pages/                 # Static pages (home, about, contact)
 │   └── blog/                  # Blog / Travel Tips (SEO)
 ├── templates/
-│   ├── base.html              # Master template (navy/aqua design)
+│   ├── base.html              # Master template (rose-bézsz luxury design)
 │   ├── components/            # _navbar.html, _footer.html, etc.
 │   └── emails/                # Email templates
 ├── static/
 │   ├── src/input.css          # Tailwind v4 entry point
 │   └── css/output.css         # Compiled (gitignored)
+├── tests/                      # Integration + cross-app tests (factory-boy)
+│   ├── factories.py           # 25 factory-boy factories
+│   ├── conftest → root conftest.py (shared fixtures)
+│   └── test_*.py              # API, security, performance, etc.
+├── scripts/
+│   └── qa.sh                  # QA pipeline (lint + test + coverage)
 ├── locale/{th,en}/            # Translation .po files
 ├── requirements/{base,dev,prod}.txt
 ├── docker-compose.yml         # PostgreSQL + Redis (when Docker available)
@@ -200,7 +209,7 @@ Pipeline: `Trigger → Parser → Field Mapper → Validator → Upsert Tour →
 3. Run dev server: `python manage.py runserver`
 4. Admin panel: http://localhost:8000/admin/
 5. After model changes: `python manage.py makemigrations && python manage.py migrate`
-6. Before commit: `ruff check . && ruff format .`
+6. Before commit: `./scripts/qa.sh` (or at minimum: `ruff check . && ruff format .`)
 
 ## API Endpoints
 

@@ -182,7 +182,9 @@ class Command(BaseCommand):
             self.stderr.write(f"    Download failed: {e}")
             return None, None
 
-    def _assign_image(self, instance, field_name, photo_id, label, stats, force, **dl_kwargs):
+    def _assign_image(
+        self, instance, field_name, photo_id, label, stats, force, **dl_kwargs
+    ):
         """Download and assign image to model instance."""
         current = getattr(instance, field_name)
         if current and not force:
@@ -212,7 +214,13 @@ class Command(BaseCommand):
                 stats["skip"] += 1
                 continue
             self._assign_image(
-                dest, "image", photo_id, f"{dest.name} → {desc}", stats, force, width=1200
+                dest,
+                "image",
+                photo_id,
+                f"{dest.name} → {desc}",
+                stats,
+                force,
+                width=1200,
             )
 
     def _seed_tours(self, stats, force):
@@ -225,7 +233,13 @@ class Command(BaseCommand):
                 stats["skip"] += 1
                 continue
             self._assign_image(
-                tour, "hero_image", photo_id, f"{tour.title} → {desc}", stats, force, width=1400
+                tour,
+                "hero_image",
+                photo_id,
+                f"{tour.title} → {desc}",
+                stats,
+                force,
+                width=1400,
             )
 
     def _seed_hero_slides(self, stats, force):
@@ -240,7 +254,13 @@ class Command(BaseCommand):
             except HeroSlide.MultipleObjectsReturned:
                 slide = HeroSlide.objects.filter(title__icontains=title_part).first()
             self._assign_image(
-                slide, "image", photo_id, f"{slide.title} → {desc}", stats, force, width=1920
+                slide,
+                "image",
+                photo_id,
+                f"{slide.title} → {desc}",
+                stats,
+                force,
+                width=1920,
             )
 
     def _seed_blog(self, stats, force):
@@ -253,7 +273,13 @@ class Command(BaseCommand):
                 stats["skip"] += 1
                 continue
             self._assign_image(
-                post, "featured_image", photo_id, f"{post.title[:40]} → {desc}", stats, force, width=1200
+                post,
+                "featured_image",
+                photo_id,
+                f"{post.title[:40]} → {desc}",
+                stats,
+                force,
+                width=1200,
             )
 
     def _seed_testimonials(self, stats, force):
@@ -302,5 +328,7 @@ class Command(BaseCommand):
             with open(filepath, "wb") as f:
                 f.write(data)
             size_kb = len(data) / 1024
-            self.stdout.write(self.style.SUCCESS(f"  [OK] {filename} → {desc} ({size_kb:.0f} KB)"))
+            self.stdout.write(
+                self.style.SUCCESS(f"  [OK] {filename} → {desc} ({size_kb:.0f} KB)")
+            )
             stats["ok"] += 1

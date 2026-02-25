@@ -1,0 +1,30 @@
+[run]
+source = apps
+omit =
+    */migrations/*
+    */tests/*
+    */tests.py
+    */test_*.py
+    */admin.py
+    */management/commands/*
+    */scrapers/*
+    manage.py
+    config/wsgi.py
+    config/asgi.py
+    config/settings/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    if __name__ == .__main__
+    raise NotImplementedError
+    pass
+    except ImportError
+
+show_missing = True
+skip_empty = True
+fail_under = 65
+
+[html]
+directory = htmlcov

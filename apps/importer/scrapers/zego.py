@@ -15,12 +15,10 @@ Multiple departures share the same program details (title, code, duration, etc.)
 import json
 import logging
 import re
-import time
 import urllib.parse
 import urllib.request
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
-from http.cookiejar import CookieJar
 
 from .base import BaseScraper
 
@@ -28,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 # Meal icon mapping (Zego uses Font Awesome classes)
 MEAL_ICON_MAP = {
-    "fas fa-utensils": "Y",         # Regular meal
+    "fas fa-utensils": "Y",  # Regular meal
     "fas fa-plane airplane-day": "P",  # Plane meal
     "fas fa-plane": "P",
     "airplane-day": "P",
@@ -73,10 +71,12 @@ class ZegoScraper(BaseScraper):
         logger.info("Logging in to Zego as %s...", self._username)
 
         url = f"{self.base_url}/Registers/SaleAgencyLogin"
-        model = json.dumps({
-            "Username": self._username,
-            "Password": self._password,
-        })
+        model = json.dumps(
+            {
+                "Username": self._username,
+                "Password": self._password,
+            }
+        )
 
         # Build multipart form data
         boundary = "----ZegoFormBoundary"
@@ -114,15 +114,13 @@ class ZegoScraper(BaseScraper):
             ("ZegoSaleAdmin", self._admin_id),
             ("ZegoSaleCode", self._sale_code),
         ]:
-            cookie = urllib.request.Request(self.base_url)
-            self._cookie_jar.set_cookie(
-                _make_cookie(name, value, ".zegotravel.com")
-            )
+            self._cookie_jar.set_cookie(_make_cookie(name, value, ".zegotravel.com"))
 
         self._logged_in = True
         logger.info(
             "Logged in: agencyID=%s, saleCode=%s",
-            self._agency_id, self._sale_code,
+            self._agency_id,
+            self._sale_code,
         )
 
     # ------------------------------------------------------------------ #
@@ -164,19 +162,22 @@ class ZegoScraper(BaseScraper):
         results = list(programs.values())
         logger.info(
             "Discovered %d programs (%d total departure rows)",
-            len(results), len(raw_data),
+            len(results),
+            len(raw_data),
         )
         return results
 
     def _fetch_tour_listing(self) -> list[dict]:
         """Fetch full tour listing from portal API."""
         url = f"{self.base_url}/Programtourweb/list_view_by_web"
-        model = json.dumps({
-            "date_f": "2000-01-01",
-            "date_t": "2000-01-01",
-            "str_search": "",
-            "str_country": "",
-        })
+        model = json.dumps(
+            {
+                "date_f": "2000-01-01",
+                "date_t": "2000-01-01",
+                "str_search": "",
+                "str_country": "",
+            }
+        )
 
         boundary = "----ZegoFormBoundary"
         body = (
@@ -440,20 +441,22 @@ class ZegoScraper(BaseScraper):
             if equivalent:
                 hotel_name = f"{hotel} ({equivalent})"
 
-            itinerary.append({
-                "day_number": i,
-                "title": title,
-                "description": description,
-                "hotel": hotel_name.strip()[:300],
-                "meals": {
-                    "breakfast": breakfast,
-                    "lunch": lunch,
-                    "dinner": dinner,
-                },
-                "breakfast_description": breakfast_desc[:300],
-                "lunch_description": lunch_desc[:300],
-                "dinner_description": dinner_desc[:300],
-            })
+            itinerary.append(
+                {
+                    "day_number": i,
+                    "title": title,
+                    "description": description,
+                    "hotel": hotel_name.strip()[:300],
+                    "meals": {
+                        "breakfast": breakfast,
+                        "lunch": lunch,
+                        "dinner": dinner,
+                    },
+                    "breakfast_description": breakfast_desc[:300],
+                    "lunch_description": lunch_desc[:300],
+                    "dinner_description": dinner_desc[:300],
+                }
+            )
 
         return itinerary
 
@@ -564,12 +567,23 @@ class ZegoScraper(BaseScraper):
 def _make_cookie(name, value, domain):
     """Create a cookie for urllib cookie jar."""
     import http.cookiejar
+
     return http.cookiejar.Cookie(
-        version=0, name=name, value=value,
-        port=None, port_specified=False,
-        domain=domain, domain_specified=True, domain_initial_dot=True,
-        path="/", path_specified=True,
-        secure=False, expires=None, discard=True,
-        comment=None, comment_url=None,
-        rest={}, rfc2109=False,
+        version=0,
+        name=name,
+        value=value,
+        port=None,
+        port_specified=False,
+        domain=domain,
+        domain_specified=True,
+        domain_initial_dot=True,
+        path="/",
+        path_specified=True,
+        secure=False,
+        expires=None,
+        discard=True,
+        comment=None,
+        comment_url=None,
+        rest={},
+        rfc2109=False,
     )

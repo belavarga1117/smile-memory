@@ -129,15 +129,17 @@ class BaseScraper:
                 if e.code == 429:
                     # Rate limited — back off significantly
                     wait = (attempt + 1) * 10 + random.uniform(5, 15)
-                    logger.warning(
-                        "Rate limited (429) on %s, waiting %.1fs", url, wait
-                    )
+                    logger.warning("Rate limited (429) on %s, waiting %.1fs", url, wait)
                     time.sleep(wait)
                 elif e.code in (500, 502, 503, 504):
                     wait = (attempt + 1) * 5 + random.uniform(2, 5)
                     logger.warning(
                         "Server error %d on %s, retry %d/%d in %.1fs",
-                        e.code, url, attempt + 1, self.max_retries, wait,
+                        e.code,
+                        url,
+                        attempt + 1,
+                        self.max_retries,
+                        wait,
                     )
                     time.sleep(wait)
                 else:
@@ -147,11 +149,16 @@ class BaseScraper:
                 wait = (attempt + 1) * 3 + random.uniform(1, 3)
                 logger.warning(
                     "URL error on %s: %s, retry %d/%d",
-                    url, e.reason, attempt + 1, self.max_retries,
+                    url,
+                    e.reason,
+                    attempt + 1,
+                    self.max_retries,
                 )
                 time.sleep(wait)
 
-        raise ConnectionError(f"Failed to fetch {url} after {self.max_retries + 1} attempts")
+        raise ConnectionError(
+            f"Failed to fetch {url} after {self.max_retries + 1} attempts"
+        )
 
     def _fetch_raw(self, url: str) -> str:
         """HTTP GET → raw HTML string (no BeautifulSoup)."""

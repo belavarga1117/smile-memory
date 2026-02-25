@@ -88,7 +88,7 @@ class Command(BaseCommand):
         elif verbosity >= 1:
             logging.basicConfig(level=logging.INFO)
 
-        self.stdout.write(f"\n{'='*60}")
+        self.stdout.write(f"\n{'=' * 60}")
         self.stdout.write(f"  Tour Scraper — source: {source}")
         if country:
             self.stdout.write(f"  Country filter: {country}")
@@ -96,17 +96,18 @@ class Command(BaseCommand):
             self.stdout.write(f"  Single URL: {single_url}")
         if dry_run:
             self.stdout.write("  Mode: DRY RUN (no DB writes)")
-        self.stdout.write(f"{'='*60}\n")
+        self.stdout.write(f"{'=' * 60}\n")
 
         # Build scraper kwargs
         scraper_kwargs = {}
         if source.lower() == "zego":
             import os
-            scraper_kwargs["username"] = (
-                options.get("zego_user") or os.environ.get("ZEGO_USERNAME", "")
+
+            scraper_kwargs["username"] = options.get("zego_user") or os.environ.get(
+                "ZEGO_USERNAME", ""
             )
-            scraper_kwargs["password"] = (
-                options.get("zego_pass") or os.environ.get("ZEGO_PASSWORD", "")
+            scraper_kwargs["password"] = options.get("zego_pass") or os.environ.get(
+                "ZEGO_PASSWORD", ""
             )
 
         # Get scraper
@@ -158,7 +159,9 @@ class Command(BaseCommand):
 
             try:
                 # API-based scrapers: data pre-fetched in discover_tours
-                if ("_raw_rows" in tour_info or "_raw_product" in tour_info) and hasattr(scraper, "scrape_program"):
+                if (
+                    "_raw_rows" in tour_info or "_raw_product" in tour_info
+                ) and hasattr(scraper, "scrape_program"):
                     data = scraper.scrape_program(tour_info)
                 else:
                     data = scraper.scrape_tour(url)
@@ -176,9 +179,14 @@ class Command(BaseCommand):
                     tour, action = self._upsert_tour(data, publish=publish)
                     stats[action] += 1
                     self._log(
-                        job, i, "success",
+                        job,
+                        i,
+                        "success",
                         f"{action.title()}: {tour.title[:60]}",
-                        raw_data={"url": url, "product_code": data.get("product_code", "")},
+                        raw_data={
+                            "url": url,
+                            "product_code": data.get("product_code", ""),
+                        },
                     )
                     self.stdout.write(
                         self.style.SUCCESS(
@@ -192,13 +200,13 @@ class Command(BaseCommand):
                 self.stderr.write(self.style.ERROR(f"  → Error: {e}"))
 
         # Summary
-        self.stdout.write(f"\n{'='*60}")
+        self.stdout.write(f"\n{'=' * 60}")
         self.stdout.write("  Summary:")
         self.stdout.write(f"    Created: {stats['created']}")
         self.stdout.write(f"    Updated: {stats['updated']}")
         self.stdout.write(f"    Skipped: {stats['skipped']}")
         self.stdout.write(f"    Failed:  {stats['failed']}")
-        self.stdout.write(f"{'='*60}\n")
+        self.stdout.write(f"{'=' * 60}\n")
 
         # Finalize ImportJob
         if job:
@@ -275,11 +283,22 @@ class Command(BaseCommand):
                 action = "updated"
                 # Update fields (don't overwrite non-empty with empty)
                 for field in [
-                    "title", "title_th", "duration_days", "duration_nights",
-                    "price_from", "includes", "includes_th", "excludes",
-                    "excludes_th", "hero_image_url", "source_url",
-                    "highlight", "highlight_th", "hotel_stars_min",
-                    "hotel_stars_max", "pdf_url",
+                    "title",
+                    "title_th",
+                    "duration_days",
+                    "duration_nights",
+                    "price_from",
+                    "includes",
+                    "includes_th",
+                    "excludes",
+                    "excludes_th",
+                    "hero_image_url",
+                    "source_url",
+                    "highlight",
+                    "highlight_th",
+                    "hotel_stars_min",
+                    "hotel_stars_max",
+                    "pdf_url",
                 ]:
                     new_val = data.get(field)
                     if new_val is not None and new_val != "":
@@ -385,7 +404,9 @@ class Command(BaseCommand):
             }
             # Meal descriptions (from Zego)
             for meal_field in [
-                "breakfast_description", "lunch_description", "dinner_description",
+                "breakfast_description",
+                "lunch_description",
+                "dinner_description",
             ]:
                 val = day_data.get(meal_field, "")
                 if val:
@@ -438,12 +459,18 @@ class Command(BaseCommand):
                 defaults["price_adult"] = price
             # Optional pricing fields
             for field in [
-                "price_child", "price_child_no_bed",
+                "price_child",
+                "price_child_no_bed",
                 "price_single_supplement",
                 # Zego-specific
-                "price_join_land", "deposit",
-                "price_adult_promo", "price_child_promo",
-                "price_single_visa", "group_size", "booked", "bus",
+                "price_join_land",
+                "deposit",
+                "price_adult_promo",
+                "price_child_promo",
+                "price_single_visa",
+                "group_size",
+                "booked",
+                "bus",
             ]:
                 val = dep_data.get(field)
                 if val is not None and val != "":
@@ -460,9 +487,7 @@ class Command(BaseCommand):
 
     def _upsert_images(self, tour, image_urls):
         """Create TourImage records for new images."""
-        existing = set(
-            tour.images.values_list("image_url", flat=True)
-        )
+        existing = set(tour.images.values_list("image_url", flat=True))
 
         for i, url in enumerate(image_urls):
             if url not in existing:
@@ -476,7 +501,9 @@ class Command(BaseCommand):
         """Pretty-print tour data for dry run."""
         self.stdout.write(self.style.SUCCESS(f"  Title: {data.get('title', '?')[:80]}"))
         self.stdout.write(f"  Code: {data.get('product_code', '-')}")
-        self.stdout.write(f"  Duration: {data.get('duration_days', '?')}D/{data.get('duration_nights', '?')}N")
+        self.stdout.write(
+            f"  Duration: {data.get('duration_days', '?')}D/{data.get('duration_nights', '?')}N"
+        )
         self.stdout.write(f"  Price: {data.get('price_from', '-')} THB")
         self.stdout.write(f"  Airline: {data.get('airline_code', '-')}")
         self.stdout.write(f"  Destination: {data.get('destination_name', '-')}")

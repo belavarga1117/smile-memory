@@ -59,12 +59,14 @@ class RealJourneyScraper(BaseScraper):
             product_slug = product.get("product_slug", "")
             title = product.get("product_name", "")
 
-            results.append({
-                "url": f"{self.base_url}/tour/{product_slug}/",
-                "external_id": str(product.get("product_id", "")),
-                "title": title,
-                "_raw_product": product,
-            })
+            results.append(
+                {
+                    "url": f"{self.base_url}/tour/{product_slug}/",
+                    "external_id": str(product.get("product_id", "")),
+                    "title": title,
+                    "_raw_product": product,
+                }
+            )
 
         logger.info(
             "Discovered %d tours from Real Journey API",
@@ -234,7 +236,9 @@ class RealJourneyScraper(BaseScraper):
             "booked": (
                 self._to_int(period.get("groupsize", 0))
                 - self._to_int(period.get("seatremain", 0))
-            ) if period.get("groupsize") and period.get("seatremain") else None,
+            )
+            if period.get("groupsize") and period.get("seatremain")
+            else None,
         }
 
         # Promo pricing

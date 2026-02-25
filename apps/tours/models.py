@@ -345,8 +345,13 @@ class TourDeparture(TimeStampedModel):
 
     @property
     def effective_price(self):
-        """Return promo price if set, otherwise regular price."""
-        if self.price_adult_promo and self.price_adult_promo > 0:
+        """Return promo price if set and lower than regular, otherwise regular price."""
+        if (
+            self.price_adult_promo
+            and self.price_adult_promo > 0
+            and self.price_adult
+            and self.price_adult_promo < self.price_adult
+        ):
             return self.price_adult_promo
         return self.price_adult
 

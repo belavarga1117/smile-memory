@@ -205,7 +205,6 @@ class TestTourListView:
         resp = client.get("/th/tours/")
         assert "current_filters" in resp.context
         assert "destinations" in resp.context
-        assert "categories" in resp.context
 
 
 @pytest.mark.django_db

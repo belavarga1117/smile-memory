@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  DJANGO_SETTINGS_MODULE: config.settings.development
+  SECRET_KEY: test-secret-key-for-ci-pipeline-minimum-fifty-characters-long-enough
+  DEBUG: "True"
+  ALLOWED_HOSTS: "*"
+  DATABASE_URL: "sqlite:///db.sqlite3"
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -37,29 +44,13 @@ jobs:
         run: |
           pip install -r requirements/base.txt
           pip install -r requirements/development.txt
-      - name: Run Django checks
-        env:
-          DJANGO_SETTINGS_MODULE: config.settings.development
-          SECRET_KEY: test-secret-key-for-ci
-          DEBUG: "True"
-          ALLOWED_HOSTS: "*"
-          DATABASE_URL: "sqlite:///db.sqlite3"
+      - name: Django system check
         run: python manage.py check
       - name: Run migrations
-        env:
-          DJANGO_SETTINGS_MODULE: config.settings.development
-          SECRET_KEY: test-secret-key-for-ci
-          DEBUG: "True"
-          ALLOWED_HOSTS: "*"
-          DATABASE_URL: "sqlite:///db.sqlite3"
         run: python manage.py migrate
+      - name: Check no unmigrated changes
+        run: python manage.py makemigrations --check --dry-run
       - name: Run tests with coverage
-        env:
-          DJANGO_SETTINGS_MODULE: config.settings.development
-          SECRET_KEY: test-secret-key-for-ci
-          DEBUG: "True"
-          ALLOWED_HOSTS: "*"
-          DATABASE_URL: "sqlite:///db.sqlite3"
         run: pytest --cov=apps --cov-report=term-missing --cov-report=html -v
       - name: Upload coverage report
         if: always()

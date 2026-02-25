@@ -4,15 +4,25 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('importer', '0001_initial'),
+        ("importer", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='importjob',
-            name='source',
-            field=models.CharField(choices=[('zego', 'Zego Travel'), ('gs25', 'GS25 Travel'), ('go365', 'Go365 Travel'), ('realjourney', 'Real Journey'), ('manual', 'Manual Upload'), ('other', 'Other')], default='manual', max_length=20),
+            model_name="importjob",
+            name="source",
+            field=models.CharField(
+                choices=[
+                    ("zego", "Zego Travel"),
+                    ("gs25", "GS25 Travel"),
+                    ("go365", "Go365 Travel"),
+                    ("realjourney", "Real Journey"),
+                    ("manual", "Manual Upload"),
+                    ("other", "Other"),
+                ],
+                default="manual",
+                max_length=20,
+            ),
         ),
     ]

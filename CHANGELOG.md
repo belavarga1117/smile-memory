@@ -5,6 +5,26 @@ All notable changes to **Smile Memory** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-02-25
+
+### Added
+- Comprehensive QA test suite: 272 tests across 18 test files (79 new integration tests)
+- factory-boy factories (25 factories for all models) in `tests/factories.py`
+- Integration test modules: API (16), inquiry workflow (11), security (12), smoke templates (14), DB integrity (11), Celery tasks (5), import pipeline (3), N+1 performance (3)
+- QA pipeline script `scripts/qa.sh` — 6 automated checks: ruff lint, format, Django check, deploy check, pytest+coverage, migration sanity
+- `.coveragerc` with proper exclusions (migrations, scrapers, seeds, admin, settings) and 65% threshold
+- `--strict-markers` in pytest.ini for safer test configuration
+
+### Changed
+- CI workflow: consolidated env vars, added migration check step, aligned with qa.sh
+- Coverage reporting: excludes scrapers and seed commands for accurate business logic measurement (81% coverage)
+
+### Fixed
+- **CRITICAL**: `effective_price` property returned promo price even when higher than regular price — now only uses promo if lower
+- Stale test assertion for `categories` context (removed in v1.3.0)
+- Unused imports in Go365 and Zego scrapers (ruff lint)
+- CLAUDE.md: outdated navy/aqua design reference, missing qa.sh docs, missing tests/ in structure
+
 ## [1.3.0] - 2026-02-25
 
 ### Added
@@ -106,6 +126,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions CI: ruff lint + pytest
 - Seed data command: 8 airlines, 10 destinations, 7 categories, 10 tours
 
+[1.4.0]: https://github.com/belavarga1117/smile-memory/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/belavarga1117/smile-memory/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/belavarga1117/smile-memory/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/belavarga1117/smile-memory/compare/v1.0.0...v1.1.0

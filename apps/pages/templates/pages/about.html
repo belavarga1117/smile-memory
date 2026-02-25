@@ -3,6 +3,28 @@
 
 {% block title %}{% trans "About Us" %} — Smile Memory{% endblock %}
 {% block meta_description %}{% trans "Learn about Smile Memory — Thailand's trusted travel agency offering curated group tours across Asia and beyond." %}{% endblock %}
+{% block og_title %}{% trans "About Us" %} — Smile Memory{% endblock %}
+{% block og_description %}{% trans "Learn about Smile Memory — Thailand's trusted travel agency offering curated group tours across Asia and beyond." %}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TravelAgency",
+  "name": "Smile Memory",
+  "description": "{% trans 'Thailand-based travel agency offering curated group tour packages across Asia and beyond.' %}",
+  "url": "https://smilememorytravel.com",
+  "logo": "https://smilememorytravel.com{% static 'images/og-default.jpg' %}",
+  "sameAs": [
+    {% if site_config and site_config.facebook_url %}"{{ site_config.facebook_url }}"{% endif %}
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "TH"
+  }
+}
+</script>
+{% endblock %}
 
 {% block content %}
 

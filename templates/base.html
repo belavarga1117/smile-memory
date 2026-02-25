@@ -20,6 +20,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{% block twitter_title %}{{ SITE_NAME }}{% endblock %}">
     <meta name="twitter:description" content="{% block twitter_description %}{% endblock %}">
+    {% block twitter_image %}<meta name="twitter:image" content="{% static 'images/og-default.jpg' %}">{% endblock %}
 
     {% block structured_data %}{% endblock %}
 

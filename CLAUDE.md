@@ -152,13 +152,16 @@ Wholesalers (Zego, GS25, Go365) are login-gated portals. Zego has REST API (v1.5
 - `Itinerarys` → `ItineraryDay` (day_number, meals B/L/D with Y/N/P/C flags, hotel info)
 
 Supported import methods:
-1. **Excel upload** (primary) — admin exports from portal, uploads in admin
-2. **PDF upload** — parsed with pdfplumber
-3. **Zego API** (future) — REST API with auth-token header
-4. **Web scraping** (future) — authenticated session scraping
-5. **Manual entry** — Django admin CRUD
+1. **Zego API** — portal internal API with session auth (239 tours)
+2. **Go365 API** — encrypted AJAX API with CryptoJS AES (274 tours)
+3. **Real Journey API** — TourProX WordPress AJAX (23 tours)
+4. **Excel upload** — admin exports from portal, uploads in admin
+5. **PDF upload** — parsed with pdfplumber
+6. **Manual entry** — Django admin CRUD
 
 Pipeline: `Trigger → Parser → Field Mapper → Validator → Upsert Tour → Log`
+
+**Automated sync**: Celery Beat runs `sync_all_tours` daily at 15:00 ICT — imports from all 3 API sources.
 
 ### Bilingual Strategy (Thai + English)
 
@@ -169,7 +172,7 @@ Pipeline: `Trigger → Parser → Field Mapper → Validator → Upsert Tour →
 
 ### Design System
 
-- **Colors**: Warm premium palette — brand-cocoa (#6E5A52, nav/footer), brand-rose (#9B6B63, primary CTA), brand-clay (#7D5347, hover), brand-bg (#E9E2D8, page background), brand-surface (#F6F3EE, cards), brand-taupe (#7A695F, borders/icons), brand-text (#2E2A28), brand-muted (#57534E), brand-hint (#78716C), brand-gold (#D4B483, sparing accent). On dark backgrounds use text-white/70 or text-white/60 instead of brand-hint.
+- **Colors**: Rose-bézsz luxury palette — brand-cocoa (#6B4F54, dark mauve nav), brand-rose (#B25E68, dusty rose CTA), brand-clay (#964D57, deep rose hover), brand-blush (#EDCFCC, soft mauve-blush hero sections), brand-bg (#F3EAE6, blush cream background), brand-surface (#FDF9F7, near-white cards), brand-taupe (#C4ADA8, rosewood borders), brand-text (#3A2D31, charcoal-rose), brand-muted (#756469, rose-gray), brand-hint (#A08E93, light rose-gray), brand-gold (#D4A494, rose gold accent). On dark backgrounds use text-white/70 or text-white/60 instead of brand-hint.
 - **Fonts**: Inter (Latin) + Noto Sans Thai — loaded from Google Fonts
 - **Layout**: Mobile-first responsive with Tailwind CSS
 - **Components**: Alpine.js for interactivity (dropdowns, modals, form handling)

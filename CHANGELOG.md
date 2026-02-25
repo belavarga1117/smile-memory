@@ -5,6 +5,32 @@ All notable changes to **Smile Memory** will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-02-25
+
+### Added
+- Rose-bézsz luxury color palette (replaced brown/earth-tone theme)
+- `brand-blush` color token for hero sections (#EDCFCC)
+- Gallery lightbox with Alpine.js (click-to-zoom, arrow navigation, keyboard support)
+- Automated daily tour sync via Celery Beat (15:00 ICT, all 3 API sources)
+- `sync_all_tours` Celery task in `apps/importer/tasks.py`
+- Blog post markdown rendering with `|markdown` template filter
+- `@tailwindcss/typography` plugin for prose content styling
+- Destination ordering by tour count on homepage
+- "All Tours" card with airplane image on homepage destinations grid
+- SVG trust badge icons (replaced emoji)
+
+### Changed
+- Full color palette: cocoa→dark mauve, rose→dusty rose, clay→deep rose, taupe→rosewood, gold→rose gold
+- Hero sections use `bg-brand-blush` (was hardcoded `#fdb0aa`)
+- Footer background: `bg-brand-text` (dark charcoal-rose)
+- Navbar background: dark mauve (#6B4F54)
+- Removed category filter from tours page (unused by API scrapers)
+
+### Fixed
+- HTML tags in hotel names from Zego API (861 records cleaned, star counts extracted)
+- Blog headings not rendering due to Tailwind v4 preflight specificity issue
+- N+1 query on homepage destination tour counts (annotated queryset)
+
 ## [1.2.0] - 2026-02-25
 
 ### Added
@@ -80,6 +106,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions CI: ruff lint + pytest
 - Seed data command: 8 airlines, 10 destinations, 7 categories, 10 tours
 
+[1.3.0]: https://github.com/belavarga1117/smile-memory/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/belavarga1117/smile-memory/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/belavarga1117/smile-memory/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/belavarga1117/smile-memory/compare/v0.9.0...v1.0.0

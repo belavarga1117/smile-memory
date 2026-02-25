@@ -58,8 +58,8 @@
         {% endif %}
 
         <!-- Body -->
-        <div class="prose prose-lg max-w-none mb-10">
-            {% trans_field post 'body' %}
+        <div class="prose max-w-none mb-10">
+            {{ post|tf:"body"|markdown }}
         </div>
 
         <!-- Tags -->

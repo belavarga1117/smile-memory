@@ -7,7 +7,7 @@ from django.views.generic import DetailView, ListView
 
 from xhtml2pdf import pisa
 
-from .models import Category, Destination, Tour
+from .models import Destination, Tour
 
 
 class TourListView(ListView):
@@ -74,11 +74,9 @@ class TourListView(ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["destinations"] = Destination.objects.filter(parent__isnull=True)
-        ctx["categories"] = Category.objects.all()
         ctx["current_filters"] = {
             "q": self.request.GET.get("q", ""),
             "destination": self.request.GET.get("destination", ""),
-            "category": self.request.GET.get("category", ""),
             "max_price": self.request.GET.get("max_price", ""),
             "duration": self.request.GET.get("duration", ""),
             "sort": self.request.GET.get("sort", ""),

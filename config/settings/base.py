@@ -149,6 +149,16 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = TIME_ZONE
 
+# Celery Beat — scheduled tasks
+from celery.schedules import crontab  # noqa: E402
+
+CELERY_BEAT_SCHEDULE = {
+    "sync-all-tours-daily": {
+        "task": "importer.sync_all_tours",
+        "schedule": crontab(hour=15, minute=0),  # 15:00 ICT daily
+    },
+}
+
 # Email
 DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="noreply@smilememory.com")
 ADMIN_EMAIL = env("ADMIN_EMAIL", default="admin@smilememory.com")

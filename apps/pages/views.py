@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.db.models import Count, Q
 from django.views.generic import FormView, TemplateView
 
 from apps.tours.models import Destination, Tour
@@ -18,9 +19,21 @@ class HomePageView(TemplateView):
             .select_related("airline")
             .prefetch_related("destinations")[:6]
         )
-        ctx["featured_destinations"] = Destination.objects.filter(
-            is_featured=True, parent__isnull=True
-        )[:8]
+
+        # Destinations ordered by published tour count, top 7 + "Others"
+        published_filter = Q(tours__status=Tour.Status.PUBLISHED)
+        all_dests = (
+            Destination.objects.filter(parent__isnull=True)
+            .annotate(tour_count=Count("tours", filter=published_filter))
+            .filter(tour_count__gt=0)
+            .order_by("-tour_count")
+        )
+        top_destinations = list(all_dests[:7])
+        ctx["featured_destinations"] = top_destinations
+        ctx["total_tour_count"] = Tour.objects.filter(
+            status=Tour.Status.PUBLISHED
+        ).count()
+
         ctx["testimonials"] = Testimonial.objects.filter(is_active=True)[:6]
         ctx["trust_badges"] = TrustBadge.objects.all()[:4]
         ctx["faqs"] = FAQ.objects.filter(is_active=True)[:8]

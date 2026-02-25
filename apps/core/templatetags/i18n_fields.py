@@ -1,10 +1,23 @@
 """Template tags/filters for bilingual field access and language switching."""
 
+import markdown as md
 from django import template
 from django.conf import settings
+from django.utils.safestring import mark_safe
 from django.utils.translation import get_language
 
 register = template.Library()
+
+
+@register.filter(name="markdown")
+def markdown_filter(value):
+    """Render markdown text as HTML.
+
+    Usage: {{ post.body|markdown }}
+    """
+    if not value:
+        return ""
+    return mark_safe(md.markdown(value, extensions=["extra", "nl2br"]))
 
 
 @register.simple_tag

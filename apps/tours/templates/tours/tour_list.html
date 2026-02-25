@@ -6,10 +6,10 @@
 {% block content %}
 <div class="min-h-screen">
     <!-- Page header -->
-    <div class="bg-brand-cocoa text-white py-12 lg:py-16">
+    <div class="bg-brand-blush py-12 lg:py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl lg:text-4xl font-bold mb-2">{% trans "Explore Our Tours" %}</h1>
-            <p class="text-white/70 text-lg">{% trans "Discover handpicked travel experiences" %}</p>
+            <h1 class="text-3xl lg:text-4xl font-bold mb-2 text-brand-text">{% trans "Explore Our Tours" %}</h1>
+            <p class="text-brand-muted text-lg">{% trans "Discover handpicked travel experiences" %}</p>
         </div>
     </div>
 
@@ -48,19 +48,6 @@
                             {% for dest in destinations %}
                             <option value="{{ dest.slug }}" {% if current_filters.destination == dest.slug %}selected{% endif %}>
                                 {% trans_field dest 'name' %}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <!-- Category -->
-                    <div>
-                        <label class="block text-sm font-semibold text-brand-text mb-1.5">{% trans "Category" %}</label>
-                        <select name="category" class="w-full px-3 py-2 border border-brand-taupe/30 rounded-lg text-sm focus:ring-2 focus:ring-brand-gold">
-                            <option value="">{% trans "All Categories" %}</option>
-                            {% for cat in categories %}
-                            <option value="{{ cat.slug }}" {% if current_filters.category == cat.slug %}selected{% endif %}>
-                                {% trans_field cat 'name' %}
                             </option>
                             {% endfor %}
                         </select>

@@ -1,22 +1,92 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 /* Scan Django templates for Tailwind classes */
 @source "../../templates/**/*.html";
 @source "../../apps/**/templates/**/*.html";
 
-/* Smile Memory Design System — warm premium palette */
+/* Blog prose — override Tailwind v4 preflight reset */
+@layer components {
+  .prose h2 {
+    font-size: 1.667em;
+    font-weight: 700;
+    line-height: 1.333;
+    margin-top: 1.867em;
+    margin-bottom: 1.067em;
+    color: var(--color-brand-text);
+  }
+  .prose h3 {
+    font-size: 1.333em;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-top: 1.667em;
+    margin-bottom: 0.667em;
+    color: var(--color-brand-text);
+  }
+  .prose p {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+    color: var(--color-brand-muted);
+    line-height: 1.778;
+  }
+  .prose ul {
+    list-style-type: disc;
+    padding-left: 1.625em;
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+  }
+  .prose ol {
+    list-style-type: decimal;
+    padding-left: 1.625em;
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+  }
+  .prose li {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    color: var(--color-brand-muted);
+  }
+  .prose strong {
+    color: var(--color-brand-text);
+    font-weight: 700;
+  }
+  .prose a {
+    color: var(--color-brand-clay);
+    text-decoration: underline;
+  }
+  .prose a:hover {
+    color: var(--color-brand-rose);
+  }
+  .prose hr {
+    border-color: var(--color-brand-taupe);
+    opacity: 0.2;
+    margin-top: 2em;
+    margin-bottom: 2em;
+  }
+  .prose blockquote {
+    border-left: 3px solid var(--color-brand-taupe);
+    padding-left: 1em;
+    font-style: italic;
+    color: var(--color-brand-hint);
+    margin-top: 1.6em;
+    margin-bottom: 1.6em;
+  }
+}
+
+/* Smile Memory Design System — rose-bézsz luxury palette */
 @theme {
   /* Brand palette */
-  --color-brand-bg:      #E9E2D8;
-  --color-brand-surface:  #F6F3EE;
-  --color-brand-rose:     #9B6B63;
-  --color-brand-clay:     #7D5347;
-  --color-brand-taupe:    #7A695F;
-  --color-brand-cocoa:    #6E5A52;
-  --color-brand-text:     #2E2A28;
-  --color-brand-muted:    #57534E;
-  --color-brand-hint:     #78716C;
-  --color-brand-gold:     #D4B483;
+  --color-brand-bg:       #F3EAE6;
+  --color-brand-surface:  #FDF9F7;
+  --color-brand-blush:    #EDCFCC;
+  --color-brand-rose:     #B25E68;
+  --color-brand-clay:     #964D57;
+  --color-brand-taupe:    #C4ADA8;
+  --color-brand-cocoa:    #6B4F54;
+  --color-brand-text:     #3A2D31;
+  --color-brand-muted:    #756469;
+  --color-brand-hint:     #A08E93;
+  --color-brand-gold:     #D4A494;
 
   /* Fonts */
   --font-family-sans: 'Inter', 'Noto Sans Thai', system-ui, sans-serif;

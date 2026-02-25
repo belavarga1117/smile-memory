@@ -124,20 +124,61 @@
                 </div>
                 {% endif %}
 
-                <!-- Gallery -->
+                <!-- Gallery with lightbox -->
                 {% if tour.images.all %}
-                <div class="mb-8">
+                <div class="mb-8" x-data="{ lightbox: false, current: 0, images: [{% for img in tour.images.all %}{% if img.image %}'{% thumbnail img.image 1400 %}'{% elif img.image_url %}'{{ img.image_url }}'{% endif %}{% if not forloop.last %},{% endif %}{% endfor %}] }">
                     <h2 class="text-xl font-bold text-brand-text mb-4">{% trans "Gallery" %}</h2>
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         {% for img in tour.images.all %}
-                        <div class="aspect-[4/3] rounded-lg overflow-hidden">
+                        <button @click="current = {{ forloop.counter0 }}; lightbox = true" class="aspect-[4/3] rounded-lg overflow-hidden cursor-zoom-in group">
                             {% if img.image %}
-                            <img src="{% thumbnail img.image 800 %}" alt="{{ img.caption }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" loading="lazy">
+                            <img src="{% thumbnail img.image 800 %}" alt="{{ img.caption }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
                             {% elif img.image_url %}
-                            <img src="{{ img.image_url }}" alt="{{ img.caption }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300" loading="lazy">
+                            <img src="{{ img.image_url }}" alt="{{ img.caption }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
                             {% endif %}
-                        </div>
+                        </button>
                         {% endfor %}
+                    </div>
+
+                    <!-- Lightbox overlay -->
+                    <div x-show="lightbox" x-cloak
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0"
+                         x-transition:enter-end="opacity-100"
+                         x-transition:leave="transition ease-in duration-150"
+                         x-transition:leave-start="opacity-100"
+                         x-transition:leave-end="opacity-0"
+                         @keydown.escape.window="lightbox = false"
+                         @keydown.left.window="current = (current - 1 + images.length) % images.length"
+                         @keydown.right.window="current = (current + 1) % images.length"
+                         class="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4">
+
+                        <!-- Close button -->
+                        <button @click="lightbox = false"
+                                class="absolute top-4 right-4 text-white/70 hover:text-white z-10 p-2">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+
+                        <!-- Previous -->
+                        <button x-show="images.length > 1" @click="current = (current - 1 + images.length) % images.length"
+                                class="absolute left-2 sm:left-6 text-white/70 hover:text-white p-2">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                        </button>
+
+                        <!-- Image -->
+                        <img :src="images[current]" @click.outside="lightbox = false"
+                             class="max-w-full max-h-[85vh] object-contain rounded-lg">
+
+                        <!-- Next -->
+                        <button x-show="images.length > 1" @click="current = (current + 1) % images.length"
+                                class="absolute right-2 sm:right-6 text-white/70 hover:text-white p-2">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </button>
+
+                        <!-- Counter -->
+                        <div x-show="images.length > 1" class="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70 text-sm">
+                            <span x-text="current + 1"></span> / <span x-text="images.length"></span>
+                        </div>
                     </div>
                 </div>
                 {% endif %}

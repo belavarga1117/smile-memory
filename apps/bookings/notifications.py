@@ -22,7 +22,13 @@ def _send_async(subject, message, from_email, recipient_list, html_message):
             fail_silently=False,
         )
     except Exception as exc:
-        logger.error("Email send failed to %s: %s", recipient_list, exc)
+        logger.error(
+            "Email send failed to %s (subject: %s): %s",
+            recipient_list,
+            subject,
+            exc,
+            exc_info=True,
+        )
 
 
 def _dispatch(subject, message, recipient_list, html_message):

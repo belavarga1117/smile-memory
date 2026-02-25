@@ -29,6 +29,7 @@ def strip_code_prefix(title: str, product_code: str = "") -> str:
     Priority:
     1. If title starts with the tour's own product_code, strip that exactly.
     2. Fall back to generic UPPER-ALPHANUM pattern (catches future scrapers).
+    3. Strip Zego's ': ' prefix from Tour_Name API field (portal convention).
     """
     if not title:
         return title
@@ -37,10 +38,14 @@ def strip_code_prefix(title: str, product_code: str = "") -> str:
     if product_code and title.startswith(product_code + " "):
         return title[len(product_code) :].lstrip()
 
-    # Generic pattern fallback
+    # Generic pattern fallback: CODE-XXXXX <title>
     m = _CODE_PREFIX_RE.match(title)
     if m:
         return title[m.end() :]
+
+    # Zego portal convention: Tour_Name field may start with ': <title>'
+    if title.startswith(": "):
+        return title[2:].lstrip()
 
     return title
 

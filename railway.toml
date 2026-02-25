@@ -3,6 +3,6 @@ builder = "nixpacks"
 buildCommand = "python manage.py collectstatic --noinput"
 
 [deploy]
-startCommand = "python manage.py migrate && gunicorn config.wsgi --bind 0.0.0.0:$PORT"
+startCommand = "python manage.py migrate && python manage.py ensure_adminpassword && gunicorn config.wsgi --bind 0.0.0.0:$PORT"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3

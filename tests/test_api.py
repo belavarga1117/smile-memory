@@ -102,7 +102,7 @@ class TestTourDetailAPI:
         assert resp.status_code == 200
 
     def test_detail_includes_departures(self, client):
-        tour = TourFactory()
+        tour = TourFactory(with_departure=False)
         TourDepartureFactory(tour=tour)
         TourDepartureFactory(tour=tour)
 

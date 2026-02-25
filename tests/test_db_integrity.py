@@ -48,7 +48,7 @@ class TestForeignKeyCascade:
     """Verify FK ON DELETE behavior is correct."""
 
     def test_tour_delete_cascades_departures(self):
-        tour = TourFactory()
+        tour = TourFactory(with_departure=False)
         TourDepartureFactory(tour=tour)
         TourDepartureFactory(tour=tour)
         tour_pk = tour.pk

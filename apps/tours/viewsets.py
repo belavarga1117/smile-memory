@@ -1,8 +1,9 @@
+from django.db.models import Exists, OuterRef
 from django_filters import rest_framework as filters
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 
-from .models import Category, Destination, Tour
+from .models import Category, Destination, Tour, TourDeparture
 from .serializers import (
     CategorySerializer,
     DestinationSerializer,
@@ -39,7 +40,17 @@ class TourViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ["-is_featured", "-created_at"]
 
     def get_queryset(self):
-        qs = Tour.objects.filter(status=Tour.Status.PUBLISHED).select_related("airline")
+        qs = (
+            Tour.objects.filter(status=Tour.Status.PUBLISHED)
+            .filter(
+                Exists(
+                    TourDeparture.objects.filter(
+                        tour=OuterRef("pk"), status="available"
+                    )
+                )
+            )
+            .select_related("airline")
+        )
         if self.action == "retrieve":
             qs = qs.prefetch_related(
                 "destinations",

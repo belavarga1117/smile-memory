@@ -76,6 +76,15 @@ def tour(db, destination, category, airline):
     )
     t.destinations.add(destination)
     t.categories.add(category)
+    # Ensure tour has an available departure so it passes the sold-out filter
+    TourDeparture.objects.create(
+        tour=t,
+        departure_date=date.today() + timedelta(days=30),
+        return_date=date.today() + timedelta(days=34),
+        price_adult=Decimal("29900.00"),
+        price_child=Decimal("25900.00"),
+        status=TourDeparture.PeriodStatus.AVAILABLE,
+    )
     return t
 
 

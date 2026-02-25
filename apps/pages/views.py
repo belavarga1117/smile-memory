@@ -1,9 +1,9 @@
 from django.contrib import messages
-from django.db.models import Count, Q
+from django.db.models import Count, Exists, OuterRef, Q
 from django.views.generic import FormView, TemplateView
 
 from apps.core.spam_protection import check_rate_limit, rate_limit_response
-from apps.tours.models import Destination, Tour
+from apps.tours.models import Destination, Tour, TourDeparture
 
 from .forms import ContactForm
 from .models import FAQ, HeroSlide, Testimonial, TrustBadge
@@ -15,8 +15,12 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["hero_slides"] = HeroSlide.objects.filter(is_active=True)
+        has_available = TourDeparture.objects.filter(
+            tour=OuterRef("pk"), status="available"
+        )
         ctx["featured_tours"] = (
             Tour.objects.filter(status=Tour.Status.PUBLISHED, is_featured=True)
+            .filter(Exists(has_available))
             .select_related("airline")
             .prefetch_related("destinations")[:6]
         )
@@ -31,9 +35,11 @@ class HomePageView(TemplateView):
         )
         top_destinations = list(all_dests[:7])
         ctx["featured_destinations"] = top_destinations
-        ctx["total_tour_count"] = Tour.objects.filter(
-            status=Tour.Status.PUBLISHED
-        ).count()
+        ctx["total_tour_count"] = (
+            Tour.objects.filter(status=Tour.Status.PUBLISHED)
+            .filter(Exists(has_available))
+            .count()
+        )
 
         ctx["testimonials"] = Testimonial.objects.filter(is_active=True)[:6]
         ctx["trust_badges"] = TrustBadge.objects.all()[:4]

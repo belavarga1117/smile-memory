@@ -2,6 +2,9 @@
   "name": "smile-memory",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "css:build": "npx @tailwindcss/cli -i static/src/input.css -o static/css/output.css --minify",
     "css:watch": "npx @tailwindcss/cli -i static/src/input.css -o static/css/output.css --watch"

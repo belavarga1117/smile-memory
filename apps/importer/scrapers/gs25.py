@@ -226,27 +226,8 @@ class GS25Scraper(BaseScraper):
                     # Follow pagination for this category
                     results.extend(self._paginate(soup, seen_urls))
                 else:
-                    # Debug: log raw page structure to diagnose AJAX vs static HTML
-                    all_anchors = soup.find_all("a", href=True)
-                    sample_hrefs = [a["href"] for a in all_anchors[:30]]
-                    page_text_preview = soup.get_text(separator=" ", strip=True)[:500]
-                    raw_html_preview = str(soup)[:2000]
-                    logger.warning(
-                        "No tour links at %s%s. "
-                        "Total <a> tags: %d. "
-                        "Sample hrefs: %s. "
-                        "Page text preview: %s",
-                        self.base_url,
-                        path,
-                        len(all_anchors),
-                        sample_hrefs,
-                        page_text_preview,
-                    )
-                    logger.warning(
-                        "Raw HTML preview (%s%s): %s",
-                        self.base_url,
-                        path,
-                        raw_html_preview,
+                    logger.debug(
+                        "No tour links at %s%s — trying next path", self.base_url, path
                     )
             except Exception as e:
                 logger.warning(
@@ -278,34 +259,53 @@ class GS25Scraper(BaseScraper):
     def _extract_tour_links(self, soup: BeautifulSoup) -> list[dict]:
         """Extract tour program links from a listing page.
 
-        GS25 URL patterns observed:
-          /programs/promotion/549      ← category subpath + numeric ID
-          /programs/regular/123        ← same pattern for other categories
-          /programs/549                ← flat numeric ID (fallback)
+        GS25 (thaioutbound) actual URL pattern:
+          /programs/{DESTINATION}/{PROGRAM_CODE} {AIRLINE} {ROUTE} {TITLE}
+        Examples:
+          /programs/VIETNAM/DAD47%20FD%20DMK%20DANANG%20BANA%20HILLS...
+          /programs/JAPAN-HOKKAIDO/CTS33%20TG%20BKK%20HOKKAIDO...
+
+        Exclude:
+          /programs/search/... (booking search pages — duplicate links)
+          /programs/nogroup/... (category aggregate pages)
         """
         results = []
         seen_ids: set[str] = set()
 
         for a in soup.find_all("a", href=True):
             href = a["href"]
-            # Match /programs/{optional-category}/123
-            match = re.search(r"/programs?/(?:[a-z]+/)?(\d+)", href)
+
+            # Match /programs/{UPPERCASE-DESTINATION}/{SLUG}
+            # Exclude /programs/search/ and /programs/nogroup/ subpaths
+            match = re.search(
+                r"/programs/(?!search(?:/|$)|nogroup(?:/|$))([A-Z][^/?#\s]*)/([^/?#]+)",
+                href,
+            )
             if not match:
                 continue
 
-            ext_id = match.group(1)
-            if ext_id in seen_ids:
+            destination_segment = match.group(1)
+            title_slug = urllib.parse.unquote(match.group(2))
+
+            # Program code: uppercase letters + digits at start of title slug
+            # e.g. "DAD47 FD DMK ..." → "DAD47", "CTS33 TG ..." → "CTS33"
+            code_match = re.match(r"([A-Z]{2,5}\d+)", title_slug)
+            ext_id = code_match.group(1) if code_match else title_slug[:20].strip()
+
+            if not ext_id or ext_id in seen_ids:
                 continue
             seen_ids.add(ext_id)
 
             url = self._abs_url(href)
-            title = a.get_text(strip=True)[:200] or f"GS25 Program {ext_id}"
+            # Use the decoded title slug as display title (includes code + route + name)
+            title = title_slug[:200] or f"GS25 {ext_id}"
 
             results.append(
                 {
                     "url": url,
                     "external_id": ext_id,
                     "title": title,
+                    "destination_hint": destination_segment,
                 }
             )
 
@@ -368,9 +368,13 @@ class GS25Scraper(BaseScraper):
         if self._re_login_if_needed(soup):
             soup = self._fetch(url, referer=f"{self.base_url}/programs")
 
-        # Extract tour ID from URL
-        match = re.search(r"/programs?/(\d+)", url)
-        ext_id = match.group(1) if match else ""
+        # Extract program code from URL
+        # URL format: /programs/{DESTINATION}/{CODE} {TITLE...}
+        decoded_url = urllib.parse.unquote(url)
+        match = re.search(r"/programs/[^/]+/([A-Z]{2,5}\d+)", decoded_url)
+        ext_id = (
+            match.group(1) if match else re.sub(r".*programs/", "", decoded_url)[:20]
+        )
 
         title = self._parse_title(soup)
         if not title:
@@ -384,7 +388,7 @@ class GS25Scraper(BaseScraper):
         highlight = self._parse_highlight(soup)
         price_from = self._parse_price(soup)
         hero_image_url = self._parse_hero_image(soup)
-        pdf_url = self._parse_pdf_url(soup, ext_id)
+        pdf_url = self._parse_pdf_url(soup)
         departures = self._parse_departures(soup)
 
         logger.info(
@@ -621,7 +625,7 @@ class GS25Scraper(BaseScraper):
 
         return ""
 
-    def _parse_pdf_url(self, soup: BeautifulSoup, ext_id: str) -> str:
+    def _parse_pdf_url(self, soup: BeautifulSoup) -> str:
         """Parse PDF download link for the program."""
         # Look for PDF link in the page
         for a in soup.find_all("a", href=True):
@@ -632,14 +636,6 @@ class GS25Scraper(BaseScraper):
                 or "pdf" in href.lower()
             ):
                 return self._abs_url(href)
-
-        # Fallback: construct from known GS25 URL pattern
-        # (confirmed from search results: /assets/files/programtour/{id}/program_pdf_{id})
-        if ext_id:
-            return (
-                f"{self.base_url}/assets/files/programtour"
-                f"/{ext_id}/program_pdf_{ext_id}"
-            )
 
         return ""
 

@@ -368,23 +368,49 @@ class GS25Scraper(BaseScraper):
         if self._re_login_if_needed(soup):
             soup = self._fetch(url, referer=f"{self.base_url}/programs")
 
-        # Extract program code from URL
-        # URL format: /programs/{DESTINATION}/{CODE} {TITLE...}
+        # Extract reliable fields directly from URL (the page has a sidebar with other
+        # tours, so HTML parsing can pick up wrong values from adjacent tour data).
+        # URL format: /programs/{DESTINATION}/{CODE} {AIRLINE} {ROUTE} {TITLE} {DUR}
         decoded_url = urllib.parse.unquote(url)
-        match = re.search(r"/programs/[^/]+/([A-Z]{2,5}\d+)", decoded_url)
-        ext_id = (
-            match.group(1) if match else re.sub(r".*programs/", "", decoded_url)[:20]
+
+        # Destination: URL segment before the title slug
+        dest_m = re.search(r"/programs/([^/]+)/", decoded_url)
+        destination_from_url = (
+            dest_m.group(1).replace("-", " ").title() if dest_m else ""
         )
 
+        # Program code: e.g. DAD47, CTS33 — the unique ID for this tour
+        code_m = re.search(r"/programs/[^/]+/([A-Z]{2,5}\d+)", decoded_url)
+        ext_id = (
+            code_m.group(1) if code_m else re.sub(r".*programs/", "", decoded_url)[:20]
+        )
+
+        # Duration: "3D2N" in URL slug is the most reliable source
+        url_slug = re.sub(r".*/programs/[^/]+/", "", decoded_url)
+        dur_m = re.search(r"(\d+)D(?:ays?)?/?(\d+)N(?:ights?)?", url_slug, re.I)
+        duration_from_url = (
+            (int(dur_m.group(1)), int(dur_m.group(2))) if dur_m else (None, None)
+        )
+
+        # Airline: first 2-letter code after program code (e.g. "DAD47 FD" → "FD")
+        airline_m = re.match(r"[A-Z]{2,5}\d+\s+([A-Z]{2})\b", url_slug)
+        airline_from_url = airline_m.group(1) if airline_m else ""
+
         title = self._parse_title(soup)
+        if not title:
+            # Fallback: use URL slug as title (always available, contains full Thai title)
+            title = url_slug.strip()[:300]
         if not title:
             logger.warning("No title found at %s — skipping", url)
             return None
 
-        product_code = self._parse_product_code(soup, ext_id)
-        duration_days, duration_nights = self._parse_duration(soup)
-        destination = self._parse_destination(soup)
-        airline_code = self._parse_airline(soup)
+        # Use URL-derived values; fall back to HTML parsing only where URL lacks data
+        product_code = ext_id  # ext_id IS the product code (e.g. DAD47)
+        duration_days, duration_nights = duration_from_url
+        if not duration_days:
+            duration_days, duration_nights = self._parse_duration(soup)
+        destination = destination_from_url or self._parse_destination(soup)
+        airline_code = airline_from_url or self._parse_airline(soup)
         highlight = self._parse_highlight(soup)
         price_from = self._parse_price(soup)
         hero_image_url = self._parse_hero_image(soup)
@@ -428,38 +454,27 @@ class GS25Scraper(BaseScraper):
     # ------------------------------------------------------------------ #
 
     def _parse_title(self, soup: BeautifulSoup) -> str:
-        """Parse tour title from the detail page."""
-        # Primary: first <h1> (most pages use this for the program name)
-        h1 = soup.find("h1")
-        if h1:
-            text = h1.get_text(strip=True)
-            if text and len(text) > 3:
+        """Parse tour title from the detail page.
+
+        GS25 (thaioutbound) uses <h3> for the program title, not <h1>.
+        """
+        # Primary: <h3> — thaioutbound platform uses this for program names
+        h3 = soup.find("h3")
+        if h3:
+            text = h3.get_text(strip=True)
+            if text and len(text) > 5:
                 return text[:300]
 
-        # Secondary: styled heading elements
-        for tag, attrs in [
-            ("h2", {"class": re.compile(r"title|program|tour|heading", re.I)}),
-            (
-                "div",
-                {"class": re.compile(r"program-?name|tour-?title|page-?title", re.I)},
-            ),
-            ("h3", {}),
-        ]:
-            el = soup.find(tag, attrs) if attrs else soup.find(tag)
+        # Secondary: <h1> or <h2>
+        for tag in ["h1", "h2"]:
+            el = soup.find(tag)
             if el:
                 text = el.get_text(strip=True)
-                if text and len(text) > 3:
+                if text and len(text) > 5:
                     return text[:300]
 
-        # Fallback: <title> tag minus "| GS25" suffix
-        title_tag = soup.find("title")
-        if title_tag:
-            raw = title_tag.get_text(strip=True)
-            cleaned = re.sub(
-                r"\s*[\|–\-]\s*(GS25|gs25).*$", "", raw, flags=re.I
-            ).strip()
-            return (cleaned or raw)[:300]
-
+        # Fallback: extract from <title> tag (usually "GS25 GS25 TRAVEL SERVICE")
+        # — not useful; return empty to trigger URL-based fallback in scrape_tour
         return ""
 
     def _parse_product_code(self, soup: BeautifulSoup, ext_id: str) -> str:
@@ -546,9 +561,17 @@ class GS25Scraper(BaseScraper):
         return ""
 
     def _parse_airline(self, soup: BeautifulSoup) -> str:
-        """Extract 2-letter airline IATA code from flight numbers on the page."""
+        """Extract 2-letter airline IATA code.
+
+        GS25 tables show airline as 'THAI AIR ASIA (FD)' — extract from parentheses.
+        Fallback: look for standard flight number format like TG205.
+        """
         text = soup.get_text()
-        # Look for standard flight number format: TG205, EK101, etc.
+        # GS25 format: "AIRLINE NAME (XX)" in departure table
+        match = re.search(r"\(([A-Z]{2})\)", text)
+        if match:
+            return match.group(1)
+        # Fallback: flight number format TG205, FD123, etc.
         match = re.search(r"\b([A-Z]{2})\d{3,4}\b", text)
         if match:
             return match.group(1)
@@ -580,22 +603,50 @@ class GS25Scraper(BaseScraper):
         return ""
 
     def _parse_price(self, soup: BeautifulSoup) -> Decimal | None:
-        """Parse starting price in THB."""
-        text = soup.get_text()
+        """Parse lowest starting price in THB from departure table.
 
-        for pattern in [
-            r"(?:เริ่มต้น|เริ่ม|ราคา|ผู้ใหญ่)[^\d]{0,10}(\d{1,3}(?:,\d{3})*)",
-            r"(\d{1,3}(?:,\d{3})+)\s*(?:บาท|THB|฿)",
-            r"(?:from|starting|Adult\s*price)[^\d]{0,10}(\d{1,3}(?:,\d{3})*)",
-        ]:
-            match = re.search(pattern, text, re.I)
-            if match:
-                try:
-                    val = Decimal(match.group(1).replace(",", ""))
-                    if val > 1000:  # Reasonable tour price floor
-                        return val
-                except InvalidOperation:
-                    pass
+        GS25 price column format: '14,999' or '14,999>10,999' (promo: take right side).
+        Minimum price across all departure rows is used as price_from.
+        """
+        candidates: list[Decimal] = []
+
+        for table in soup.find_all("table"):
+            rows = table.find_all("tr")
+            if len(rows) < 2:
+                continue
+            header_text = " ".join(
+                th.get_text(strip=True).lower() for th in rows[0].find_all(["th", "td"])
+            )
+            if "ราคา" not in header_text and "price" not in header_text:
+                continue
+
+            for row in rows[1:]:
+                cols = [td.get_text(strip=True) for td in row.find_all(["td", "th"])]
+                for cell in cols:
+                    # Handle promo format: "14,999>10,999" — take the promo (right) price
+                    if ">" in cell:
+                        cell = cell.split(">")[-1]
+                    price_m = re.search(r"(\d{1,3}(?:,\d{3})+)", cell)
+                    if price_m:
+                        try:
+                            val = Decimal(price_m.group(1).replace(",", ""))
+                            if 5000 < val < 500000:  # Reasonable tour price range
+                                candidates.append(val)
+                        except InvalidOperation:
+                            pass
+
+        if candidates:
+            return min(candidates)
+
+        # Fallback: any price-like number >= 5000 in page text
+        text = soup.get_text()
+        for m in re.finditer(r"(\d{1,3}(?:,\d{3})+)", text):
+            try:
+                val = Decimal(m.group(1).replace(",", ""))
+                if 5000 < val < 500000:
+                    return val
+            except InvalidOperation:
+                pass
 
         return None
 
@@ -666,46 +717,45 @@ class GS25Scraper(BaseScraper):
 
             for row in rows[1:]:
                 cols = row.find_all(["td", "th"])
-                if len(cols) < 2:
+                if len(cols) < 4:
                     continue
 
                 texts = [col.get_text(strip=True) for col in cols]
+
+                # GS25 table column order (0-indexed, first col is empty checkbox):
+                # [0]=checkbox [1]=date_range [2]=duration [3]=program [4]=airline
+                # [5]=price [6]=commission [7]=com_sell [8]=total_seats [9]=avail
+                # [10]=status [11]=remark
                 dep_date = None
                 ret_date = None
                 price_adult = None
                 status = "available"
 
-                for text in texts:
-                    # Try to parse as date
-                    if dep_date is None:
-                        parsed = self._parse_date(text)
-                        if parsed:
-                            dep_date = parsed
-                            continue
+                # Column 1: date range "DD - DD MMM YYYY" or "DD/MM/YYYY"
+                date_cell = texts[1] if len(texts) > 1 else ""
+                dep_date, ret_date = self._parse_date_range(date_cell)
 
-                    # Second date becomes return date
-                    if ret_date is None and dep_date is not None:
-                        parsed = self._parse_date(text)
-                        if parsed and parsed > dep_date:
-                            ret_date = parsed
-                            continue
+                # Column 5: price "14,999" or "14,999>10,999" (promo)
+                price_cell = texts[5] if len(texts) > 5 else ""
+                if ">" in price_cell:
+                    price_cell = price_cell.split(">")[-1]  # Take promo price
+                price_m = re.search(r"(\d{1,3}(?:,\d{3})+)", price_cell)
+                if price_m:
+                    try:
+                        val = Decimal(price_m.group(1).replace(",", ""))
+                        if val > 1000:
+                            price_adult = val
+                    except InvalidOperation:
+                        pass
 
-                    # Price: look for numbers >= 1,000 (Thai tour price floor)
-                    if price_adult is None:
-                        price_match = re.search(r"(\d{1,3}(?:,\d{3})+|\d{5,})", text)
-                        if price_match:
-                            try:
-                                val = Decimal(price_match.group(1).replace(",", ""))
-                                if val > 1000:
-                                    price_adult = val
-                            except InvalidOperation:
-                                pass
-
-                    # Status keywords
-                    if any(kw in text for kw in ["เต็ม", "Full", "Sold"]):
-                        status = "soldout"
-                    elif any(kw in text for kw in ["ยกเลิก", "Cancel", "ปิด", "Closed"]):
-                        status = "closed"
+                # Column 10: status (English: Available, Waitlist, Full)
+                status_cell = texts[10] if len(texts) > 10 else ""
+                remark_cell = texts[11] if len(texts) > 11 else ""
+                combined = f"{status_cell} {remark_cell}"
+                if any(kw in combined for kw in ["Waitlist", "เต็ม", "Full", "Sold"]):
+                    status = "soldout"
+                elif any(kw in combined for kw in ["Cancel", "ยกเลิก", "Closed", "ปิด"]):
+                    status = "closed"
 
                 if dep_date and price_adult:
                     departures.append(
@@ -761,3 +811,33 @@ class GS25Scraper(BaseScraper):
                         pass
 
         return None
+
+    def _parse_date_range(self, text: str) -> tuple[date | None, date | None]:
+        """Parse GS25 date range cell: '07 - 09 Mar 2026' → (dep_date, ret_date)."""
+        text = text.strip()
+        if not text:
+            return None, None
+
+        # GS25 format: "07 - 09 Mar 2026"
+        m = re.match(r"(\d{1,2})\s*[-–]\s*(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})", text)
+        if m:
+            day1, day2, mon_str, year_str = (
+                m.group(1),
+                m.group(2),
+                m.group(3),
+                m.group(4),
+            )
+            try:
+                dep = datetime.strptime(
+                    f"{day1} {mon_str} {year_str}", "%d %b %Y"
+                ).date()
+                ret = datetime.strptime(
+                    f"{day2} {mon_str} {year_str}", "%d %b %Y"
+                ).date()
+                return dep, ret
+            except ValueError:
+                pass
+
+        # Fallback: single date
+        d = self._parse_date(text)
+        return d, None

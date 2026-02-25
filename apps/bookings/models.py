@@ -56,6 +56,14 @@ class Inquiry(TimeStampedModel):
     # Marketing
     marketing_opt_in = models.BooleanField(default=False)
 
+    # Language used when submitting inquiry (determines email language)
+    language = models.CharField(
+        max_length=5,
+        default="th",
+        choices=[("en", "English"), ("th", "Thai")],
+        help_text="Language active when inquiry was submitted",
+    )
+
     # Workflow
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.NEW)
     assigned_to = models.ForeignKey(

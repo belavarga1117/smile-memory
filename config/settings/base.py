@@ -87,10 +87,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # Database
 DATABASES = {
-    "default": env.db(
-        "DATABASE_URL",
-        default="postgres://travel:travel_dev@localhost:5432/smile_memory",
-    ),
+    "default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3"),
 }
 
 # Custom user model

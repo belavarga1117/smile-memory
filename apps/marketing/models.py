@@ -171,6 +171,12 @@ class Subscriber(TimeStampedModel):
         blank=True,
         help_text="Where they subscribed from, e.g. 'footer', 'homepage', 'inquiry'",
     )
+    language = models.CharField(
+        max_length=5,
+        default="th",
+        choices=[("en", "English"), ("th", "Thai")],
+        help_text="Language active when subscriber signed up",
+    )
 
     class Meta:
         ordering = ["-created_at"]

@@ -79,8 +79,9 @@
                             <h2 class="font-semibold text-brand-text mb-2 line-clamp-2 group-hover:text-brand-clay transition-colors">
                                 <a href="{{ post.get_absolute_url }}">{% trans_field post 'title' %}</a>
                             </h2>
-                            {% if post.excerpt %}
-                            <p class="text-sm text-brand-muted mb-3 line-clamp-2">{% trans_field post 'excerpt' %}</p>
+                            {% trans_field post 'excerpt' as post_excerpt %}
+                            {% if post_excerpt %}
+                            <p class="text-sm text-brand-muted mb-3 line-clamp-2">{{ post_excerpt }}</p>
                             {% endif %}
                             <div class="flex items-center justify-between text-xs text-brand-hint">
                                 <span>{{ post.author_name }}</span>

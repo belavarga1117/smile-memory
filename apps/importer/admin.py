@@ -47,6 +47,11 @@ class ImportJobAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.sync_view),
                 name="importer_run_sync",
             ),
+            path(
+                "validate/<str:source>/",
+                self.admin_site.admin_view(self.validate_view),
+                name="importer_run_validate",
+            ),
         ]
         return custom + urls
 
@@ -64,6 +69,24 @@ class ImportJobAdmin(admin.ModelAdmin):
         self.message_user(
             request,
             f"✅ Sync queued ({label}). Task ID: {result.id} — check worker logs for progress.",
+            messages.SUCCESS,
+        )
+        return redirect(changelist_url)
+
+    def validate_view(self, request, source):
+        from .tasks import validate_scrapers
+
+        changelist_url = reverse("admin:importer_importjob_changelist")
+
+        if request.method != "POST":
+            return redirect(changelist_url)
+
+        src = None if source == "all" else source
+        result = validate_scrapers.delay(source=src, sample=10)
+        label = "all sources" if src is None else source
+        self.message_user(
+            request,
+            f"✅ Validation queued ({label}, sample=10). Task ID: {result.id} — results in worker logs.",
             messages.SUCCESS,
         )
         return redirect(changelist_url)

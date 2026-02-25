@@ -1,9 +1,11 @@
 from django import forms
 
+from apps.core.spam_protection import HoneypotFormMixin
+
 from .models import ContactMessage
 
 
-class ContactForm(forms.ModelForm):
+class ContactForm(HoneypotFormMixin, forms.ModelForm):
     class Meta:
         model = ContactMessage
         fields = ["name", "email", "phone", "subject", "message"]

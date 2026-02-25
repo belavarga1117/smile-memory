@@ -4,6 +4,25 @@
 {% block title %}Smile Memory — {% trans "Your Journey, Our Memory" %}{% endblock %}
 {% block meta_description %}{% trans "Discover amazing tour packages across Asia and beyond. Group tours, cultural experiences, and luxury travel from Thailand's trusted travel agency." %}{% endblock %}
 
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TravelAgency",
+  "name": "Smile Memory",
+  "description": "{% trans 'Discover amazing tour packages across Asia and beyond. Group tours, cultural experiences, and luxury travel from Thailand.' %}",
+  "url": "{{ request.scheme }}://{{ request.get_host }}",
+  {% if site_config and site_config.phone_number %}"telephone": "{{ site_config.phone_number }}",{% endif %}
+  {% if site_config and site_config.admin_email %}"email": "{{ site_config.admin_email }}",{% endif %}
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "TH"
+  }{% if site_config and site_config.facebook_url %},
+  "sameAs": ["{{ site_config.facebook_url }}"{% if site_config.instagram_url %}, "{{ site_config.instagram_url }}"{% endif %}]{% endif %}
+}
+</script>
+{% endblock %}
+
 {% block content %}
 
 <!-- Hero Section -->

@@ -38,15 +38,17 @@
     <!-- Content -->
     <div class="p-4 lg:p-5">
         <!-- Destinations -->
-        {% if tour.destinations.all %}
+        {% with dests=tour.destinations.all %}
+        {% if dests %}
         <div class="flex flex-wrap gap-1.5 mb-2">
-            {% for dest in tour.destinations.all|slice:":3" %}
+            {% for dest in dests|slice:":3" %}
             <span class="text-xs font-medium text-brand-clay bg-brand-rose/10 px-2 py-0.5 rounded-full">
                 {% trans_field dest 'name' %}
             </span>
             {% endfor %}
         </div>
         {% endif %}
+        {% endwith %}
 
         <!-- Title -->
         <h3 class="font-semibold text-brand-text mb-2 line-clamp-2 group-hover:text-brand-clay transition-colors">

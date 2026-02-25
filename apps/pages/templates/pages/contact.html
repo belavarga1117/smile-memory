@@ -101,6 +101,7 @@
 
                     <form method="post" class="space-y-5">
                         {% csrf_token %}
+                        {{ form.website_url }}
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                             <div>

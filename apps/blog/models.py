@@ -92,6 +92,7 @@ class BlogPost(TimeStampedModel):
         ordering = ["-published_at", "-created_at"]
         indexes = [
             models.Index(fields=["status", "-published_at"]),
+            models.Index(fields=["status", "category"]),
             models.Index(fields=["slug"]),
         ]
 

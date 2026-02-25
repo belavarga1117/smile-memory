@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views import View
 
+from apps.core.spam_protection import check_rate_limit, rate_limit_response
 from apps.customers.models import Customer
 
 from .models import Subscriber
@@ -12,6 +13,15 @@ class NewsletterSubscribeView(View):
     """Handle newsletter signup from footer or standalone form."""
 
     def post(self, request):
+        if not check_rate_limit(
+            request, key="subscribe_submissions", max_count=3, window=300
+        ):
+            return rate_limit_response()
+
+        # Honeypot check
+        if request.POST.get("website_url", ""):
+            return redirect(request.META.get("HTTP_REFERER", "/"))
+
         email = request.POST.get("email", "").strip().lower()
         source = request.POST.get("source", "footer")
 

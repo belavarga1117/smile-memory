@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views import View
 
+from apps.core.spam_protection import check_rate_limit, rate_limit_response
 from apps.customers.models import Customer
 from apps.tours.models import Tour, TourDeparture
 
@@ -15,6 +16,10 @@ class InquiryCreateView(View):
     """Handle tour inquiry submission."""
 
     def post(self, request, slug):
+        if not check_rate_limit(
+            request, key="inquiry_submissions", max_count=5, window=300
+        ):
+            return rate_limit_response()
         tour = get_object_or_404(Tour, slug=slug, status=Tour.Status.PUBLISHED)
         form = InquiryForm(request.POST)
 

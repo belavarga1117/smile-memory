@@ -1,5 +1,7 @@
 from django import forms
 
+from apps.core.spam_protection import HoneypotFormMixin
+
 from .models import Inquiry
 
 INPUT_CLASS = (
@@ -9,7 +11,7 @@ INPUT_CLASS = (
 SELECT_CLASS = INPUT_CLASS
 
 
-class InquiryForm(forms.ModelForm):
+class InquiryForm(HoneypotFormMixin, forms.ModelForm):
     """Public-facing inquiry form shown on tour detail page."""
 
     class Meta:

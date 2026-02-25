@@ -176,6 +176,8 @@ class Tour(TimeStampedModel):
         ordering = ["-is_featured", "-created_at"]
         indexes = [
             models.Index(fields=["status", "is_featured"]),
+            models.Index(fields=["status", "price_from"]),
+            models.Index(fields=["status", "-created_at"]),
             models.Index(fields=["source", "external_id"]),
             models.Index(fields=["product_code"]),
             models.Index(fields=["slug"]),

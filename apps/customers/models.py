@@ -32,6 +32,10 @@ class Customer(TimeStampedModel):
 
     class Meta:
         ordering = ["-created_at"]
+        indexes = [
+            models.Index(fields=["-created_at"]),
+            models.Index(fields=["marketing_opt_in"]),
+        ]
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} <{self.email}>"

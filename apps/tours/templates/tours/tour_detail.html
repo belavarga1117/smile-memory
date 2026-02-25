@@ -3,6 +3,33 @@
 
 {% block title %}{% trans_field tour 'title' %} — {{ SITE_NAME }}{% endblock %}
 {% block meta_description %}{% trans_field tour 'short_description' %}{% endblock %}
+{% block og_title %}{% trans_field tour 'title' %}{% endblock %}
+{% block og_description %}{% trans_field tour 'short_description' %}{% endblock %}
+{% block og_type %}product{% endblock %}
+{% block og_image %}{% if tour.hero_image %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ tour.hero_image.url }}">{% elif tour.hero_image_url %}<meta property="og:image" content="{{ tour.hero_image_url }}">{% endif %}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "{% trans_field tour 'title' %}",
+  "description": "{% trans_field tour 'short_description' %}",
+  {% if tour.hero_image %}"image": "{{ request.scheme }}://{{ request.get_host }}{{ tour.hero_image.url }}",{% elif tour.hero_image_url %}"image": "{{ tour.hero_image_url }}",{% endif %}
+  "url": "{{ request.build_absolute_uri }}",
+  "brand": {
+    "@type": "Organization",
+    "name": "Smile Memory"
+  }{% if tour.price_from %},
+  "offers": {
+    "@type": "Offer",
+    "price": "{{ tour.price_from }}",
+    "priceCurrency": "{{ tour.currency }}",
+    "availability": "https://schema.org/InStock"
+  }{% endif %}
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <article>
@@ -312,6 +339,7 @@
 
                         <form method="post" action="{% url 'bookings:inquire' tour.slug %}" class="space-y-4">
                             {% csrf_token %}
+                            {{ inquiry_form.website_url }}
 
                             {% if tour.departures.all %}
                             <div>

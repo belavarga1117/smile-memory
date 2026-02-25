@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.db.models import Count, Q
 from django.views.generic import FormView, TemplateView
 
+from apps.core.spam_protection import check_rate_limit, rate_limit_response
 from apps.tours.models import Destination, Tour
 
 from .forms import ContactForm
@@ -48,6 +49,13 @@ class ContactView(FormView):
     template_name = "pages/contact.html"
     form_class = ContactForm
     success_url = "/contact/"
+
+    def post(self, request, *args, **kwargs):
+        if not check_rate_limit(
+            request, key="contact_submissions", max_count=3, window=300
+        ):
+            return rate_limit_response()
+        return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
         form.save()

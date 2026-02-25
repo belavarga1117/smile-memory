@@ -113,6 +113,23 @@ class TourFactory(factory.django.DjangoModelFactory):
             for cat in extracted:
                 self.categories.add(cat)
 
+    @factory.post_generation
+    def with_departure(self, create, extracted, **kwargs):
+        """Auto-create one available departure so tour passes the sold-out filter."""
+        if not create:
+            return
+        # extracted=False disables auto-creation (for tests that control departures)
+        if extracted is False:
+            return
+        TourDeparture.objects.create(
+            tour=self,
+            departure_date=date.today() + timedelta(days=30),
+            return_date=date.today() + timedelta(days=34),
+            price_adult=Decimal("29900.00"),
+            price_child=Decimal("25900.00"),
+            status=TourDeparture.PeriodStatus.AVAILABLE,
+        )
+
 
 class TourDepartureFactory(factory.django.DjangoModelFactory):
     class Meta:

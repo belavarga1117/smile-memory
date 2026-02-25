@@ -1,13 +1,18 @@
 import io
 
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.views.generic import DetailView, ListView
 
 from xhtml2pdf import pisa
 
-from .models import Destination, Tour
+from .models import Destination, Tour, TourDeparture
+
+
+def _has_available_departure():
+    """Subquery: tour has at least one available departure."""
+    return TourDeparture.objects.filter(tour=OuterRef("pk"), status="available")
 
 
 class TourListView(ListView):
@@ -19,6 +24,7 @@ class TourListView(ListView):
     def get_queryset(self):
         qs = (
             Tour.objects.filter(status=Tour.Status.PUBLISHED)
+            .filter(Exists(_has_available_departure()))
             .select_related("airline")
             .prefetch_related("destinations", "categories")
         )
@@ -107,12 +113,13 @@ class TourDetailView(DetailView):
         ctx = super().get_context_data(**kwargs)
         tour = self.object
 
-        # Related tours from same destinations
+        # Related tours from same destinations (exclude sold-out)
         ctx["related_tours"] = (
             Tour.objects.filter(
                 status=Tour.Status.PUBLISHED,
                 destinations__in=tour.destinations.all(),
             )
+            .filter(Exists(_has_available_departure()))
             .exclude(pk=tour.pk)
             .select_related("airline")
             .prefetch_related("destinations")

@@ -12,69 +12,58 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - **Backend**: Django 5.1 + Django REST Framework
 - **Frontend**: Django Templates + Tailwind CSS v4 + Alpine.js
-- **Database**: SQLite (dev) / PostgreSQL 16 (prod)
+- **Database**: PostgreSQL 16 (dev + prod) — Homebrew local / Railway prod
 - **Task Queue**: Celery + Redis
 - **Search**: PostgreSQL Full-Text Search
 - **Hosting**: Railway (nixpacks, git push = auto-deploy)
 - **Static Files**: WhiteNoise `CompressedStaticFilesStorage` (prod)
 - **Email**: Brevo REST API (transactional) + Brevo bulk (campaigns) — `apps/core/email_backends.BrevoEmailBackend`
 - **CI/CD**: GitHub Actions
-- **Production URL**: https://web-production-86e1f.up.railway.app
+- **Production URL**: https://smilememorytravel.com (Railway internal: web-production-86e1f.up.railway.app)
 
 ## Common Commands
 
 ```bash
-# Activate virtual environment
+# ── Local dev stack (PostgreSQL + Redis + Celery + Django + Tailwind) ──────────
+./scripts/dev.sh                    # start everything in one command
+./scripts/dev.sh --no-css           # skip Tailwind watch (when not changing styles)
+
+# ── Individual services (manual) ──────────────────────────────────────────────
 source venv/bin/activate
+brew services start postgresql@16   # start PostgreSQL (auto-starts at login)
+brew services start redis           # start Redis (auto-starts at login)
+python manage.py runserver          # Django dev server only
+celery -A config worker -l info     # Celery worker (needs Redis)
+celery -A config beat -l info       # Celery beat scheduler
+npm run css:watch                   # Tailwind CSS watch
+npm run css:build                   # Tailwind CSS production build
 
-# Run development server
-python manage.py runserver
-
-# Run migrations
+# ── Database ───────────────────────────────────────────────────────────────────
 python manage.py makemigrations
 python manage.py migrate
-
-# Create superuser
+python manage.py seed_tours         # seed 10 tours + fixtures
 python manage.py createsuperuser
 
-# Run tests
-python manage.py test
-pytest                              # with pytest-django
+# ── Tests ──────────────────────────────────────────────────────────────────────
+pytest                              # full suite (272 tests, PostgreSQL)
+pytest -x -q                        # stop on first failure, quiet
 
-# Run single app tests
-python manage.py test apps.tours
-pytest apps/tours/tests/
-
-# Lint
+# ── Code quality ───────────────────────────────────────────────────────────────
 ruff check .
 ruff check --fix .
-
-# Format
 ruff format .
+./scripts/qa.sh                     # full QA pipeline (lint + test + coverage)
 
-# Tailwind CSS
-npm run css:watch                   # development (auto-rebuild)
-npm run css:build                   # production (minified)
-
-# Celery worker (requires Redis)
-celery -A config worker -l info
-
-# Celery beat (scheduled tasks)
-celery -A config beat -l info
-
-# Django system check
+# ── Django checks ──────────────────────────────────────────────────────────────
 python manage.py check
 python manage.py check --deploy     # production checklist
 
-# Collect static files (production)
+# ── Static files (production only) ────────────────────────────────────────────
 python manage.py collectstatic --noinput
 
-# Generate translation files
+# ── Translations ───────────────────────────────────────────────────────────────
 python manage.py makemessages -l th
 python manage.py compilemessages
-
-# QA pipeline (all checks: lint, format, Django check, tests, coverage)
-./scripts/qa.sh
 ```
 
 ## Project Structure
@@ -84,7 +73,7 @@ travel-agency/
 ├── config/                     # Django project config
 │   ├── settings/
 │   │   ├── base.py            # Shared settings (all envs)
-│   │   ├── development.py     # Dev: DEBUG=True, SQLite, console email
+│   │   ├── development.py     # Dev: DEBUG=True, PostgreSQL (local), console email
 │   │   └── production.py      # Prod: Railway, WhiteNoise, Brevo, Sentry
 │   ├── celery.py              # Celery app init
 │   ├── urls.py                # Root URL routing
@@ -116,14 +105,13 @@ travel-agency/
 │   ├── conftest → root conftest.py (shared fixtures)
 │   └── test_*.py              # API, security, performance, etc.
 ├── scripts/
+│   ├── dev.sh                 # Local full-stack launcher (PG + Redis + Celery + Django + Tailwind)
 │   └── qa.sh                  # QA pipeline (lint + test + coverage)
 ├── locale/{th,en}/            # Translation .po files
 ├── requirements/{base,dev,prod}.txt
-├── docker-compose.yml         # PostgreSQL + Redis (when Docker available)
 ├── nixpacks.toml              # Nixpacks build config (Python + libcairo2-dev)
 ├── Procfile                   # Railway process definitions
-├── railway.toml               # Railway deploy config (build + start commands)
-└── Dockerfile.local           # Local Docker build (not used by Railway)
+└── railway.toml               # Railway deploy config (build + start commands)
 ```
 
 ## Architecture
@@ -166,16 +154,19 @@ Wholesalers (Zego, GS25, Go365) are login-gated portals. Zego has REST API (v1.5
 - `Itinerarys` → `ItineraryDay` (day_number, meals B/L/D with Y/N/P/C flags, hotel info)
 
 Supported import methods:
-1. **Zego API** — portal internal API with session auth (239 tours)
-2. **Go365 API** — encrypted AJAX API with CryptoJS AES (274 tours)
+1. **Zego API** — portal internal API with session auth (239+ tours, full itinerary + PDF)
+2. **Go365 API** — encrypted AJAX API with CryptoJS AES (275 tours, PDF fixed)
 3. **Real Journey API** — TourProX WordPress AJAX (23 tours)
-4. **Excel upload** — admin exports from portal, uploads in admin
-5. **PDF upload** — parsed with pdfplumber
-6. **Manual entry** — Django admin CRUD
+4. **GS25 HTML scraper** — session auth, BeautifulSoup, ~87 tours in prod (production only, not run locally)
+5. **Excel upload** — admin exports from portal, uploads in admin
+6. **PDF upload** — parsed with pdfplumber
+7. **Manual entry** — Django admin CRUD
 
 Pipeline: `Trigger → Parser → Field Mapper → Validator → Upsert Tour → Log`
 
-**Automated sync**: Celery Beat runs `sync_all_tours` daily at 15:00 ICT — imports from all 3 API sources.
+**Automated sync**: Celery Beat runs `sync_all_tours` daily at 15:00 ICT — imports from all 4 sources (Zego, Go365, Real Journey, GS25).
+
+**Data validation**: `python manage.py validate_scrapers` — samples tours from DB, re-fetches live, compares title/duration/price/departures/PDF. Use `--source` and `--sample` flags.
 
 ### Bilingual Strategy (Thai + English)
 
@@ -193,7 +184,7 @@ Pipeline: `Trigger → Parser → Field Mapper → Validator → Upsert Tour →
 
 ## Settings
 
-- Dev settings: `config.settings.development` (SQLite, console email, DEBUG=True)
+- Dev settings: `config.settings.development` (PostgreSQL via DATABASE_URL, console email, DEBUG=True)
 - Prod settings: `config.settings.production` (PostgreSQL, Brevo REST API, WhiteNoise, Sentry, logging to stdout)
 - Settings module controlled by `DJANGO_SETTINGS_MODULE` env var
 - All secrets in `.env` file (never committed)
@@ -205,7 +196,7 @@ Pipeline: `Trigger → Parser → Field Mapper → Validator → Upsert Tour →
 - **Build**: `collectstatic` | **Start**: `migrate && gunicorn`
 - **Static**: WhiteNoise serves from `staticfiles/`, seed images in `static/media/`
 - **Media**: Ephemeral filesystem — seed images committed as static, tour images are external URLs
-- **Admin**: https://web-production-86e1f.up.railway.app/admin/ (credentials in .env / Railway variables)
+- **Admin**: https://smilememorytravel.com/admin/ (credentials in Railway env vars: ADMIN_PASSWORD)
 - **Railway CLI**: `railway logs`, `railway variables`, `railway status`
 - **Key env vars**: DJANGO_SETTINGS_MODULE, SECRET_KEY, DATABASE_URL, ALLOWED_HOSTS, PIP_ONLY_BINARY=pycairo
 
@@ -232,15 +223,28 @@ Pipeline: `Trigger → Parser → Field Mapper → Validator → Upsert Tour →
 ### Workflow Steps
 
 1. Create feature branch: `git checkout -b feat/my-feature`
-2. Activate venv: `source venv/bin/activate`
-3. Start Tailwind watcher: `npm run css:watch` (separate terminal)
-4. Run dev server: `python manage.py runserver`
-5. Admin panel: http://localhost:8000/admin/
-6. After model changes: `python manage.py makemigrations && python manage.py migrate`
-7. Before commit: `./scripts/qa.sh` (or at minimum: `ruff check . && ruff format .`)
-8. Push branch & create PR: `git push -u origin feat/my-feature && gh pr create`
-9. Wait for CI + review Railway preview URL
-10. Merge PR → auto-deploy to production
+2. Start local dev stack: `./scripts/dev.sh` — starts PostgreSQL + Redis + Celery + Django + Tailwind
+3. Admin panel: http://localhost:8000/admin/ (admin / admin123)
+4. After model changes: `python manage.py makemigrations && python manage.py migrate`
+5. Write + run tests locally: `pytest -x -q` — catches real PostgreSQL errors before deploy
+6. Before commit: `./scripts/qa.sh` (or at minimum: `ruff check . && ruff format .`)
+7. Push branch & create PR: `git push -u origin feat/my-feature && gh pr create`
+8. **Only push when feature is ready** — every push = Railway deploy (~10 min); iterate locally
+9. Merge PR → auto-deploy to production
+
+### Local vs Production Split
+
+| What | Local (Homebrew PG) | Production (Railway) |
+|---|---|---|
+| Admin, templates, forms | ✅ Full testing | ✅ Final verify |
+| PostgreSQL migrations | ✅ Real behavior | ✅ Apply on deploy |
+| Celery tasks | ✅ Test logic | ✅ Real workers |
+| Real Journey (no auth) | ✅ Can scrape locally | ✅ Scheduled daily |
+| Zego / Go365 / GS25 | ⚠️ Need credentials from Railway | ✅ Full sync daily |
+| **537+ real tour data** | ❌ Local: only seed/test data | ✅ Full catalog here |
+
+**Rule**: For production data quality → use production. Local scraping = code testing only, not data management.
+**PDF rule**: A tour is only published (`status=PUBLISHED`) if it has a `pdf_url`. Tours without PDF stay DRAFT for admin review.
 
 ### Branch Naming
 

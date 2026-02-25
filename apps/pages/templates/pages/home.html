@@ -39,9 +39,9 @@
             <img src="{{ slide.image_url }}" alt="{{ slide.title }}"
                  class="w-full h-full object-cover">
             {% else %}
-            <div class="w-full h-full bg-gradient-to-br from-brand-cocoa via-brand-clay to-brand-rose"></div>
+            <div class="w-full h-full bg-brand-blush"></div>
             {% endif %}
-            <div class="absolute inset-0 bg-gradient-to-t from-brand-text/75 via-brand-cocoa/30 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-text/60 via-brand-cocoa/20 to-transparent"></div>
             <div class="absolute inset-0 flex items-center justify-center">
                 <div class="text-center px-4 max-w-4xl">
                     <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
@@ -75,21 +75,19 @@
     </div>
     {% else %}
     <!-- Default hero when no slides configured -->
-    <div class="relative h-[500px] md:h-[600px] lg:h-[700px] bg-gradient-to-br from-brand-cocoa via-brand-rose to-brand-clay">
-        <div class="absolute inset-0 flex items-center justify-center">
-            <div class="text-center px-4 max-w-4xl">
-                <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
-                    {% trans "Turn Every Journey Into an Everlasting Memory" %}
-                </h1>
-                <p class="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-                    {% trans "Discover amazing tour packages across Asia and beyond with Thailand's trusted travel agency." %}
-                </p>
-                <a href="{% url 'tours:list' %}"
-                   class="inline-flex items-center gap-2 bg-brand-rose hover:bg-brand-clay text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-lg hover:shadow-xl">
-                    {% trans "Explore Tours" %}
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                </a>
-            </div>
+    <div class="relative h-[500px] md:h-[600px] lg:h-[700px] bg-brand-blush flex items-center justify-center">
+        <div class="text-center px-4 max-w-4xl">
+            <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-brand-text mb-4 leading-tight">
+                {% trans "Turn Every Journey Into an Everlasting Memory" %}
+            </h1>
+            <p class="text-lg md:text-xl text-brand-muted mb-8 max-w-2xl mx-auto">
+                {% trans "Discover amazing tour packages across Asia and beyond with Thailand's trusted travel agency." %}
+            </p>
+            <a href="{% url 'tours:list' %}"
+               class="inline-flex items-center gap-2 bg-brand-rose hover:bg-brand-clay text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors shadow-lg hover:shadow-xl">
+                {% trans "Explore Tours" %}
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
         </div>
     </div>
     {% endif %}

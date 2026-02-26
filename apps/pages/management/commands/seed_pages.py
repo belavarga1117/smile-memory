@@ -169,49 +169,63 @@ class Command(BaseCommand):
             {
                 "question": "Can I cancel or change my booking?",
                 "question_th": "สามารถยกเลิกหรือเปลี่ยนแปลงการจองได้หรือไม่?",
-                "answer": "Cancellation and change policies vary by tour and departure date. Please contact us as soon as possible if you need to make changes. Cancellation fees may apply depending on how close to the departure date.",
-                "answer_th": "นโยบายการยกเลิกและเปลี่ยนแปลงแตกต่างกันตามทัวร์และวันเดินทาง กรุณาติดต่อเราโดยเร็วที่สุดหากต้องการเปลี่ยนแปลง อาจมีค่าธรรมเนียมการยกเลิกขึ้นอยู่กับระยะเวลาก่อนวันเดินทาง",
+                "answer": "Cancellations are subject to the following fees based on days before departure: more than 45 days — deposit only (50%); 30–44 days — 50% of total price; 15–29 days — 75%; 0–14 days or no-show — no refund. Refunds are processed within 30 calendar days of cancellation confirmation. Some tours may have different policies — we will confirm at booking. To request a change or cancellation, contact us at baifern@smilememorytravel.com.",
+                "answer_th": "การยกเลิกมีค่าธรรมเนียมตามจำนวนวันก่อนออกเดินทาง: มากกว่า 45 วัน — สูญเสียมัดจำ (50%); 30–44 วัน — 50% ของราคารวม; 15–29 วัน — 75%; 0–14 วัน หรือไม่มาปรากฏตัว — ไม่คืนเงิน การคืนเงินดำเนินการภายใน 30 วันตามปฏิทินนับจากวันยืนยันการยกเลิก บางทัวร์อาจมีเงื่อนไขต่างออกไป — เราจะยืนยันเมื่อทำการจอง",
                 "sort_order": 3,
+            },
+            {
+                "question": "What if Smile Memory cancels my tour?",
+                "question_th": "หาก Smile Memory ยกเลิกทัวร์ของฉัน จะเกิดอะไรขึ้น?",
+                "answer": "If we or our wholesaler partner cancel a confirmed booking for commercial reasons (including insufficient passenger numbers), we will notify you as soon as possible and offer either a full refund of all amounts paid, or a replacement departure of equivalent value — the choice is yours. Cancellations due to force majeure (natural disasters, pandemics, government travel bans) are handled separately per our Terms of Service.",
+                "answer_th": "หากเราหรือพาร์ทเนอร์บริษัทขายส่งต้องยกเลิกการจองที่ยืนยันแล้วด้วยเหตุผลทางธุรกิจ (รวมถึงกรณีจำนวนผู้เดินทางไม่ครบ) เราจะแจ้งให้ทราบโดยเร็วที่สุด และเสนอทางเลือก: คืนเงินทั้งหมดที่ชำระแล้ว หรือวันเดินทางทดแทนที่มีมูลค่าเทียบเท่า — เป็นสิทธิ์ของคุณในการเลือก กรณียกเลิกเนื่องจากเหตุสุดวิสัย (ภัยธรรมชาติ โรคระบาด คำสั่งห้ามเดินทาง) ดำเนินการตามเงื่อนไขการให้บริการของเรา",
+                "sort_order": 4,
             },
             {
                 "question": "Do I need a visa for the tour?",
                 "question_th": "ต้องทำวีซ่าสำหรับทัวร์หรือไม่?",
                 "answer": "Visa requirements depend on your nationality and destination. We'll inform you about visa requirements when your booking is confirmed. For some destinations, we can assist with group visa applications.",
                 "answer_th": "ข้อกำหนดวีซ่าขึ้นอยู่กับสัญชาติและจุดหมายปลายทาง เราจะแจ้งให้ทราบเกี่ยวกับข้อกำหนดวีซ่าเมื่อการจองได้รับการยืนยัน สำหรับบางจุดหมาย เราสามารถช่วยยื่นวีซ่ากรุ๊ปได้",
-                "sort_order": 4,
+                "sort_order": 5,
             },
             {
                 "question": "What is included in the tour price?",
                 "question_th": "ราคาทัวร์รวมอะไรบ้าง?",
-                "answer": "Typically includes flights, accommodation, meals (as specified in the itinerary), local transportation, and sightseeing. Each tour page lists exactly what's included and excluded.",
-                "answer_th": "โดยทั่วไปรวมตั๋วเครื่องบิน ที่พัก อาหาร (ตามที่ระบุในโปรแกรม) การเดินทางภายใน และการเที่ยวชม แต่ละทัวร์จะระบุรายละเอียดว่ารวมและไม่รวมอะไรบ้าง",
-                "sort_order": 5,
+                "answer": "Most packages include accommodation, daily meals (as per itinerary), local transportation, and entrance fees. Round-trip flights are included in many packages but not all — the exact inclusions and exclusions are listed on each tour page and confirmed in your quotation. Tips, personal expenses, and optional activities are typically not included.",
+                "answer_th": "แพ็กเกจส่วนใหญ่รวมที่พัก อาหารตามโปรแกรม การเดินทางภายใน และค่าเข้าชมสถานที่ ตั๋วเครื่องบินไป-กลับรวมในบางแพ็กเกจแต่ไม่ใช่ทั้งหมด — รายละเอียดที่รวมและไม่รวมระบุในหน้าทัวร์และยืนยันในใบเสนอราคา ค่าทิป ค่าใช้จ่ายส่วนตัว และกิจกรรมเสริมโดยทั่วไปไม่รวมในราคา",
+                "sort_order": 6,
             },
             {
                 "question": "Is travel insurance included?",
                 "question_th": "รวมประกันการเดินทางหรือไม่?",
                 "answer": "Travel insurance is not included in the tour price. We strongly recommend purchasing travel insurance before your trip. We can recommend insurance providers upon request.",
                 "answer_th": "ประกันการเดินทางไม่รวมในราคาทัวร์ เราแนะนำอย่างยิ่งให้ซื้อประกันการเดินทางก่อนเดินทาง เราสามารถแนะนำบริษัทประกันได้",
-                "sort_order": 6,
+                "sort_order": 7,
             },
             {
                 "question": "What is the group size?",
                 "question_th": "ขนาดกรุ๊ปเท่าไหร่?",
-                "answer": "Group sizes typically range from 15-40 people depending on the tour. You can see available seats for each departure date on the tour detail page.",
-                "answer_th": "ขนาดกรุ๊ปโดยทั่วไปอยู่ที่ 15-40 คน ขึ้นอยู่กับทัวร์ คุณสามารถดูที่นั่งว่างสำหรับแต่ละวันเดินทางได้ในหน้ารายละเอียดทัวร์",
-                "sort_order": 7,
+                "answer": "Group sizes typically range from 15–40 people depending on the tour. You can see available seats for each departure date on the tour detail page. If a minimum number of passengers is not reached for a departure, the wholesaler may cancel that date — in which case we will offer a full refund or an alternative departure.",
+                "answer_th": "ขนาดกรุ๊ปโดยทั่วไปอยู่ที่ 15–40 คน ขึ้นอยู่กับทัวร์ คุณสามารถดูที่นั่งว่างสำหรับแต่ละวันเดินทางได้ในหน้ารายละเอียดทัวร์ หากจำนวนผู้เดินทางไม่ครบตามที่กำหนดสำหรับวันเดินทางใด บริษัทขายส่งอาจยกเลิกวันนั้น — ในกรณีดังกล่าวเราจะเสนอคืนเงินทั้งหมดหรือวันเดินทางทดแทน",
+                "sort_order": 8,
             },
             {
                 "question": "How do I contact you?",
                 "question_th": "ติดต่อได้อย่างไร?",
                 "answer": "You can reach us via LINE (fastest), phone, email, or the contact form on our website. Our team typically responds within a few hours during business hours.",
                 "answer_th": "คุณสามารถติดต่อเราทาง LINE (เร็วที่สุด) โทรศัพท์ อีเมล หรือแบบฟอร์มติดต่อบนเว็บไซต์ ทีมของเราตอบกลับภายในไม่กี่ชั่วโมงในเวลาทำการ",
-                "sort_order": 8,
+                "sort_order": 9,
+            },
+            {
+                "question": "Is Smile Memory a tour operator?",
+                "question_th": "Smile Memory เป็นบริษัทนำเที่ยวหรือตัวแทนจำหน่าย?",
+                "answer": "No — Smile Memory Tour Co., Ltd. is a licensed tour reseller (TAT License 11/08172), not a tour operator. We act as an intermediary: we source and sell group tour packages from licensed wholesalers (Zego, GS25, Go365, Real Journey). The wholesaler operates the tour itself (hotels, transport, guides). This means we can negotiate competitive prices and handle your booking, while the operational experience is delivered by our vetted wholesaler partners.",
+                "answer_th": "ไม่ใช่ — บริษัท สไมล์ เมมโมรี่ ทัวร์ จำกัด เป็นตัวแทนจำหน่ายทัวร์ที่ได้รับอนุญาต (ใบอนุญาตนำเที่ยว 11/08172) ไม่ใช่บริษัทนำเที่ยวโดยตรง เราทำหน้าที่เป็นตัวกลาง: จำหน่ายแพ็กเกจทัวร์กรุ๊ปจากบริษัทขายส่งที่ได้รับอนุญาต (Zego, GS25, Go365, Real Journey) การดำเนินงานทัวร์จริง (โรงแรม รถ มัคคุเทศก์) เป็นหน้าที่ของบริษัทขายส่ง เราช่วยคุณได้ราคาดีและดูแลการจอง ขณะที่ประสบการณ์ทัวร์จริงส่งมอบโดยพาร์ทเนอร์ขายส่งที่ผ่านการคัดกรองของเรา",
+                "sort_order": 10,
             },
         ]
         for f in faqs:
-            FAQ.objects.get_or_create(question=f["question"], defaults=f)
-        self.stdout.write(f"  Created {len(faqs)} FAQs")
+            FAQ.objects.update_or_create(question=f["question"], defaults=f)
+        self.stdout.write(f"  Upserted {len(faqs)} FAQs")
 
     def _seed_blog(self):
         # Categories

@@ -1,4 +1,7 @@
+import csv
+
 from django.contrib import admin
+from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.html import format_html
 
@@ -43,7 +46,12 @@ class InquiryAdmin(admin.ModelAdmin):
     ]
     raw_id_fields = ["tour", "departure", "customer"]
     inlines = [InquiryNoteInline]
-    actions = ["action_confirm", "action_reject", "action_mark_contacted"]
+    actions = [
+        "action_confirm",
+        "action_reject",
+        "action_mark_contacted",
+        "export_as_csv",
+    ]
 
     fieldsets = (
         (
@@ -158,6 +166,51 @@ class InquiryAdmin(admin.ModelAdmin):
     def action_mark_contacted(self, request, queryset):
         count = queryset.filter(status="new").update(status=Inquiry.Status.CONTACTED)
         self.message_user(request, f"{count} inquiry(ies) marked as contacted.")
+
+    @admin.action(description="📥 Export selected inquiries as CSV")
+    def export_as_csv(self, _request, queryset):
+        today = timezone.now().strftime("%Y-%m-%d")
+        response = HttpResponse(content_type="text/csv; charset=utf-8")
+        response["Content-Disposition"] = (
+            f'attachment; filename="inquiries-{today}.csv"'
+        )
+        response.write("\ufeff")  # UTF-8 BOM for Excel compatibility
+
+        writer = csv.writer(response)
+        writer.writerow(
+            [
+                "Reference",
+                "Status",
+                "Contact Name",
+                "Email",
+                "Phone",
+                "Tour",
+                "Adults",
+                "Children",
+                "Infants",
+                "Quoted Price",
+                "Assigned To",
+                "Created",
+            ]
+        )
+        for inq in queryset.select_related("tour", "assigned_to"):
+            writer.writerow(
+                [
+                    inq.reference_number,
+                    inq.get_status_display(),
+                    inq.contact_name,
+                    inq.contact_email,
+                    inq.contact_phone,
+                    inq.tour.title if inq.tour else "",
+                    inq.num_adults,
+                    inq.num_children,
+                    inq.num_infants,
+                    inq.quoted_price or "",
+                    inq.assigned_to.get_full_name() if inq.assigned_to else "",
+                    inq.created_at.strftime("%Y-%m-%d %H:%M"),
+                ]
+            )
+        return response
 
 
 @admin.register(InquiryNote)

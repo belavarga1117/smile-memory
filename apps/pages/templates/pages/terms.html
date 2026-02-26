@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}Terms of Service / เงื่อนไขการให้บริการ — Smile Memory{% endblock %}
+{% block meta_description %}Smile Memory Terms of Service — booking process, payment terms, cancellation policy, and traveler responsibilities.{% endblock %}
+{% block og_title %}Terms of Service — Smile Memory{% endblock %}
+{% block og_description %}Smile Memory booking conditions, payment terms, and cancellation policy.{% endblock %}
+
+{% block content %}
+
+{% trans "Terms of Service" as hero_title %}
+{% trans "Booking conditions, payment terms, and traveler responsibilities." as hero_subtitle %}
+{% include "components/_hero_simple.html" with title=hero_title subtitle=hero_subtitle size="sm" %}
+
+<section class="py-16 lg:py-20">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+  <!-- Language notice -->
+  <div class="mb-10 p-4 bg-brand-blush rounded-xl text-sm text-brand-muted text-center">
+    These terms are provided in both English and Thai (เงื่อนไขนี้จัดทำทั้งภาษาอังกฤษและภาษาไทย).
+    In case of conflict, the Thai version prevails.
+  </div>
+
+  <!-- ═══════════════════════════════ ENGLISH ═══════════════════════════════ -->
+  <div class="prose prose-sm max-w-none text-brand-text mb-16">
+    <h2 class="text-2xl font-bold text-brand-cocoa mb-6">Terms of Service — English</h2>
+    <p class="text-brand-muted text-sm mb-6">Last updated: January 2026 &nbsp;|&nbsp; Version 1.0</p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">1. About Smile Memory</h3>
+    <p class="text-brand-muted leading-relaxed">
+      Smile Memory is a tour reseller based in Thailand. We act as an intermediary between travelers and licensed tour wholesalers.
+      By using this website or submitting an inquiry, you agree to these Terms of Service.
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">2. Booking Process</h3>
+    <p class="text-brand-muted leading-relaxed mb-3">
+      Booking a tour with Smile Memory involves the following steps:
+    </p>
+    <ol class="list-decimal list-inside text-brand-muted space-y-2">
+      <li>Submit an inquiry via our website, LINE, or Facebook.</li>
+      <li>Our team will check availability with the wholesaler and send you a quote within 1–2 business days.</li>
+      <li>Upon your acceptance of the quote, we will issue a booking confirmation.</li>
+      <li>A deposit (typically 50% of the total price) is required within 3 business days of confirmation to secure your spot.</li>
+      <li>Full payment is due no later than 30 days before the departure date, unless otherwise stated.</li>
+    </ol>
+    <p class="text-brand-muted leading-relaxed mt-3">
+      No booking is confirmed until we have issued a written confirmation and received the required deposit.
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">3. Pricing</h3>
+    <p class="text-brand-muted leading-relaxed">
+      All prices shown on this website are indicative and subject to availability at the time of booking.
+      Prices are quoted in Thai Baht (THB) unless otherwise stated. Prices may include or exclude:
+      airline tickets, hotel accommodation, meals, visa fees, travel insurance, and personal expenses —
+      please confirm inclusions at the time of inquiry. We reserve the right to adjust prices due to fuel
+      surcharge changes, currency fluctuations, or wholesaler pricing updates prior to booking confirmation.
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">4. Cancellation & Refund Policy</h3>
+    <p class="text-brand-muted leading-relaxed mb-3">Cancellation fees depend on how far in advance you cancel:</p>
+    <div class="overflow-x-auto mb-4">
+      <table class="w-full text-sm text-brand-muted border-collapse">
+        <thead>
+          <tr class="bg-brand-blush">
+            <th class="text-left p-3 border border-brand-taupe/30 font-semibold text-brand-text">Days Before Departure</th>
+            <th class="text-left p-3 border border-brand-taupe/30 font-semibold text-brand-text">Cancellation Fee</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="p-3 border border-brand-taupe/20">More than 45 days</td><td class="p-3 border border-brand-taupe/20">Loss of deposit (50%)</td></tr>
+          <tr class="bg-brand-surface"><td class="p-3 border border-brand-taupe/20">30–44 days</td><td class="p-3 border border-brand-taupe/20">50% of total price</td></tr>
+          <tr><td class="p-3 border border-brand-taupe/20">15–29 days</td><td class="p-3 border border-brand-taupe/20">75% of total price</td></tr>
+          <tr class="bg-brand-surface"><td class="p-3 border border-brand-taupe/20">0–14 days or no-show</td><td class="p-3 border border-brand-taupe/20">100% of total price (no refund)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-brand-muted leading-relaxed">
+      Refunds are processed within 15–30 business days, subject to the wholesaler's refund timeline.
+      Non-refundable items (e.g., airline tickets issued, visa fees paid) are excluded from any refund.
+      Cancellation fees may differ for specific tours — always confirm at booking.
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">5. Traveler Responsibilities</h3>
+    <p class="text-brand-muted leading-relaxed mb-3">You are solely responsible for ensuring:</p>
+    <ul class="list-disc list-inside text-brand-muted space-y-1">
+      <li>Your passport is valid for at least 6 months beyond your return date (or as required by the destination country).</li>
+      <li>You obtain all required visas before departure. Smile Memory may assist with visa guidance but is not responsible for visa issuance or denial.</li>
+      <li>You meet all health and vaccination requirements for the destination.</li>
+      <li>You arrive at the departure point on time. Smile Memory is not responsible for missed departures due to late arrival.</li>
+      <li>You have adequate travel insurance. We strongly recommend comprehensive travel insurance covering medical expenses, trip cancellation, and baggage loss.</li>
+    </ul>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">6. Our Role as Reseller</h3>
+    <p class="text-brand-muted leading-relaxed">
+      Smile Memory acts as a sales agent for licensed wholesalers. The actual tour services (transportation,
+      accommodation, guides) are provided by the wholesaler. We are not liable for the quality of services
+      delivered by the wholesaler, airline delays, hotel overbookings, or any other event outside our direct control.
+      Any complaints about tour quality should be directed to our team, who will liaise with the wholesaler on your behalf.
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">7. Force Majeure</h3>
+    <p class="text-brand-muted leading-relaxed">
+      Neither Smile Memory nor the wholesaler shall be liable for failure to perform or cancellation of services
+      due to events beyond reasonable control, including natural disasters, pandemics, government travel bans,
+      civil unrest, or acts of war. In such cases, we will work with you to reschedule or, where possible, obtain
+      a partial refund from the wholesaler.
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">8. Limitation of Liability</h3>
+    <p class="text-brand-muted leading-relaxed">
+      To the maximum extent permitted by applicable law, Smile Memory's total liability arising from or in connection
+      with a booking shall not exceed the amount you paid for the tour. We are not liable for indirect, incidental,
+      or consequential damages including loss of enjoyment, loss of income, or consequential travel costs.
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">9. Governing Law</h3>
+    <p class="text-brand-muted leading-relaxed">
+      These terms are governed by the laws of Thailand. Any disputes shall be subject to the exclusive jurisdiction
+      of the courts of Thailand. For consumer disputes, you may also seek resolution through Thailand's Consumer
+      Protection Board (OCPB).
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">10. Contact</h3>
+    <p class="text-brand-muted leading-relaxed">
+      For questions about these terms, contact us at
+      <a href="mailto:baifern@smilememorytravel.com" class="text-brand-rose hover:underline">baifern@smilememorytravel.com</a>
+      or via LINE / Facebook.
+    </p>
+
+    <div class="mt-8 p-4 bg-brand-surface border border-brand-taupe/30 rounded-xl text-sm text-brand-muted">
+      <strong class="text-brand-text">⚠️ Placeholder notice:</strong>
+      These terms are a professional draft. Please have them reviewed by a qualified Thai legal professional
+      before relying on them for customer-facing use.
+    </div>
+  </div>
+
+  <hr class="border-brand-taupe/30 my-12">
+
+  <!-- ════════════════════════════════ THAI ════════════════════════════════ -->
+  <div class="text-brand-text">
+    <h2 class="text-2xl font-bold text-brand-cocoa mb-6">เงื่อนไขการให้บริการ — ภาษาไทย</h2>
+    <p class="text-brand-muted text-sm mb-6">อัปเดตล่าสุด: มกราคม 2569 &nbsp;|&nbsp; เวอร์ชัน 1.0</p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">1. เกี่ยวกับ Smile Memory</h3>
+    <p class="text-brand-muted leading-relaxed">
+      Smile Memory เป็นตัวแทนจำหน่ายทัวร์ที่ตั้งอยู่ในประเทศไทย เราทำหน้าที่เป็นตัวกลางระหว่างนักเดินทางและบริษัทขายส่งทัวร์ที่ได้รับอนุญาต
+      การใช้งานเว็บไซต์นี้หรือการส่งแบบฟอร์มสอบถาม ถือว่าคุณยอมรับเงื่อนไขการให้บริการฉบับนี้
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">2. ขั้นตอนการจอง</h3>
+    <ol class="list-decimal list-inside text-brand-muted space-y-2">
+      <li>ส่งแบบฟอร์มสอบถามผ่านเว็บไซต์, LINE, หรือ Facebook</li>
+      <li>ทีมงานจะตรวจสอบที่ว่างกับบริษัทขายส่งและส่งใบเสนอราคาภายใน 1–2 วันทำการ</li>
+      <li>เมื่อคุณยืนยันรับราคา เราจะออกใบยืนยันการจอง</li>
+      <li>ต้องชำระมัดจำ (โดยทั่วไป 50% ของราคารวม) ภายใน 3 วันทำการเพื่อจองที่นั่ง</li>
+      <li>ชำระเงินส่วนที่เหลือทั้งหมดอย่างน้อย 30 วันก่อนวันเดินทาง เว้นแต่จะระบุไว้เป็นอย่างอื่น</li>
+    </ol>
+    <p class="text-brand-muted leading-relaxed mt-3">
+      การจองจะได้รับการยืนยันก็ต่อเมื่อเราออกใบยืนยันเป็นลายลักษณ์อักษรและได้รับมัดจำแล้วเท่านั้น
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">3. ราคาทัวร์</h3>
+    <p class="text-brand-muted leading-relaxed">
+      ราคาที่แสดงบนเว็บไซต์เป็นราคาอ้างอิงและขึ้นอยู่กับความพร้อมของที่นั่ง ณ เวลาที่จอง
+      ราคาระบุเป็นสกุลเงินบาทไทย (THB) เว้นแต่จะระบุไว้เป็นอย่างอื่น
+      กรุณายืนยันรายการที่รวม/ไม่รวมในราคา (ตั๋วเครื่องบิน, ที่พัก, อาหาร, ค่าวีซ่า, ประกันการเดินทาง ฯลฯ)
+      ณ เวลาสอบถาม เราขอสงวนสิทธิ์ปรับราคาหากมีการเปลี่ยนแปลงราคาเชื้อเพลิง, อัตราแลกเปลี่ยน,
+      หรือราคาจากบริษัทขายส่ง ก่อนยืนยันการจอง
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">4. นโยบายการยกเลิกและคืนเงิน</h3>
+    <p class="text-brand-muted leading-relaxed mb-3">ค่าธรรมเนียมการยกเลิกขึ้นอยู่กับระยะเวลาก่อนวันเดินทาง:</p>
+    <div class="overflow-x-auto mb-4">
+      <table class="w-full text-sm text-brand-muted border-collapse">
+        <thead>
+          <tr class="bg-brand-blush">
+            <th class="text-left p-3 border border-brand-taupe/30 font-semibold text-brand-text">จำนวนวันก่อนเดินทาง</th>
+            <th class="text-left p-3 border border-brand-taupe/30 font-semibold text-brand-text">ค่าธรรมเนียมยกเลิก</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="p-3 border border-brand-taupe/20">มากกว่า 45 วัน</td><td class="p-3 border border-brand-taupe/20">สูญเสียมัดจำ (50%)</td></tr>
+          <tr class="bg-brand-surface"><td class="p-3 border border-brand-taupe/20">30–44 วัน</td><td class="p-3 border border-brand-taupe/20">50% ของราคารวม</td></tr>
+          <tr><td class="p-3 border border-brand-taupe/20">15–29 วัน</td><td class="p-3 border border-brand-taupe/20">75% ของราคารวม</td></tr>
+          <tr class="bg-brand-surface"><td class="p-3 border border-brand-taupe/20">0–14 วัน หรือไม่มาปรากฏตัว</td><td class="p-3 border border-brand-taupe/20">100% ของราคารวม (ไม่คืนเงิน)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-brand-muted leading-relaxed">
+      การคืนเงินดำเนินการภายใน 15–30 วันทำการ ขึ้นอยู่กับกำหนดการคืนเงินของบริษัทขายส่ง
+      รายการที่ไม่สามารถคืนเงินได้ (เช่น ตั๋วเครื่องบินที่ออกแล้ว, ค่าวีซ่าที่ชำระแล้ว) ไม่อยู่ในขอบเขตการคืนเงิน
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">5. ความรับผิดชอบของนักเดินทาง</h3>
+    <ul class="list-disc list-inside text-brand-muted space-y-1">
+      <li>หนังสือเดินทางต้องมีอายุไม่น้อยกว่า 6 เดือนหลังวันเดินทางกลับ (หรือตามที่ประเทศปลายทางกำหนด)</li>
+      <li>จัดหาวีซ่าที่จำเป็นก่อนเดินทาง Smile Memory อาจช่วยแนะนำข้อมูลวีซ่า แต่ไม่รับผิดชอบต่อการอนุมัติหรือปฏิเสธวีซ่า</li>
+      <li>ปฏิบัติตามข้อกำหนดด้านสุขภาพและวัคซีนของประเทศปลายทาง</li>
+      <li>มาถึงจุดนัดพบตรงเวลา Smile Memory ไม่รับผิดชอบต่อการพลาดทัวร์เนื่องจากมาช้า</li>
+      <li>มีประกันการเดินทาง เราแนะนำประกันแบบครอบคลุมที่รวมค่ารักษาพยาบาล, การยกเลิกการเดินทาง, และความสูญเสียสัมภาระ</li>
+    </ul>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">6. บทบาทของเราในฐานะตัวแทนจำหน่าย</h3>
+    <p class="text-brand-muted leading-relaxed">
+      Smile Memory ทำหน้าที่เป็นตัวแทนขายให้กับบริษัทขายส่งทัวร์ที่ได้รับอนุญาต
+      บริการทัวร์จริง (การเดินทาง, ที่พัก, ไกด์) ให้บริการโดยบริษัทขายส่ง
+      เราไม่รับผิดชอบต่อคุณภาพบริการของบริษัทขายส่ง, เที่ยวบินล่าช้า, โรงแรมเต็ม,
+      หรือเหตุการณ์ใดที่อยู่นอกเหนือการควบคุมของเรา
+      ข้อร้องเรียนเกี่ยวกับคุณภาพทัวร์กรุณาติดต่อทีมงานของเรา เราจะประสานงานกับบริษัทขายส่งในนามของคุณ
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">7. เหตุสุดวิสัย</h3>
+    <p class="text-brand-muted leading-relaxed">
+      Smile Memory และบริษัทขายส่งไม่รับผิดชอบต่อความล้มเหลวหรือการยกเลิกบริการ
+      อันเนื่องมาจากเหตุการณ์ที่อยู่นอกเหนือการควบคุม เช่น ภัยธรรมชาติ, การระบาดของโรค,
+      คำสั่งห้ามเดินทางของรัฐ, การประท้วงทางแพ่ง, หรือสงคราม
+      ในกรณีดังกล่าว เราจะพยายามเลื่อนการเดินทางหรือ ขอคืนเงินบางส่วนจากบริษัทขายส่งให้คุณ
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">8. การจำกัดความรับผิด</h3>
+    <p class="text-brand-muted leading-relaxed">
+      ความรับผิดรวมของ Smile Memory ที่เกิดจากหรือเกี่ยวข้องกับการจอง จะไม่เกินจำนวนเงินที่คุณชำระสำหรับทัวร์นั้น
+      เราไม่รับผิดชอบต่อความเสียหายทางอ้อม เช่น ความเสียใจ, การสูญเสียรายได้, หรือค่าเดินทางที่เกิดขึ้น
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">9. กฎหมายที่ใช้บังคับ</h3>
+    <p class="text-brand-muted leading-relaxed">
+      เงื่อนไขนี้อยู่ภายใต้กฎหมายของประเทศไทย ข้อพิพาทใดๆ อยู่ภายใต้เขตอำนาจของศาลไทย
+      สำหรับข้อพิพาทผู้บริโภค คุณสามารถขอไกล่เกลี่ยผ่านสำนักงานคณะกรรมการคุ้มครองผู้บริโภค (สคบ.) ได้เช่นกัน
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">10. ติดต่อเรา</h3>
+    <p class="text-brand-muted leading-relaxed">
+      หากมีคำถามเกี่ยวกับเงื่อนไขการให้บริการ ติดต่อเราได้ที่
+      <a href="mailto:baifern@smilememorytravel.com" class="text-brand-rose hover:underline">baifern@smilememorytravel.com</a>
+      หรือผ่าน LINE / Facebook
+    </p>
+
+    <div class="mt-8 p-4 bg-brand-surface border border-brand-taupe/30 rounded-xl text-sm text-brand-muted">
+      <strong class="text-brand-text">⚠️ หมายเหตุ:</strong>
+      เงื่อนไขการให้บริการนี้เป็นร่างเบื้องต้น กรุณาให้ทนายความที่คุ้นเคยกับกฎหมายไทยตรวจสอบก่อนนำไปใช้งานจริง
+    </div>
+  </div>
+
+  <!-- Back link -->
+  <div class="mt-12 text-center">
+    <a href="{% url 'pages:home' %}" class="inline-flex items-center gap-2 text-brand-rose hover:text-brand-clay font-medium transition-colors">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+      Back to Home / กลับหน้าหลัก
+    </a>
+  </div>
+
+</div>
+</section>
+
+{% endblock %}

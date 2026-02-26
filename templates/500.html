@@ -5,22 +5,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Server Error — Smile Memory</title>
     <style>
+        /* Pink luxury palette — standalone (no base.html, which may also be broken) */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #E9E2D8; color: #2E2A28; }
-        .container { text-align: center; max-width: 400px; padding: 2rem; }
-        .code { font-size: 4.5rem; font-weight: 800; color: #C9A6A0; margin-bottom: 0.5rem; }
-        h1 { font-size: 1.5rem; margin-bottom: 0.75rem; }
-        p { color: #6F6A66; margin-bottom: 2rem; line-height: 1.6; }
-        a { display: inline-block; padding: 0.75rem 1.5rem; background: #6E5A52; color: #fff; border-radius: 0.5rem; text-decoration: none; font-weight: 500; }
-        a:hover { background: #B88473; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #FEF0F3;
+            color: #2E0A1A;
+        }
+        .container {
+            text-align: center;
+            max-width: 460px;
+            padding: 2.5rem 2rem;
+            background: #FFF5F7;
+            border-radius: 1.25rem;
+            box-shadow: 0 4px 24px rgba(140, 32, 80, 0.10);
+            border: 1px solid #EEB8C5;
+        }
+        .icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(224, 82, 122, 0.12);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+        }
+        .icon svg { color: #E05270; }
+        .code {
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: #E05270;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            letter-spacing: -2px;
+        }
+        h1 {
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: #2E0A1A;
+            margin-bottom: 0.5rem;
+        }
+        h1 span { display: block; font-size: 1rem; color: #804060; font-weight: 400; margin-top: 0.25rem; }
+        p {
+            color: #804060;
+            margin-bottom: 2rem;
+            line-height: 1.65;
+            font-size: 0.9375rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.75rem;
+            background: #E05270;
+            color: #fff;
+            border-radius: 0.625rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            transition: background 0.15s;
+        }
+        .btn:hover { background: #C43A58; }
+        .brand {
+            margin-top: 2rem;
+            font-size: 0.8125rem;
+            color: #B87090;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="icon">
+            <svg width="28" height="28" fill="none" stroke="#E05270" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+        </div>
         <p class="code">500</p>
-        <h1>Something Went Wrong</h1>
-        <p>We're sorry, an unexpected error occurred. Our team has been notified and we're working to fix it.</p>
-        <a href="/">Back to Home</a>
+        <h1>
+            Something Went Wrong
+            <span>เกิดข้อผิดพลาด — กรุณาลองใหม่อีกครั้ง</span>
+        </h1>
+        <p>
+            We're sorry — an unexpected error occurred on our end.<br>
+            Our team has been notified and is working to fix it.
+        </p>
+        <a href="/" class="btn">Back to Home / กลับหน้าหลัก</a>
+        <p class="brand">Smile Memory Travel</p>
     </div>
 </body>
 </html>

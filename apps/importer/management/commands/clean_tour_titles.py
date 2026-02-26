@@ -22,32 +22,45 @@ from apps.tours.models import Tour
 # Matches patterns like: RJ-XJ107, RJ-VZCTS001, GO365-JPN001, ZG-ABC123
 _CODE_PREFIX_RE = re.compile(r"^([A-Z]{1,6}-[A-Z0-9]+)\s+")
 
+# GS25-specific: IATA airline codes (2-letter) and airport codes (3-letter) at title start
+_AIRLINE_PREFIX_RE = re.compile(r"^[A-Z]{2}\s+")
+_AIRPORT_PREFIX_RE = re.compile(r"^[A-Z]{3}\s+")
+_BY_AIRLINE_RE = re.compile(r"\s+BY\s+[A-Z]{2}\b")
 
-def strip_code_prefix(title: str, product_code: str = "") -> str:
+
+def strip_code_prefix(title: str, product_code: str = "", source: str = "") -> str:
     """Return title with leading product-code prefix removed.
 
     Priority:
     1. If title starts with the tour's own product_code, strip that exactly.
     2. Fall back to generic UPPER-ALPHANUM pattern (catches future scrapers).
     3. Strip Zego's ': ' prefix from Tour_Name API field (portal convention).
+    4. For GS25: also strip leading airline/airport IATA codes and BY XX patterns.
     """
     if not title:
         return title
 
     # Exact match against stored product_code (most reliable)
     if product_code and title.startswith(product_code + " "):
-        return title[len(product_code) :].lstrip()
+        title = title[len(product_code) :].lstrip()
+    else:
+        # Generic pattern fallback: CODE-XXXXX <title>
+        m = _CODE_PREFIX_RE.match(title)
+        if m:
+            title = title[m.end() :]
 
-    # Generic pattern fallback: CODE-XXXXX <title>
-    m = _CODE_PREFIX_RE.match(title)
-    if m:
-        return title[m.end() :]
+        # Zego portal convention: Tour_Name field may start with ': <title>'
+        elif title.startswith(": "):
+            title = title[2:].lstrip()
 
-    # Zego portal convention: Tour_Name field may start with ': <title>'
-    if title.startswith(": "):
-        return title[2:].lstrip()
+    # GS25: strip leading airline IATA code (XJ, TK, EK...) + airport code (DMK, NRT...)
+    # and inline " BY XX" patterns after the product code has been removed
+    if source == "gs25":
+        title = _AIRLINE_PREFIX_RE.sub("", title)
+        title = _AIRPORT_PREFIX_RE.sub("", title)
+        title = _BY_AIRLINE_RE.sub("", title)
 
-    return title
+    return title.strip()
 
 
 class Command(BaseCommand):
@@ -77,8 +90,10 @@ class Command(BaseCommand):
 
         changed = []
         for tour in qs.iterator():
-            new_title = strip_code_prefix(tour.title, tour.product_code)
-            new_title_th = strip_code_prefix(tour.title_th or "", tour.product_code)
+            new_title = strip_code_prefix(tour.title, tour.product_code, tour.source)
+            new_title_th = strip_code_prefix(
+                tour.title_th or "", tour.product_code, tour.source
+            )
 
             title_changed = new_title != tour.title
             title_th_changed = new_title_th != (tour.title_th or "")

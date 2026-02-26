@@ -37,4 +37,5 @@ def site_config(request):
     return {
         "site_config": config,
         "SITE_NAME": settings.SITE_NAME,
+        "GOOGLE_ANALYTICS_ID": getattr(settings, "GOOGLE_ANALYTICS_ID", ""),
     }

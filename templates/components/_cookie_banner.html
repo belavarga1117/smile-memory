@@ -1,0 +1,54 @@
+{% load i18n %}
+{% comment %}
+Cookie consent banner — localStorage-based, Alpine.js powered.
+Shows on first visit. "Accept" stores consent in localStorage → banner disappears permanently.
+Links to the Privacy Policy page.
+{% endcomment %}
+<div
+  x-data="{
+    show: false,
+    init() {
+      this.show = !localStorage.getItem('cookie_consent');
+    },
+    accept() {
+      localStorage.setItem('cookie_consent', '1');
+      this.show = false;
+    }
+  }"
+  x-show="show"
+  x-transition:enter="transition ease-out duration-300"
+  x-transition:enter-start="translate-y-full opacity-0"
+  x-transition:enter-end="translate-y-0 opacity-100"
+  x-transition:leave="transition ease-in duration-200"
+  x-transition:leave-start="translate-y-0 opacity-100"
+  x-transition:leave-end="translate-y-full opacity-0"
+  style="display: none;"
+  class="fixed bottom-0 left-0 right-0 z-40 bg-brand-cocoa text-white shadow-2xl"
+  role="region"
+  aria-label="Cookie consent"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+    <!-- Icon -->
+    <div class="shrink-0 hidden sm:block">
+      <svg class="w-7 h-7 text-brand-petal" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"/>
+      </svg>
+    </div>
+    <!-- Text -->
+    <p class="text-sm text-white/90 flex-1 leading-relaxed">
+      เราใช้คุกกี้ที่จำเป็นเพื่อให้เว็บไซต์ทำงานได้อย่างถูกต้อง
+      โดยการใช้งานเว็บไซต์นี้ต่อไป คุณยอมรับ
+      <a href="{% url 'pages:privacy' %}" class="underline hover:text-brand-petal transition-colors">นโยบายความเป็นส่วนตัว</a>
+      ของเรา &nbsp;·&nbsp;
+      We use essential cookies to keep this site working. By continuing, you accept our
+      <a href="{% url 'pages:privacy' %}" class="underline hover:text-brand-petal transition-colors">Privacy Policy</a>.
+    </p>
+    <!-- Accept button -->
+    <button
+      @click="accept()"
+      class="shrink-0 bg-brand-rose hover:bg-brand-clay text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors whitespace-nowrap"
+    >
+      ยอมรับ / Accept
+    </button>
+  </div>
+</div>

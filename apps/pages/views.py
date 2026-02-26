@@ -82,3 +82,11 @@ class ContactView(FormView):
 
 class PaymentInfoView(TemplateView):
     template_name = "pages/payment_info.html"
+
+
+class PrivacyView(TemplateView):
+    template_name = "pages/privacy.html"
+
+
+class TermsView(TemplateView):
+    template_name = "pages/terms.html"

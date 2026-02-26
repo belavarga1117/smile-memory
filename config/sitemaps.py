@@ -37,6 +37,8 @@ class StaticViewSitemap(Sitemap):
             "pages:about",
             "pages:contact",
             "pages:payment_info",
+            "pages:privacy",
+            "pages:terms",
             "tours:list",
             "blog:list",
         ]

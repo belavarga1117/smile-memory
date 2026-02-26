@@ -168,3 +168,7 @@ ADMIN_EMAIL = env("ADMIN_EMAIL", default="admin@smilememory.com")
 # Site configuration
 SITE_NAME = "Smile Memory"
 SITE_URL = env("SITE_URL", default="https://smilememorytravel.com")
+
+# Google Analytics 4 — set GOOGLE_ANALYTICS_ID in Railway env vars (e.g. G-XXXXXXXXXX)
+# If empty/unset, no tracking script is rendered.
+GOOGLE_ANALYTICS_ID = env("GOOGLE_ANALYTICS_ID", default="")

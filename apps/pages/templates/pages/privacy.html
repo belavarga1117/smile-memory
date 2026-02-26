@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}Privacy Policy / นโยบายความเป็นส่วนตัว — Smile Memory{% endblock %}
+{% block meta_description %}Smile Memory Privacy Policy — how we collect, use, and protect your personal data in accordance with GDPR and Thailand's PDPA.{% endblock %}
+{% block og_title %}Privacy Policy — Smile Memory{% endblock %}
+{% block og_description %}How Smile Memory collects, uses, and protects your personal data.{% endblock %}
+
+{% block content %}
+
+{% trans "Privacy Policy" as hero_title %}
+{% trans "How we collect, use, and protect your personal data." as hero_subtitle %}
+{% include "components/_hero_simple.html" with title=hero_title subtitle=hero_subtitle size="sm" %}
+
+<section class="py-16 lg:py-20">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+  <!-- Language notice -->
+  <div class="mb-10 p-4 bg-brand-blush rounded-xl text-sm text-brand-muted text-center">
+    This policy is provided in both English and Thai (นโยบายนี้จัดทำทั้งภาษาอังกฤษและภาษาไทย).
+    In case of conflict, the Thai version prevails for Thai residents.
+  </div>
+
+  <!-- ═══════════════════════════════ ENGLISH ═══════════════════════════════ -->
+  <div class="prose prose-sm max-w-none text-brand-text mb-16">
+    <h2 class="text-2xl font-bold text-brand-cocoa mb-6">Privacy Policy — English</h2>
+    <p class="text-brand-muted text-sm mb-6">Last updated: January 2026 &nbsp;|&nbsp; Version 1.0</p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">1. Who We Are</h3>
+    <p class="text-brand-muted leading-relaxed">
+      Smile Memory ("we", "us", "our") is a travel agency based in Thailand that resells group tour packages
+      from licensed wholesalers. Our website is <strong>smilememorytravel.com</strong>.
+      For data protection matters, contact us at
+      <a href="mailto:baifern@smilememorytravel.com" class="text-brand-rose hover:underline">baifern@smilememorytravel.com</a>.
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">2. What Data We Collect</h3>
+    <p class="text-brand-muted leading-relaxed mb-3">We collect the following personal data only when you voluntarily provide it:</p>
+    <ul class="list-disc list-inside text-brand-muted space-y-1 mb-3">
+      <li><strong>Inquiry form:</strong> full name, email address, phone number, nationality, number of travelers, tour of interest, travel dates, and any notes you include.</li>
+      <li><strong>Newsletter sign-up:</strong> email address and preferred language.</li>
+      <li><strong>Contact form:</strong> name, email, and message content.</li>
+    </ul>
+    <p class="text-brand-muted leading-relaxed">
+      We do <strong>not</strong> collect payment card details on this website — payment is handled separately after booking confirmation.
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">3. Why We Collect It (Legal Basis)</h3>
+    <div class="overflow-x-auto mb-4">
+      <table class="w-full text-sm text-brand-muted border-collapse">
+        <thead>
+          <tr class="bg-brand-blush">
+            <th class="text-left p-3 border border-brand-taupe/30 font-semibold text-brand-text">Purpose</th>
+            <th class="text-left p-3 border border-brand-taupe/30 font-semibold text-brand-text">Legal Basis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="p-3 border border-brand-taupe/20">Processing your tour inquiry</td><td class="p-3 border border-brand-taupe/20">Pre-contractual necessity (preparing a quote)</td></tr>
+          <tr class="bg-brand-surface"><td class="p-3 border border-brand-taupe/20">Sending booking confirmation &amp; updates</td><td class="p-3 border border-brand-taupe/20">Contract performance</td></tr>
+          <tr><td class="p-3 border border-brand-taupe/20">Sending newsletters &amp; promotions</td><td class="p-3 border border-brand-taupe/20">Consent (opt-in checkbox — withdrawable at any time)</td></tr>
+          <tr class="bg-brand-surface"><td class="p-3 border border-brand-taupe/20">Responding to contact form messages</td><td class="p-3 border border-brand-taupe/20">Legitimate interest (customer support)</td></tr>
+          <tr><td class="p-3 border border-brand-taupe/20">Legal record-keeping</td><td class="p-3 border border-brand-taupe/20">Legal obligation</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">4. How Long We Keep Your Data</h3>
+    <ul class="list-disc list-inside text-brand-muted space-y-1">
+      <li><strong>Inquiry data:</strong> 3 years from the date of inquiry (or last interaction), for accounting and dispute resolution.</li>
+      <li><strong>Booking records:</strong> 7 years (Thai Revenue Department requirement).</li>
+      <li><strong>Newsletter subscribers:</strong> Until you unsubscribe. We will also purge subscribers inactive for 3 years.</li>
+      <li><strong>Contact messages:</strong> 12 months after resolution.</li>
+    </ul>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">5. Who We Share Data With</h3>
+    <p class="text-brand-muted leading-relaxed mb-3">We share your data only when necessary:</p>
+    <ul class="list-disc list-inside text-brand-muted space-y-1">
+      <li><strong>Tour wholesalers</strong> (Zego Travel, GS25 Travel, Go365 Travel, Real Journey) — to confirm booking availability.</li>
+      <li><strong>Email service provider</strong> (Brevo / Sendinblue) — to deliver transactional and marketing emails.</li>
+      <li><strong>Hosting provider</strong> (Railway.app) — data stored on their infrastructure.</li>
+      <li><strong>Legal authorities</strong> — when required by Thai law or court order.</li>
+    </ul>
+    <p class="text-brand-muted leading-relaxed mt-3">We do not sell your personal data to any third party.</p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">6. Cookies</h3>
+    <p class="text-brand-muted leading-relaxed">
+      We use only essential session cookies necessary for the website to function (e.g., CSRF protection, language preference).
+      We do not use advertising or tracking cookies without your consent. If we add analytics tools (such as Google Analytics),
+      we will ask for your consent via a cookie banner first.
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">7. Your Rights</h3>
+    <p class="text-brand-muted leading-relaxed mb-3">Under Thailand's Personal Data Protection Act (PDPA) and applicable law, you have the right to:</p>
+    <ul class="list-disc list-inside text-brand-muted space-y-1">
+      <li>Access the personal data we hold about you</li>
+      <li>Correct inaccurate data</li>
+      <li>Request deletion of your data (subject to legal retention requirements)</li>
+      <li>Withdraw consent for marketing emails at any time</li>
+      <li>Object to processing based on legitimate interest</li>
+      <li>Lodge a complaint with Thailand's Personal Data Protection Committee (PDPC)</li>
+    </ul>
+    <p class="text-brand-muted leading-relaxed mt-3">
+      To exercise any right, email us at
+      <a href="mailto:baifern@smilememorytravel.com" class="text-brand-rose hover:underline">baifern@smilememorytravel.com</a>.
+      We will respond within 30 days.
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">8. Data Security</h3>
+    <p class="text-brand-muted leading-relaxed">
+      We use HTTPS encryption on all pages. Our database is hosted on Railway's secure infrastructure with restricted access.
+      We apply the principle of least privilege — only authorized staff can view customer data.
+      Despite these measures, no system is 100% secure; we encourage you to contact us immediately if you suspect unauthorized use of your data.
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">9. Changes to This Policy</h3>
+    <p class="text-brand-muted leading-relaxed">
+      We may update this policy when our practices change or when required by law.
+      The "last updated" date at the top will reflect the latest revision.
+      For material changes, we will notify active customers by email.
+    </p>
+
+    <div class="mt-8 p-4 bg-brand-surface border border-brand-taupe/30 rounded-xl text-sm text-brand-muted">
+      <strong class="text-brand-text">⚠️ Placeholder notice:</strong>
+      This privacy policy is a professional draft. Please have it reviewed by a qualified legal professional
+      familiar with Thai PDPA and your specific business operations before relying on it.
+    </div>
+  </div>
+
+  <hr class="border-brand-taupe/30 my-12">
+
+  <!-- ════════════════════════════════ THAI ════════════════════════════════ -->
+  <div class="text-brand-text">
+    <h2 class="text-2xl font-bold text-brand-cocoa mb-6">นโยบายความเป็นส่วนตัว — ภาษาไทย</h2>
+    <p class="text-brand-muted text-sm mb-6">อัปเดตล่าสุด: มกราคม 2569 &nbsp;|&nbsp; เวอร์ชัน 1.0</p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">1. เราคือใคร</h3>
+    <p class="text-brand-muted leading-relaxed">
+      Smile Memory ("เรา") เป็นบริษัทนำเที่ยวที่ตั้งอยู่ในประเทศไทย จำหน่ายแพ็กเกจทัวร์กรุ๊ปจากบริษัทขายส่งทัวร์ที่ได้รับอนุญาต
+      เว็บไซต์ของเรา คือ <strong>smilememorytravel.com</strong>
+      หากมีข้อสงสัยเกี่ยวกับการคุ้มครองข้อมูลส่วนบุคคล ติดต่อเราได้ที่
+      <a href="mailto:baifern@smilememorytravel.com" class="text-brand-rose hover:underline">baifern@smilememorytravel.com</a>
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">2. ข้อมูลที่เราเก็บรวบรวม</h3>
+    <p class="text-brand-muted leading-relaxed mb-3">เราเก็บข้อมูลส่วนบุคคลเฉพาะที่คุณให้ไว้โดยสมัครใจ ได้แก่:</p>
+    <ul class="list-disc list-inside text-brand-muted space-y-1 mb-3">
+      <li><strong>แบบฟอร์มสอบถามทัวร์:</strong> ชื่อ-นามสกุล, อีเมล, เบอร์โทรศัพท์, สัญชาติ, จำนวนผู้เดินทาง, ทัวร์ที่สนใจ, วันเดินทาง, และหมายเหตุ</li>
+      <li><strong>สมัครรับจดหมายข่าว:</strong> อีเมล และภาษาที่ต้องการ</li>
+      <li><strong>แบบฟอร์มติดต่อ:</strong> ชื่อ, อีเมล, และข้อความ</li>
+    </ul>
+    <p class="text-brand-muted leading-relaxed">
+      เราไม่เก็บข้อมูลบัตรชำระเงินบนเว็บไซต์นี้ — การชำระเงินดำเนินการแยกต่างหากหลังยืนยันการจอง
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">3. วัตถุประสงค์และฐานทางกฎหมาย</h3>
+    <div class="overflow-x-auto mb-4">
+      <table class="w-full text-sm text-brand-muted border-collapse">
+        <thead>
+          <tr class="bg-brand-blush">
+            <th class="text-left p-3 border border-brand-taupe/30 font-semibold text-brand-text">วัตถุประสงค์</th>
+            <th class="text-left p-3 border border-brand-taupe/30 font-semibold text-brand-text">ฐานทางกฎหมาย</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="p-3 border border-brand-taupe/20">ดำเนินการสอบถามทัวร์ของคุณ</td><td class="p-3 border border-brand-taupe/20">ความจำเป็นก่อนทำสัญญา</td></tr>
+          <tr class="bg-brand-surface"><td class="p-3 border border-brand-taupe/20">ส่งยืนยันการจองและอัปเดต</td><td class="p-3 border border-brand-taupe/20">การปฏิบัติตามสัญญา</td></tr>
+          <tr><td class="p-3 border border-brand-taupe/20">ส่งจดหมายข่าวและโปรโมชัน</td><td class="p-3 border border-brand-taupe/20">ความยินยอม (กาเครื่องหมายสมัคร — ถอนได้ทุกเมื่อ)</td></tr>
+          <tr class="bg-brand-surface"><td class="p-3 border border-brand-taupe/20">ตอบคำถามจากแบบฟอร์มติดต่อ</td><td class="p-3 border border-brand-taupe/20">ประโยชน์อันชอบธรรม</td></tr>
+          <tr><td class="p-3 border border-brand-taupe/20">เก็บบันทึกตามกฎหมาย</td><td class="p-3 border border-brand-taupe/20">พันธกรณีทางกฎหมาย</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">4. ระยะเวลาการเก็บข้อมูล</h3>
+    <ul class="list-disc list-inside text-brand-muted space-y-1">
+      <li><strong>ข้อมูลการสอบถาม:</strong> 3 ปีนับจากวันสอบถาม หรือนับจากการติดต่อครั้งล่าสุด</li>
+      <li><strong>บันทึกการจอง:</strong> 7 ปี (ตามข้อกำหนดของกรมสรรพากร)</li>
+      <li><strong>ผู้สมัครรับจดหมายข่าว:</strong> จนกว่าจะยกเลิกการสมัคร หรือไม่มีการใช้งานนาน 3 ปี</li>
+      <li><strong>ข้อความติดต่อ:</strong> 12 เดือนหลังจากแก้ไขปัญหาเสร็จสิ้น</li>
+    </ul>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">5. การเปิดเผยข้อมูลแก่บุคคลที่สาม</h3>
+    <ul class="list-disc list-inside text-brand-muted space-y-1 mb-3">
+      <li><strong>บริษัทขายส่งทัวร์</strong> (Zego, GS25, Go365, Real Journey) — เพื่อยืนยันการจอง</li>
+      <li><strong>ผู้ให้บริการอีเมล</strong> (Brevo) — เพื่อส่งอีเมลธุรกรรมและการตลาด</li>
+      <li><strong>ผู้ให้บริการโฮสติ้ง</strong> (Railway.app) — จัดเก็บข้อมูลบนโครงสร้างพื้นฐานของผู้ให้บริการ</li>
+      <li><strong>หน่วยงานกฎหมาย</strong> — เมื่อกฎหมายไทยหรือคำสั่งศาลกำหนด</li>
+    </ul>
+    <p class="text-brand-muted leading-relaxed">เราไม่ขายข้อมูลส่วนบุคคลของคุณแก่บุคคลที่สามใดๆ</p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">6. คุกกี้</h3>
+    <p class="text-brand-muted leading-relaxed">
+      เราใช้เฉพาะคุกกี้ที่จำเป็นสำหรับการทำงานของเว็บไซต์ (เช่น การป้องกัน CSRF, การตั้งค่าภาษา)
+      เราไม่ใช้คุกกี้โฆษณาหรือติดตามพฤติกรรมโดยไม่ได้รับความยินยอม
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">7. สิทธิของเจ้าของข้อมูล</h3>
+    <p class="text-brand-muted leading-relaxed mb-3">ภายใต้พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA) คุณมีสิทธิ:</p>
+    <ul class="list-disc list-inside text-brand-muted space-y-1">
+      <li>เข้าถึงข้อมูลส่วนบุคคลที่เราเก็บไว้</li>
+      <li>แก้ไขข้อมูลที่ไม่ถูกต้อง</li>
+      <li>ขอให้ลบข้อมูล (ภายใต้ข้อกำหนดการเก็บข้อมูลตามกฎหมาย)</li>
+      <li>ถอนความยินยอมรับอีเมลการตลาดได้ทุกเมื่อ</li>
+      <li>คัดค้านการประมวลผลที่อาศัยประโยชน์อันชอบธรรม</li>
+      <li>ร้องเรียนต่อสำนักงานคณะกรรมการคุ้มครองข้อมูลส่วนบุคคล (สคส.)</li>
+    </ul>
+    <p class="text-brand-muted leading-relaxed mt-3">
+      ติดต่อเราได้ที่
+      <a href="mailto:baifern@smilememorytravel.com" class="text-brand-rose hover:underline">baifern@smilememorytravel.com</a>
+      เราจะตอบกลับภายใน 30 วัน
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">8. ความปลอดภัยของข้อมูล</h3>
+    <p class="text-brand-muted leading-relaxed">
+      เราใช้การเข้ารหัส HTTPS บนทุกหน้า ฐานข้อมูลโฮสต์บนโครงสร้างพื้นฐานที่ปลอดภัยของ Railway
+      โดยมีการจำกัดการเข้าถึงเฉพาะผู้มีอำนาจ หากคุณสงสัยว่าข้อมูลของคุณถูกใช้โดยไม่ได้รับอนุญาต
+      กรุณาติดต่อเราทันที
+    </p>
+
+    <h3 class="text-lg font-semibold text-brand-text mt-8 mb-3">9. การเปลี่ยนแปลงนโยบาย</h3>
+    <p class="text-brand-muted leading-relaxed">
+      เราอาจปรับปรุงนโยบายนี้เมื่อมีการเปลี่ยนแปลงแนวปฏิบัติหรือข้อกำหนดทางกฎหมาย
+      วันที่ "อัปเดตล่าสุด" ที่ด้านบนจะสะท้อนการแก้ไขล่าสุด สำหรับการเปลี่ยนแปลงที่มีนัยสำคัญ
+      เราจะแจ้งลูกค้าที่ใช้งานอยู่ทางอีเมล
+    </p>
+
+    <div class="mt-8 p-4 bg-brand-surface border border-brand-taupe/30 rounded-xl text-sm text-brand-muted">
+      <strong class="text-brand-text">⚠️ หมายเหตุ:</strong>
+      นโยบายความเป็นส่วนตัวนี้เป็นร่างเบื้องต้น กรุณาให้ผู้เชี่ยวชาญกฎหมายที่คุ้นเคยกับ PDPA ของไทย
+      ตรวจสอบก่อนนำไปใช้งานจริง
+    </div>
+  </div>
+
+  <!-- Back link -->
+  <div class="mt-12 text-center">
+    <a href="{% url 'pages:home' %}" class="inline-flex items-center gap-2 text-brand-rose hover:text-brand-clay font-medium transition-colors">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+      Back to Home / กลับหน้าหลัก
+    </a>
+  </div>
+
+</div>
+</section>
+
+{% endblock %}

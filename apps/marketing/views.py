@@ -8,11 +8,11 @@ from apps.core.spam_protection import check_rate_limit, rate_limit_response
 from apps.customers.models import Customer
 
 from .models import Subscriber
-from .notifications import send_newsletter_welcome
+from .notifications import send_newsletter_confirmation, send_newsletter_welcome
 
 
 class NewsletterSubscribeView(View):
-    """Handle newsletter signup from footer or standalone form."""
+    """Handle newsletter signup from footer or standalone form (double opt-in)."""
 
     def post(self, request):
         if not check_rate_limit(
@@ -38,39 +38,65 @@ class NewsletterSubscribeView(View):
             defaults={"source": source, "is_active": True, "language": lang},
         )
         if not created and not subscriber.is_active:
-            # Reactivating unsubscribed user — send welcome again
+            # Reactivating unsubscribed user — reset confirmation and resend
             subscriber.is_active = True
+            subscriber.is_confirmed = False
             subscriber.language = lang
-            subscriber.save(update_fields=["is_active", "language"])
+            subscriber.save(update_fields=["is_active", "is_confirmed", "language"])
             created = True
 
-        # Link to customer if exists
-        try:
-            customer = Customer.objects.get(email=email)
-            if subscriber.customer != customer:
-                subscriber.customer = customer
-                subscriber.save(update_fields=["customer"])
-            if not customer.marketing_opt_in:
-                customer.marketing_opt_in = True
-                customer.opted_in_at = timezone.now()
-                customer.save(update_fields=["marketing_opt_in", "opted_in_at"])
-        except Customer.DoesNotExist:
-            pass
-
-        # Send welcome email only on first signup / reactivation
+        # Send confirmation email on first signup / reactivation
+        # Customer opt-in set only after confirmation (NewsletterConfirmView)
         if created:
+            try:
+                send_newsletter_confirmation(subscriber)
+            except Exception:
+                pass
+
+        msg = (
+            "ขอบคุณ! กรุณาตรวจสอบอีเมลของท่านเพื่อยืนยันการสมัครรับข่าวสาร"
+            if lang == "th"
+            else "Thank you! Please check your email to confirm your subscription."
+        )
+        messages.success(request, msg)
+        return redirect(request.META.get("HTTP_REFERER", "/"))
+
+
+class NewsletterConfirmView(View):
+    """Handle double opt-in confirmation link from email."""
+
+    def get(self, request, token):
+        subscriber = get_object_or_404(Subscriber, confirmation_token=token)
+
+        if not subscriber.is_confirmed:
+            subscriber.is_confirmed = True
+            subscriber.confirmed_at = timezone.now()
+            subscriber.save(update_fields=["is_confirmed", "confirmed_at"])
+
+            # Now link customer and set marketing opt-in
+            try:
+                customer = Customer.objects.get(email=subscriber.email)
+                if subscriber.customer != customer:
+                    subscriber.customer = customer
+                    subscriber.save(update_fields=["customer"])
+                if not customer.marketing_opt_in:
+                    customer.marketing_opt_in = True
+                    customer.opted_in_at = timezone.now()
+                    customer.save(update_fields=["marketing_opt_in", "opted_in_at"])
+            except Customer.DoesNotExist:
+                pass
+
+            # Send welcome email now that confirmation is complete
             try:
                 send_newsletter_welcome(subscriber)
             except Exception:
                 pass
 
-        msg = (
-            "ขอบคุณที่สมัครรับข่าวสาร! ท่านจะได้รับโปรโมชั่นและทัวร์ใหม่ก่อนใคร"
-            if lang == "th"
-            else "Thank you for subscribing! You'll receive our latest tour deals and travel tips."
+        return render(
+            request,
+            "marketing/confirm_success.html",
+            {"subscriber": subscriber},
         )
-        messages.success(request, msg)
-        return redirect(request.META.get("HTTP_REFERER", "/"))
 
 
 class NewsletterUnsubscribeView(View):

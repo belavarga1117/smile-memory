@@ -117,7 +117,8 @@ class TestNewsletterSubscribeView:
         )
         assert resp.status_code == 302  # Redirects back with error
 
-    def test_subscribe_links_customer(self, client, customer):
+    def test_subscribe_does_not_link_customer_before_confirm(self, client, customer):
+        # Double opt-in: customer linking only happens after email confirmation
         resp = client.post(
             "/th/newsletter/subscribe/",
             {"email": customer.email},
@@ -125,7 +126,51 @@ class TestNewsletterSubscribeView:
         )
         assert resp.status_code == 302
         sub = Subscriber.objects.get(email=customer.email)
+        assert sub.customer is None
+        assert sub.is_confirmed is False
+
+
+@pytest.mark.django_db
+class TestNewsletterConfirmView:
+    def test_confirm_sets_confirmed(self, client, subscriber):
+        subscriber.is_confirmed = False
+        subscriber.save()
+        url = f"/th/newsletter/confirm/{subscriber.confirmation_token}/"
+        resp = client.get(url)
+        assert resp.status_code == 200
+        subscriber.refresh_from_db()
+        assert subscriber.is_confirmed is True
+        assert subscriber.confirmed_at is not None
+
+    def test_confirm_links_customer(self, client, customer):
+        sub = Subscriber.objects.create(
+            email=customer.email,
+            is_active=True,
+            is_confirmed=False,
+            source="footer",
+        )
+        url = f"/th/newsletter/confirm/{sub.confirmation_token}/"
+        client.get(url)
+        sub.refresh_from_db()
         assert sub.customer == customer
+        customer.refresh_from_db()
+        assert customer.marketing_opt_in is True
+
+    def test_confirm_invalid_token_404(self, client):
+        fake_token = uuid.uuid4()
+        url = f"/th/newsletter/confirm/{fake_token}/"
+        resp = client.get(url)
+        assert resp.status_code == 404
+
+    def test_confirm_idempotent(self, client, subscriber):
+        # Clicking confirm link twice should be safe
+        subscriber.is_confirmed = False
+        subscriber.save()
+        url = f"/th/newsletter/confirm/{subscriber.confirmation_token}/"
+        client.get(url)
+        client.get(url)
+        subscriber.refresh_from_db()
+        assert subscriber.is_confirmed is True
 
 
 @pytest.mark.django_db

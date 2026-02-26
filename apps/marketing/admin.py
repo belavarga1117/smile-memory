@@ -160,14 +160,20 @@ class SubscriberAdmin(admin.ModelAdmin):
     list_display = [
         "email",
         "is_active",
+        "is_confirmed",
         "language",
         "source",
         "customer",
         "created_at",
     ]
-    list_filter = ["is_active", "language", "source", "created_at"]
+    list_filter = ["is_active", "is_confirmed", "language", "source", "created_at"]
     search_fields = ["email"]
-    readonly_fields = ["unsubscribe_token", "created_at"]
+    readonly_fields = [
+        "confirmation_token",
+        "confirmed_at",
+        "unsubscribe_token",
+        "created_at",
+    ]
     actions = ["action_reactivate", "action_deactivate"]
 
     @admin.action(description="Reactivate selected subscribers")

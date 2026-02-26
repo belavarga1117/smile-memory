@@ -7,6 +7,11 @@ app_name = "marketing"
 urlpatterns = [
     path("subscribe/", views.NewsletterSubscribeView.as_view(), name="subscribe"),
     path(
+        "confirm/<uuid:token>/",
+        views.NewsletterConfirmView.as_view(),
+        name="confirm",
+    ),
+    path(
         "unsubscribe/<uuid:token>/",
         views.NewsletterUnsubscribeView.as_view(),
         name="unsubscribe",

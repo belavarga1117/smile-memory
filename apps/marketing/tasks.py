@@ -54,8 +54,10 @@ def _collect_recipients(campaign):
             seen.add(customer.email)
             recipients.append((customer.email, lang, customer))
 
-    # 2. Active Subscribers whose email is NOT already covered by a customer
-    for sub in Subscriber.objects.filter(is_active=True).exclude(email__in=seen):
+    # 2. Active + confirmed Subscribers whose email is NOT already covered by a customer
+    for sub in Subscriber.objects.filter(is_active=True, is_confirmed=True).exclude(
+        email__in=seen
+    ):
         seen.add(sub.email)
         recipients.append((sub.email, sub.language or "th", None))
 

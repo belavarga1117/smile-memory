@@ -199,6 +199,7 @@ def subscriber(db, customer):
     return Subscriber.objects.create(
         email="customer@test.com",
         is_active=True,
+        is_confirmed=True,
         customer=customer,
         source="footer",
     )

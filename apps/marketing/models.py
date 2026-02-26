@@ -154,10 +154,17 @@ class Subscriber(TimeStampedModel):
 
     Footer/standalone signup creates Subscriber first,
     then links to Customer if email matches.
+    Double opt-in: is_confirmed=False until user clicks confirmation email link.
     """
 
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
+    is_confirmed = models.BooleanField(
+        default=False,
+        help_text="True after subscriber clicks confirmation link (double opt-in).",
+    )
+    confirmation_token = models.UUIDField(default=uuid.uuid4, unique=True)
+    confirmed_at = models.DateTimeField(null=True, blank=True)
     unsubscribe_token = models.UUIDField(default=uuid.uuid4, unique=True)
     customer = models.OneToOneField(
         Customer,
@@ -183,4 +190,5 @@ class Subscriber(TimeStampedModel):
 
     def __str__(self):
         status = "active" if self.is_active else "unsubscribed"
-        return f"{self.email} ({status})"
+        confirmed = " ✓" if self.is_confirmed else " (unconfirmed)"
+        return f"{self.email} ({status}{confirmed})"

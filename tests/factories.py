@@ -233,6 +233,7 @@ class SubscriberFactory(factory.django.DjangoModelFactory):
 
     email = factory.Sequence(lambda n: f"subscriber{n}@test.com")
     is_active = True
+    is_confirmed = True
     source = "footer"
 
 

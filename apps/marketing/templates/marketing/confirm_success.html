@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Subscription Confirmed" %} — Smile Memory{% endblock %}
+
+{% block content %}
+<section class="py-20">
+    <div class="max-w-lg mx-auto px-4 text-center">
+        <div class="w-16 h-16 bg-brand-blush rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-brand-rose" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+        </div>
+        <h1 class="text-2xl font-bold text-brand-text mb-3">
+            {% trans "You're subscribed!" %}
+        </h1>
+        <p class="text-brand-muted mb-2">
+            <strong>{{ subscriber.email }}</strong>
+        </p>
+        <p class="text-brand-muted mb-8">
+            {% trans "Thank you for confirming your subscription. You'll now receive exclusive travel deals, new tour packages, and travel tips from Smile Memory." %}
+        </p>
+        <a href="{% url 'tours:list' %}"
+           class="inline-block bg-brand-rose hover:bg-brand-clay text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+            {% trans "Explore Our Tours" %} →
+        </a>
+    </div>
+</section>
+{% endblock %}

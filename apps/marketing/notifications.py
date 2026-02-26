@@ -69,3 +69,33 @@ def send_newsletter_welcome(subscriber):
         else f"Welcome! Thank you for subscribing to Smile Memory newsletter.\nUnsubscribe: {unsubscribe_url}"
     )
     _dispatch(subject, plain, [subscriber.email], html_message)
+
+
+def send_newsletter_confirmation(subscriber):
+    """Send double opt-in confirmation email to new subscriber."""
+    lang = getattr(subscriber, "language", "th") or "th"
+    site_url = "https://smilememorytravel.com"
+    confirm_url = (
+        f"{site_url}/{'th' if lang == 'th' else 'en'}"
+        f"/newsletter/confirm/{subscriber.confirmation_token}/"
+    )
+
+    subject = (
+        "ยืนยันการสมัครรับข่าวสาร Smile Memory 🌏"
+        if lang == "th"
+        else "Please confirm your Smile Memory subscription ✈️"
+    )
+    html_message = render_to_string(
+        f"emails/newsletter_confirm_{lang}.html",
+        {
+            "subscriber": subscriber,
+            "site_name": settings.SITE_NAME,
+            "confirm_url": confirm_url,
+        },
+    )
+    plain = (
+        f"กรุณายืนยันการสมัครรับข่าวสาร Smile Memory:\n{confirm_url}"
+        if lang == "th"
+        else f"Please confirm your Smile Memory newsletter subscription:\n{confirm_url}"
+    )
+    _dispatch(subject, plain, [subscriber.email], html_message)

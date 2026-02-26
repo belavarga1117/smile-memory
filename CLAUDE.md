@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Smile Memory** — Thai travel agency website. Resells tour packages from wholesalers (Zego Travel, GS25 Travel, Go365 Travel). Bilingual (Thai + English), responsive (mobile + desktop), professional quality.
+**Smile Memory** — Thai travel agency website. Resells tour packages from wholesalers (Zego, GS25, Go365, Real Journey). Bilingual (Thai + English), responsive, professional quality.
 
 **NOT e-commerce** — customers submit inquiries, admin confirms bookings, then automated emails are sent. No online payments.
 
@@ -12,106 +12,57 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - **Backend**: Django 5.1 + Django REST Framework
 - **Frontend**: Django Templates + Tailwind CSS v4 + Alpine.js
-- **Database**: PostgreSQL 16 (dev + prod) — Homebrew local / Railway prod
-- **Task Queue**: Celery + Redis
-- **Search**: PostgreSQL Full-Text Search
+- **Database**: PostgreSQL 16 (Homebrew local / Railway prod)
+- **Task Queue**: Celery + Redis | **Search**: PostgreSQL Full-Text Search
 - **Hosting**: Railway (nixpacks, git push = auto-deploy)
-- **Static Files**: WhiteNoise `CompressedStaticFilesStorage` (prod)
-- **Email**: Brevo REST API (transactional) + Brevo bulk (campaigns) — `apps/core/email_backends.BrevoEmailBackend`
-- **CI/CD**: GitHub Actions
-- **Production URL**: https://smilememorytravel.com (Railway internal: web-production-86e1f.up.railway.app)
+- **Static**: WhiteNoise `CompressedStaticFilesStorage` | **Email**: Brevo REST API
+- **Production**: https://smilememorytravel.com
+
+## NEVER (Critical Rules)
+
+- **NEVER push directly to `main`** — always create a PR; CI must pass first
+- **NEVER run GS25 scraper locally** — requires Railway credentials (GS25_USERNAME/PASSWORD)
+- **NEVER commit `.env`, credentials, or API keys** to git
+- **NEVER use SMTP on Railway** — it's blocked; use `BrevoEmailBackend` (Brevo REST API)
+- **NEVER rebuild CSS on Railway** — commit `static/css/output.css` pre-built locally
+- **NEVER set `STORAGES` without both `"default"` and `"staticfiles"` keys** (Django 5.1 requirement)
+- **NEVER publish a blog post** with visa/entry/health facts without running the fact-check research agent first
+- **NEVER guess** when best practice is unclear — spawn the research sub-agent
 
 ## Common Commands
 
 ```bash
-# ── Local dev stack (PostgreSQL + Redis + Celery + Django + Tailwind) ──────────
-./scripts/dev.sh                    # start everything in one command
-./scripts/dev.sh --no-css           # skip Tailwind watch (when not changing styles)
+# ── Local dev stack ─────────────────────────────────────────────────────────
+./scripts/dev.sh                    # start everything (PG + Redis + Celery + Django + Tailwind)
+./scripts/dev.sh --no-css           # skip Tailwind watch
 
-# ── Individual services (manual) ──────────────────────────────────────────────
-source venv/bin/activate
-brew services start postgresql@16   # start PostgreSQL (auto-starts at login)
-brew services start redis           # start Redis (auto-starts at login)
-python manage.py runserver          # Django dev server only
-celery -A config worker -l info     # Celery worker (needs Redis)
-celery -A config beat -l info       # Celery beat scheduler
-npm run css:watch                   # Tailwind CSS watch
-npm run css:build                   # Tailwind CSS production build
-
-# ── Database ───────────────────────────────────────────────────────────────────
-python manage.py makemigrations
-python manage.py migrate
-python manage.py seed_tours         # seed 10 tours + fixtures
+# ── Database ────────────────────────────────────────────────────────────────
+python manage.py makemigrations && python manage.py migrate
+python manage.py seed_tours         # 10 tours + fixtures for local dev
 python manage.py createsuperuser
 
-# ── Tests ──────────────────────────────────────────────────────────────────────
-pytest                              # full suite (458 tests, PostgreSQL)
-pytest -x -q                        # stop on first failure, quiet
+# ── Tests & QA ──────────────────────────────────────────────────────────────
+pytest                              # full suite (~460 tests, PostgreSQL)
+pytest -x -q                        # stop on first failure
+./scripts/qa.sh                     # full QA pipeline (lint + format + check + test + coverage)
 
-# ── Code quality ───────────────────────────────────────────────────────────────
-ruff check .
-ruff check --fix .
-ruff format .
-./scripts/qa.sh                     # full QA pipeline (lint + test + coverage)
-
-# ── Django checks ──────────────────────────────────────────────────────────────
+# ── Code quality ────────────────────────────────────────────────────────────
+ruff check . && ruff format .
 python manage.py check
 python manage.py check --deploy     # production checklist
 
-# ── Static files (production only) ────────────────────────────────────────────
+# ── Data quality (production) ───────────────────────────────────────────────
+python manage.py clean_tour_html [--source all]   # strip HTML from tour fields
+python manage.py clean_tour_titles [--apply]      # strip junk from titles (dry-run default)
+python manage.py validate_scrapers [--source zego] [--sample 5]
+python manage.py find_duplicates [--fix]
+
+# ── Translations ────────────────────────────────────────────────────────────
+python manage.py makemessages -l th && python manage.py compilemessages
+
+# ── Static files (prod only) ────────────────────────────────────────────────
+npm run css:build                   # rebuild Tailwind CSS (commit output.css after)
 python manage.py collectstatic --noinput
-
-# ── Translations ───────────────────────────────────────────────────────────────
-python manage.py makemessages -l th
-python manage.py compilemessages
-```
-
-## Project Structure
-
-```
-travel-agency/
-├── config/                     # Django project config
-│   ├── settings/
-│   │   ├── base.py            # Shared settings (all envs)
-│   │   ├── development.py     # Dev: DEBUG=True, PostgreSQL (local), console email
-│   │   └── production.py      # Prod: Railway, WhiteNoise, Brevo, Sentry
-│   ├── celery.py              # Celery app init
-│   ├── urls.py                # Root URL routing
-│   └── wsgi.py / asgi.py
-├── apps/
-│   ├── core/                  # Shared base models, template tags, utils
-│   ├── accounts/              # Custom User model, admin auth
-│   ├── tours/                 # Tour catalog (central domain)
-│   ├── bookings/              # Inquiry system (admin-approved workflow)
-│   ├── customers/             # Customer CRM, opt-in, segmentation
-│   ├── marketing/             # Newsletter, email campaigns
-│   ├── importer/              # Tour data import pipeline
-│   │   ├── parsers/           # Excel, PDF, scrape parsers
-│   │   ├── mappers/           # Field mapping per wholesaler
-│   │   └── pipeline.py        # Import orchestrator
-│   ├── pages/                 # Static pages (home, about, contact)
-│   └── blog/                  # Blog / Travel Tips (SEO)
-├── templates/
-│   ├── base.html              # Master template (rose-bézsz luxury design)
-│   ├── components/            # _navbar.html, _footer.html, etc.
-│   └── emails/                # Email templates
-├── static/
-│   ├── src/input.css          # Tailwind v4 entry point
-│   ├── css/output.css         # Compiled (committed for prod)
-│   ├── images/                # Static images (about-team.jpg)
-│   └── media/                 # Seed data images (heroes, testimonials, destinations, blog)
-├── tests/                      # Integration + cross-app tests (factory-boy)
-│   ├── factories.py           # 25 factory-boy factories
-│   ├── conftest → root conftest.py (shared fixtures)
-│   └── test_*.py              # API, security, performance, etc.
-├── scripts/
-│   ├── dev.sh                 # Local full-stack launcher (PG + Redis + Celery + Django + Tailwind)
-│   └── qa.sh                  # QA pipeline (lint + test + coverage)
-├── locale/{th,en}/            # Translation .po files
-├── requirements/{base,dev,prod}.txt
-├── nixpacks.toml              # Nixpacks build config (Python + libcairo2-dev)
-├── Procfile                   # Railway process definitions
-└── railway.toml               # Railway deploy config (build + start commands)
 ```
 
 ## Architecture
@@ -122,171 +73,98 @@ travel-agency/
 |-----|---------|------------|
 | `core` | Base classes, template tags, context processors | `TimeStampedModel` (abstract), `SiteConfiguration` (singleton) |
 | `accounts` | Auth, custom user | `User` (extends AbstractUser) |
-| `tours` | Tour catalog, search, filtering | `Tour`, `Destination`, `Category`, `Airline`, `TourDeparture`, `TourFlight`, `TourImage`, `ItineraryDay`, `PriceOption` |
+| `tours` | Tour catalog, search, filtering | `Tour`, `Destination`, `Category`, `TourDeparture`, `TourFlight`, `ItineraryDay` |
 | `bookings` | Inquiry workflow (admin-approved) | `Inquiry`, `InquiryNote` |
-| `customers` | Customer database, marketing opt-in | `Customer` (email, phone, tags, opt-in) |
-| `marketing` | Newsletters, campaigns | `Campaign`, `EmailTemplate`, `CampaignRecipient` |
-| `importer` | Tour data import | `ImportSource`, `ImportJob`, `ImportLog` |
-| `pages` | Homepage, about, contact | `HeroSlide`, `Testimonial`, `TrustBadge`, `FAQ` |
+| `customers` | Customer CRM, marketing opt-in | `Customer` |
+| `marketing` | Newsletters, campaigns | `Campaign`, `EmailTemplate` |
+| `importer` | Tour data import pipeline | `ImportJob`, `ImportLog` |
+| `pages` | Homepage, about, contact | `HeroSlide`, `Testimonial`, `FAQ` |
 | `blog` | Travel blog | `BlogPost`, `BlogCategory`, `Tag` |
 
-### Booking Workflow (Key Business Logic)
+### Booking Workflow
 
 ```
-Customer submits inquiry form (+ marketing opt-in checkbox)
-  → Inquiry created (status: NEW)
-  → Customer record created/updated
-  → Immediate email to customer: "Thank you, we'll respond soon"
-  → Immediate email to admin: "New inquiry received"
-  → Admin reviews in admin panel
-  → Admin CONFIRMS → auto email: booking confirmation + payment info
-  → OR Admin REJECTS → optional email: unavailable / alternative suggestion
+Customer inquiry (+ marketing opt-in) → Inquiry (status=NEW)
+  → Email to customer: "Thank you"  → Email to admin: "New inquiry"
+  → Admin CONFIRMS → email: booking confirmation + payment info
+  → Admin REJECTS → optional email: unavailable / suggestion
 ```
 
 ### Import Pipeline
 
-Wholesalers (Zego, GS25, Go365) are login-gated portals. Zego has REST API (v1.5) at zegoapi.com.
+4 wholesalers: **Zego** (246 tours, internal API + session auth), **Go365** (275 tours, CryptoJS encrypted AJAX), **Real Journey** (23 tours, WordPress AJAX — no auth), **GS25** (~90 tours, HTML scraper — production only).
 
-**Zego API → Django Model Mapping:**
-- `ProgramTour` → `Tour` (title, product_code, locations, hotel_stars, meals, includes/excludes)
-- `Period` → `TourDeparture` (departure_date, full pricing matrix: adult/child/infant/visa/room supplements, deposit, commission, promo pricing)
-- `Flights` → `TourFlight` (airline, flight_number, route, times)
-- `Itinerarys` → `ItineraryDay` (day_number, meals B/L/D with Y/N/P/C flags, hotel info)
+Pipeline: `Trigger → Scraper → Field Mapper → _sanitize_tour_data() → _upsert_tour() → Log`
 
-Supported import methods:
-1. **Zego API** — portal internal API with session auth (239+ tours, full itinerary + PDF)
-2. **Go365 API** — encrypted AJAX API with CryptoJS AES (275 tours, PDF fixed)
-3. **Real Journey API** — TourProX WordPress AJAX (23 tours)
-4. **GS25 HTML scraper** — session auth, BeautifulSoup, ~87 tours in prod (production only, not run locally)
-5. **Excel upload** — admin exports from portal, uploads in admin
-6. **PDF upload** — parsed with pdfplumber
-7. **Manual entry** — Django admin CRUD
+Automated: Celery Beat runs `sync_all_tours` daily at 15:00 ICT.
 
-Pipeline: `Trigger → Parser → Field Mapper → Validator → Upsert Tour → Log`
+**PDF rule**: Tour only published (`status=PUBLISHED`) if `pdf_url` is non-empty.
 
-**Automated sync**: Celery Beat runs `sync_all_tours` daily at 15:00 ICT — imports from all 4 sources (Zego, Go365, Real Journey, GS25).
+### Bilingual Strategy
 
-**Data validation**: `python manage.py validate_scrapers` — samples tours from DB, re-fetches live, compares title/duration/price/departures/PDF. Use `--source` and `--sample` flags.
+- Static UI strings: `{% trans %}` + `.po` locale files
+- Dynamic content: dual model fields (`title` + `title_th`)
+- Template tag: `{% trans_field tour "title" %}` — returns field based on active language
+- URL routing: `i18n_patterns` → `/en/tours/`, `/th/tours/`
 
-### Bilingual Strategy (Thai + English)
+## Design System
 
-- **Static UI strings**: Django `{% trans %}` + `.po` files
-- **Dynamic content**: Dual fields on models (`title` + `title_th`)
-- **Template tag**: `{% trans_field tour "title" %}` — returns Thai or English based on active language
-- **URL routing**: `i18n_patterns` → `/en/tours/`, `/th/tours/`
+Pink luxury palette. **See MEMORY.md for current color hex values** — do NOT use CLAUDE.md
+palette (it's outdated). Key: `brand-rose` (CTA), `brand-cocoa` (footer), `brand-bg` (body).
+Font: `font-brand` = Playfair Display (headings), `font-sans` = Inter + Noto Sans Thai.
+Owner loves pink — NO brown/mauve tones. Layout: mobile-first Tailwind, Alpine.js interactivity.
 
-### Design System
+## Settings & Conventions
 
-- **Colors**: True pink luxury palette — all in `@theme` in `static/src/input.css` (owner loves pink, NO brown tones!):
-  - `brand-bg` (#FEF0F3) — very light blush pink body background
-  - `brand-surface` (#FFF5F7) — near-white pink tint for cards
-  - `brand-blush` (#FCDDE4) — soft petal pink sections
-  - `brand-petal` (#F5A8B8) — medium pink accent
-  - `brand-rose` (#E05270) — primary CTA, vibrant rose
-  - `brand-clay` (#C43A58) — CTA hover, deeper rose
-  - `brand-taupe` (#EEB8C5) — borders, separators (pink-rose)
-  - `brand-cocoa` (#8C2050) — navbar/footer/dark sections (deep berry)
-  - `brand-text` (#2E0A1A) — main text (near-black berry)
-  - `brand-muted` (#804060) — secondary text (medium berry-rose)
-  - `brand-hint` (#B87090) — subtle text on light bg
-  - `brand-gold` (#E8A878) — rose-gold/peach accent
-  - `brand-deep` (#14050E) — near-black berry for hero gradients
-  - On dark backgrounds use `text-white/70` or `text-white/60`
-- **Fonts**:
-  - `font-sans` → Inter + Noto Sans Thai (body/UI text)
-  - `font-brand` → Playfair Display (brand name "Smile Memory", section headings) — elegant serif
-  - Both loaded from Google Fonts in `base.html`
-- **Logo**: SVG icons in `static/images/` — 3 variants:
-  - `logo-icon-color.svg` — full rose-gold palette (navbar, footer, favicon)
-  - `logo-icon-white.svg` — white variant (optional for dark overlays)
-  - `logo-icon-dark.svg` — dark mauve variant (for light/white backgrounds)
-  - Brand name rendered in HTML next to icon using `font-brand` class
-  - Navbar: `<img logo> + "Smile" (bold 22px) + "MEMORY" (10px tracking-wide uppercase)`
-- **Layout**: Mobile-first responsive with Tailwind CSS
-- **Components**: Alpine.js for interactivity (dropdowns, modals, form handling)
-
-## Settings
-
-- Dev settings: `config.settings.development` (PostgreSQL via DATABASE_URL, console email, DEBUG=True)
-- Prod settings: `config.settings.production` (PostgreSQL, Brevo REST API, WhiteNoise, Sentry, logging to stdout)
-- Settings module controlled by `DJANGO_SETTINGS_MODULE` env var
-- All secrets in `.env` file (never committed)
-
-## Deployment (Railway)
-
-- **Project**: perpetual-vibrancy | **Service**: web | **DB**: PostgreSQL
-- **Builder**: nixpacks (Python provider) — auto-deploy on git push to main
-- **Build**: `collectstatic` | **Start**: `migrate && gunicorn`
-- **Static**: WhiteNoise serves from `staticfiles/`, seed images in `static/media/`
-- **Media**: Ephemeral filesystem — seed images committed as static, tour images are external URLs
-- **Admin**: https://smilememorytravel.com/admin/ (credentials in Railway env vars: ADMIN_PASSWORD)
-- **Railway CLI**: `railway logs`, `railway variables`, `railway status`
-- **Key env vars**: DJANGO_SETTINGS_MODULE, SECRET_KEY, DATABASE_URL, ALLOWED_HOSTS, PIP_ONLY_BINARY=pycairo
-
-## Conventions
-
-- All apps in `apps/` directory, referenced as `apps.tours`, `apps.bookings`, etc.
-- All models inherit from `core.TimeStampedModel` (provides `created_at`, `updated_at`)
-- Bilingual fields use `_th` suffix: `title` (English) + `title_th` (Thai)
-- Custom User model: `apps.accounts.User` (`AUTH_USER_MODEL = "accounts.User"`)
-- Template partials prefixed with underscore: `_tour_card.html`, `_navbar.html`
-- Admin credentials: stored in `.env` (dev) and Railway variables (prod) — never commit to repo
-- Seed images served from `static/media/` via `thumbnail` tag fallback (ephemeral media/ on Railway)
+- Dev: `config.settings.development` (DEBUG=True, console email) | Prod: `config.settings.production`
+- All secrets in `.env` (never committed) — prod secrets in Railway env vars
+- All models inherit from `core.TimeStampedModel` (`created_at`, `updated_at`)
+- Bilingual: `_th` suffix — `title` (EN) + `title_th` (TH)
+- Template partials: underscore prefix (`_tour_card.html`, `_navbar.html`)
+- Custom User: `apps.accounts.User` (`AUTH_USER_MODEL = "accounts.User"`)
 
 ## Development Workflow
 
 ### Branch Strategy (GitHub Flow)
 
-- **`main`** = production (protected, auto-deploys to Railway)
-- **Feature branches** (`feat/...`, `fix/...`, `refactor/...`) for all work
-- **Pull Requests** required to merge into `main` — CI must pass
-- **Railway PR Previews** — each PR gets a temporary preview URL for testing
-- **NEVER push directly to `main`** — always create a PR
+- `main` = production (protected) — **CI must pass, PR required**
+- Feature branches: `feat/...`, `fix/...`, `refactor/...`, `docs/...`, `chore/...`
+- Every push to main = Railway deploy (~10 min) — iterate locally, push when ready
 
 ### Workflow Steps
 
-1. Create feature branch: `git checkout -b feat/my-feature`
-2. Start local dev stack: `./scripts/dev.sh` — starts PostgreSQL + Redis + Celery + Django + Tailwind
-3. Admin panel: http://localhost:8000/admin/ (admin / admin123)
-4. After model changes: `python manage.py makemigrations && python manage.py migrate`
-5. Write + run tests locally: `pytest -x -q` — catches real PostgreSQL errors before deploy
-6. Before commit: `./scripts/qa.sh` (or at minimum: `ruff check . && ruff format .`)
-7. Push branch & create PR: `git push -u origin feat/my-feature && gh pr create`
-8. **Only push when feature is ready** — every push = Railway deploy (~10 min); iterate locally
-9. Merge PR → auto-deploy to production
+1. `git checkout -b feat/my-feature`
+2. `./scripts/dev.sh` — full dev stack
+3. Make changes + `pytest -x -q` locally
+4. `./scripts/qa.sh` before committing
+5. `git push -u origin feat/my-feature && gh pr create`
+6. Merge PR → auto-deploy to production
 
-### Local vs Production Split
+**Local vs prod**: Zego/Go365/GS25 scrapers need Railway credentials — use production for real data.
+**Production DB access**: `DATABASE_URL="$(railway variables --service Postgres --json | python3 -c "import json,sys; print(json.load(sys.stdin)['DATABASE_PUBLIC_URL'])")" python manage.py <command>`
 
-| What | Local (Homebrew PG) | Production (Railway) |
-|---|---|---|
-| Admin, templates, forms | ✅ Full testing | ✅ Final verify |
-| PostgreSQL migrations | ✅ Real behavior | ✅ Apply on deploy |
-| Celery tasks | ✅ Test logic | ✅ Real workers |
-| Real Journey (no auth) | ✅ Can scrape locally | ✅ Scheduled daily |
-| Zego / Go365 / GS25 | ⚠️ Need credentials from Railway | ✅ Full sync daily |
-| **537+ real tour data** | ❌ Local: only seed/test data | ✅ Full catalog here |
+### Multi-Agent Workflow (Automatic)
 
-**Rule**: For production data quality → use production. Local scraping = code testing only, not data management.
-**PDF rule**: A tour is only published (`status=PUBLISHED`) if it has a `pdf_url`. Tours without PDF stay DRAFT for admin review.
+The parent agent MUST proactively spawn Task sub-agents — user never needs to ask.
+Templates: `.claude/commands/{research,review,qa,vendor-research,write-scraper,write-blog}.md`
 
-### Branch Naming
-
-- `feat/...` — new features
-- `fix/...` — bug fixes
-- `refactor/...` — code refactoring
-- `docs/...` — documentation changes
-- `chore/...` — maintenance, dependencies
+| When | Agent | Template |
+|------|-------|----------|
+| Feature >3 files complete | review → then qa | `review.md` → `qa.md` |
+| Before creating a PR | review (if not done) | `review.md` |
+| Blog post requested | fact-check research FIRST | `write-blog.md` Phase 1 |
+| New wholesaler / scraper task | vendor-research BEFORE coding | `vendor-research.md` |
+| Approach unclear | research sub-agent | `research.md` |
 
 ## API Endpoints
 
-- **Tours list**: `GET /api/v1/tours/` (filterable: destination, category, status, min/max price, search)
-- **Tour detail**: `GET /api/v1/tours/{id}/` (includes departures, flights, itinerary, images)
-- **Destinations**: `GET /api/v1/destinations/`
-- **Categories**: `GET /api/v1/categories/`
-- **Tour pages**: `/tours/` (list), `/tours/<slug>/` (detail)
+- `GET /api/v1/tours/` — filterable: destination, category, status, min/max price, search
+- `GET /api/v1/tours/{id}/` — includes departures, flights, itinerary, images
+- `GET /api/v1/destinations/` | `GET /api/v1/categories/`
+- Tour pages: `/tours/` (list) | `/tours/<slug>/` (detail) — language-prefixed via i18n
 
 ## Seed Data
 
 ```bash
-python manage.py seed_tours    # 8 airlines, 10 destinations, 7 categories, 10 tours with departures + itineraries
+python manage.py seed_tours    # 8 airlines, 10 destinations, 7 categories, 10 tours
 ```

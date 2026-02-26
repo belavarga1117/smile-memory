@@ -44,6 +44,8 @@ _GS25_DEPART_AIRPORTS = frozenset({"DMK", "BKK", "CNX", "HKT"})
 _AIRPORT_PREFIX_RE = re.compile(r"^([A-Z]{3})\s+")
 # " BY TK", " BY EK", " BY XJ" etc. — airline code in middle of title
 _BY_AIRLINE_RE = re.compile(r"\s+BY\s+[A-Z]{2}\b")
+# Duration codes embedded in URL slugs (9D7N, 5D3N) — redundant, shown via duration_display badge
+_DURATION_CODE_RE = re.compile(r"\s+\d+D\d*N\b", re.IGNORECASE)
 
 # Thai month abbreviations → month number (for departure date parsing)
 THAI_MONTHS = {
@@ -499,6 +501,8 @@ class GS25Scraper(BaseScraper):
         title = _strip_airport(title)
         # Strip " BY XX" pattern (e.g. " BY TK", " BY EK")
         title = _BY_AIRLINE_RE.sub("", title)
+        # Strip duration codes (9D7N, 5D3N) — shown separately via duration_display badge
+        title = _DURATION_CODE_RE.sub("", title)
         return title.strip()
 
     def _parse_title(self, soup: BeautifulSoup) -> str:

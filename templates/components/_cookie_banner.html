@@ -2,6 +2,7 @@
 {% comment %}
 Cookie consent banner — localStorage-based, Alpine.js powered.
 Shows on first visit. "Accept" stores consent in localStorage → banner disappears permanently.
+Also dispatches 'cookie_consent_given' window event so GA4 can load on the same page visit.
 Links to the Privacy Policy page.
 {% endcomment %}
 <div
@@ -13,6 +14,7 @@ Links to the Privacy Policy page.
     accept() {
       localStorage.setItem('cookie_consent', '1');
       this.show = false;
+      window.dispatchEvent(new Event('cookie_consent_given'));
     }
   }"
   x-show="show"
@@ -36,11 +38,11 @@ Links to the Privacy Policy page.
     </div>
     <!-- Text -->
     <p class="text-sm text-white/90 flex-1 leading-relaxed">
-      เราใช้คุกกี้ที่จำเป็นเพื่อให้เว็บไซต์ทำงานได้อย่างถูกต้อง
-      โดยการใช้งานเว็บไซต์นี้ต่อไป คุณยอมรับ
+      เราใช้คุกกี้ที่จำเป็นและคุกกี้วิเคราะห์ข้อมูลเพื่อให้บริการที่ดีขึ้น
+      โดยการกด "ยอมรับ" คุณให้ความยินยอมตาม
       <a href="{% url 'pages:privacy' %}" class="underline hover:text-brand-petal transition-colors">นโยบายความเป็นส่วนตัว</a>
       ของเรา &nbsp;·&nbsp;
-      We use essential cookies to keep this site working. By continuing, you accept our
+      We use essential and analytics cookies to improve your experience. By clicking Accept, you consent per our
       <a href="{% url 'pages:privacy' %}" class="underline hover:text-brand-petal transition-colors">Privacy Policy</a>.
     </p>
     <!-- Accept button -->

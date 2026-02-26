@@ -22,9 +22,11 @@ from apps.tours.models import Tour
 # Matches patterns like: RJ-XJ107, RJ-VZCTS001, GO365-JPN001, ZG-ABC123
 _CODE_PREFIX_RE = re.compile(r"^([A-Z]{1,6}-[A-Z0-9]+)\s+")
 
-# GS25-specific: IATA airline codes (2-letter) and airport codes (3-letter) at title start
+# GS25-specific: strip IATA airline codes (2-letter) and known Thai departure airports
 _AIRLINE_PREFIX_RE = re.compile(r"^[A-Z]{2}\s+")
-_AIRPORT_PREFIX_RE = re.compile(r"^[A-Z]{3}\s+")
+# Only whitelist Thai departure airports — prevents "TAM" in "Tam Dao" (Vietnamese place) being stripped
+_GS25_DEPART_AIRPORTS = frozenset({"DMK", "BKK", "CNX", "HKT"})
+_AIRPORT_PREFIX_RE = re.compile(r"^([A-Z]{3})\s+")
 _BY_AIRLINE_RE = re.compile(r"\s+BY\s+[A-Z]{2}\b")
 
 
@@ -53,11 +55,19 @@ def strip_code_prefix(title: str, product_code: str = "", source: str = "") -> s
         elif title.startswith(": "):
             title = title[2:].lstrip()
 
-    # GS25: strip leading airline IATA code (XJ, TK, EK...) + airport code (DMK, NRT...)
-    # and inline " BY XX" patterns after the product code has been removed
+    # GS25: strip leading airline codes (XJ, TK...) and whitelisted Thai departure airports.
+    # Run airport→airline→airport to handle both orderings (XJ DMK or DMK XJ).
     if source == "gs25":
+
+        def _strip_airport(t):
+            m = _AIRPORT_PREFIX_RE.match(t)
+            if m and m.group(1) in _GS25_DEPART_AIRPORTS:
+                return t[m.end() :]
+            return t
+
+        title = _strip_airport(title)
         title = _AIRLINE_PREFIX_RE.sub("", title)
-        title = _AIRPORT_PREFIX_RE.sub("", title)
+        title = _strip_airport(title)
         title = _BY_AIRLINE_RE.sub("", title)
 
     return title.strip()

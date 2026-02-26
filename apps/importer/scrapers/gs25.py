@@ -36,9 +36,12 @@ _GS25_JUNK_RE = [
     re.compile(r"py\s+text\b", re.IGNORECASE),
 ]
 
-# IATA airline codes (2-letter) and airport codes (3-letter) at title start
+# IATA airline codes (2-letter) at title start
 _AIRLINE_PREFIX_RE = re.compile(r"^[A-Z]{2}\s+")
-_AIRPORT_PREFIX_RE = re.compile(r"^[A-Z]{3}\s+")
+# Only strip 3-letter airport codes that are known Thai departure airports —
+# prevents false positives like "TAM" in "Tam Dao" (Vietnamese place name)
+_GS25_DEPART_AIRPORTS = frozenset({"DMK", "BKK", "CNX", "HKT"})
+_AIRPORT_PREFIX_RE = re.compile(r"^([A-Z]{3})\s+")
 # " BY TK", " BY EK", " BY XJ" etc. — airline code in middle of title
 _BY_AIRLINE_RE = re.compile(r"\s+BY\s+[A-Z]{2}\b")
 
@@ -482,10 +485,18 @@ class GS25Scraper(BaseScraper):
         # Strip product code prefix (e.g. "IST58 " or "NRT69 ")
         if product_code and title.startswith(product_code):
             title = title[len(product_code) :].lstrip()
-        # Strip leading 2-letter airline IATA code (e.g. "XJ ")
+
+        # Strip leading airline (2-letter) and Thai departure airport (3-letter, whitelisted).
+        # Run airport→airline→airport to handle both orderings (XJ DMK vs DMK XJ).
+        def _strip_airport(t):
+            m = _AIRPORT_PREFIX_RE.match(t)
+            if m and m.group(1) in _GS25_DEPART_AIRPORTS:
+                return t[m.end() :]
+            return t
+
+        title = _strip_airport(title)
         title = _AIRLINE_PREFIX_RE.sub("", title)
-        # Strip leading 3-letter airport IATA code (e.g. "DMK ")
-        title = _AIRPORT_PREFIX_RE.sub("", title)
+        title = _strip_airport(title)
         # Strip " BY XX" pattern (e.g. " BY TK", " BY EK")
         title = _BY_AIRLINE_RE.sub("", title)
         return title.strip()

@@ -1,16 +1,24 @@
-"""Management command to strip product code prefixes from tour titles.
+"""Management command to strip product code prefixes and routing junk from tour titles.
 
-Some scrapers (Real Journey) embed the product code at the start of the tour
-title in the source API, e.g.:
-  "RJ-XJ107 ทัวร์ เรียล เรียล...ฮอกไกโด"  →  "ทัวร์ เรียล เรียล...ฮอกไกโด"
+Handles all import sources. Each source may embed different junk:
+  Real Journey: "RJ-XJ107 ทัวร์ เรียล...ฮอกไกโด"    → "ทัวร์ เรียล...ฮอกไกโด"
+  GS25:         "NRT69 XJ DMK TOKYO TULIP 9D7N"       → "TOKYO TULIP"
+  Zego:         ": TOUR NAME"                          → "TOUR NAME"
 
-This command finds all such titles and strips the prefix, both from `title`
-and `title_th`. It is idempotent — running it twice has no effect.
+Rules applied in order:
+  1. Product code prefix (exact match)
+  2. Generic CODE-XXXXX prefix (RJ-XJ107 style)
+  3. Zego ': ' prefix convention
+  4. GS25: leading IATA airline code (XJ, TK, VZ...) and whitelisted Thai departure airports
+  5. GS25: inline ' BY XX' airline pattern
+  6. ALL SOURCES: duration codes (9D7N, 5D3N) — redundant since duration_display badge shows this
+
+This command is idempotent — running it twice has no effect.
 
 Usage:
     python manage.py clean_tour_titles            # dry-run (preview only)
     python manage.py clean_tour_titles --apply    # actually update DB
-    python manage.py clean_tour_titles --source realjourney --apply
+    python manage.py clean_tour_titles --source gs25 --apply
 """
 
 import re
@@ -19,35 +27,69 @@ from django.core.management.base import BaseCommand
 
 from apps.tours.models import Tour
 
-# Matches patterns like: RJ-XJ107, RJ-VZCTS001, GO365-JPN001, ZG-ABC123
-_CODE_PREFIX_RE = re.compile(r"^([A-Z]{1,6}-[A-Z0-9]+)\s+")
+# Matches product code prefixes like: RJ-XJ107, GO365-JPN001, ZG-ABC123
+# Requires at least one digit after the hyphen to avoid matching place names like NAGOYA-OSAKA
+_CODE_PREFIX_RE = re.compile(r"^([A-Z]{1,6}-[A-Z0-9]*\d[A-Z0-9]*)\s+")
+
+# GS25-specific: strip IATA airline codes (2-letter) and known Thai departure airports
+_AIRLINE_PREFIX_RE = re.compile(r"^[A-Z]{2}\s+")
+# Only whitelist Thai departure airports — prevents "TAM" in "Tam Dao" (Vietnamese place) being stripped
+_GS25_DEPART_AIRPORTS = frozenset({"DMK", "BKK", "CNX", "HKT"})
+_AIRPORT_PREFIX_RE = re.compile(r"^([A-Z]{3})\s+")
+_BY_AIRLINE_RE = re.compile(r"\s+BY\s+[A-Z]{2}\b")
+
+# Universal: duration codes embedded in title slugs (9D7N, 5D3N, 10D7N...)
+# These are redundant — the Tour.duration_display badge already shows duration on cards.
+_DURATION_CODE_RE = re.compile(r"\s+\d+D\d*N\b", re.IGNORECASE)
 
 
-def strip_code_prefix(title: str, product_code: str = "") -> str:
+def strip_code_prefix(title: str, product_code: str = "", source: str = "") -> str:
     """Return title with leading product-code prefix removed.
 
     Priority:
     1. If title starts with the tour's own product_code, strip that exactly.
     2. Fall back to generic UPPER-ALPHANUM pattern (catches future scrapers).
     3. Strip Zego's ': ' prefix from Tour_Name API field (portal convention).
+    4. For GS25: also strip leading airline/airport IATA codes and BY XX patterns.
     """
     if not title:
         return title
 
     # Exact match against stored product_code (most reliable)
     if product_code and title.startswith(product_code + " "):
-        return title[len(product_code) :].lstrip()
+        title = title[len(product_code) :].lstrip()
+        # Zego portal convention: product code may be followed by ': <title>'
+        if title.startswith(": "):
+            title = title[2:].lstrip()
+    else:
+        # Generic pattern fallback: CODE-XXXXX <title>
+        m = _CODE_PREFIX_RE.match(title)
+        if m:
+            title = title[m.end() :]
 
-    # Generic pattern fallback: CODE-XXXXX <title>
-    m = _CODE_PREFIX_RE.match(title)
-    if m:
-        return title[m.end() :]
+        # Zego portal convention: Tour_Name field may start with ': <title>'
+        elif title.startswith(": "):
+            title = title[2:].lstrip()
 
-    # Zego portal convention: Tour_Name field may start with ': <title>'
-    if title.startswith(": "):
-        return title[2:].lstrip()
+    # GS25: strip leading airline codes (XJ, TK...) and whitelisted Thai departure airports.
+    # Run airport→airline→airport to handle both orderings (XJ DMK or DMK XJ).
+    if source == "gs25":
 
-    return title
+        def _strip_airport(t):
+            m = _AIRPORT_PREFIX_RE.match(t)
+            if m and m.group(1) in _GS25_DEPART_AIRPORTS:
+                return t[m.end() :]
+            return t
+
+        title = _strip_airport(title)
+        title = _AIRLINE_PREFIX_RE.sub("", title)
+        title = _strip_airport(title)
+        title = _BY_AIRLINE_RE.sub("", title)
+
+    # ALL SOURCES: strip embedded duration codes (9D7N, 5D3N...) — already shown via duration_display.
+    title = _DURATION_CODE_RE.sub("", title)
+
+    return title.strip()
 
 
 class Command(BaseCommand):
@@ -77,8 +119,10 @@ class Command(BaseCommand):
 
         changed = []
         for tour in qs.iterator():
-            new_title = strip_code_prefix(tour.title, tour.product_code)
-            new_title_th = strip_code_prefix(tour.title_th or "", tour.product_code)
+            new_title = strip_code_prefix(tour.title, tour.product_code, tour.source)
+            new_title_th = strip_code_prefix(
+                tour.title_th or "", tour.product_code, tour.source
+            )
 
             title_changed = new_title != tour.title
             title_th_changed = new_title_th != (tour.title_th or "")

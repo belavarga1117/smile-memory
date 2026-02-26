@@ -78,6 +78,7 @@ TEMPLATES = [
                 "django.template.context_processors.i18n",
                 "django.template.context_processors.media",
                 "apps.core.context_processors.site_config",
+                "apps.core.context_processors.language_urls",
             ],
         },
     },

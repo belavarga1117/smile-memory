@@ -35,6 +35,9 @@ staticfiles/
 *.swo
 *~
 
+# Claude Code local settings (machine-specific paths)
+.claude/
+
 # OS
 .DS_Store
 Thumbs.db

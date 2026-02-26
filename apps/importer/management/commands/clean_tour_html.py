@@ -32,7 +32,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "--source",
             default="all",
-            help="Source to clean: zego, realjourney, go365, or 'all' (default: all)",
+            help="Source to clean: zego, realjourney, go365, gs25, or 'all' (default: all)",
         )
 
     def handle(self, *args, **options):
@@ -45,7 +45,9 @@ class Command(BaseCommand):
         # ZegoScraper._html_to_text() handles HTML + Zego junk patterns generically
         scraper = ZegoScraper()
 
-        sources = ["zego", "go365", "realjourney"] if source == "all" else [source]
+        sources = (
+            ["zego", "go365", "realjourney", "gs25"] if source == "all" else [source]
+        )
         for src in sources:
             self._clean_highlights(scraper, src, dry_run)
             self._clean_itinerary_descriptions(scraper, src, dry_run)

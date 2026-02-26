@@ -7,6 +7,10 @@
     <title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}{% if site_config %}{{ site_config.meta_description }}{% endif %}{% endblock %}">
     {% block canonical %}<link rel="canonical" href="{{ request.build_absolute_uri }}">{% endblock %}
+    <!-- Hreflang — bilingual SEO -->
+    <link rel="alternate" hreflang="th" href="{{ request.scheme }}://{{ request.get_host }}{{ th_url }}">
+    <link rel="alternate" hreflang="en" href="{{ request.scheme }}://{{ request.get_host }}{{ en_url }}">
+    <link rel="alternate" hreflang="x-default" href="{{ request.scheme }}://{{ request.get_host }}{{ th_url }}">
 
     <!-- Open Graph -->
     <meta property="og:title" content="{% block og_title %}{{ SITE_NAME }}{% endblock %}">

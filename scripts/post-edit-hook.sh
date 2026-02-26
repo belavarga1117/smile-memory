@@ -23,12 +23,20 @@ fi
 
 # Auto-rebuild CSS when input.css is edited
 if [[ "$FILE" == *"/input.css" ]]; then
-    echo "🎨 CSS changed — rebuilding..."
-    cd "$PROJ" && npm run css:build 2>&1 | tail -3
+    echo "[hook] CSS changed — rebuilding..."
+    if cd "$PROJ" && npm run css:build 2>&1; then
+        echo "[hook] ✓ CSS rebuilt successfully"
+    else
+        echo "[hook] ✗ CSS build FAILED — run 'npm run css:build' manually to see the error" >&2
+        exit 1
+    fi
 fi
 
 # Auto-format Python files after editing
 if [[ "$FILE" == *.py ]]; then
-    "$PROJ/venv/bin/ruff" format "$FILE" --quiet 2>/dev/null
-    "$PROJ/venv/bin/ruff" check --fix "$FILE" --quiet 2>/dev/null
+    RUFF="$PROJ/venv/bin/ruff"
+    if [[ -x "$RUFF" ]]; then
+        "$RUFF" format "$FILE" 2>&1 && echo "[hook] ✓ Formatted: $(basename "$FILE")"
+        "$RUFF" check --fix "$FILE" 2>&1 || true
+    fi
 fi

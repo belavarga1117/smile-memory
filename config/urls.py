@@ -6,7 +6,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.views.generic import TemplateView
+from django.views.generic import RedirectView, TemplateView
 from rest_framework.routers import DefaultRouter
 
 from apps.tours.viewsets import CategoryViewSet, DestinationViewSet, TourViewSet
@@ -26,6 +26,8 @@ sitemaps = {
 
 # Language-independent URLs (admin, API, SEO, language switcher)
 urlpatterns = [
+    # Root → redirect to Thai (default language)
+    path("", RedirectView.as_view(url="/th/", permanent=False)),
     path("admin/", admin.site.urls),
     path("dashboard/", include("apps.core.urls")),
     path("api/v1/", include(router.urls)),

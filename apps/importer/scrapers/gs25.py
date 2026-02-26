@@ -27,6 +27,26 @@ from .base import BaseScraper
 
 logger = logging.getLogger(__name__)
 
+# Junk UI text that leaks into highlight/description (same as Zego portal)
+_GS25_JUNK_RE = [
+    re.compile(r"[×✕]\s*ส่งโปรแกรมทัวร์.*", re.DOTALL),
+    re.compile(r"Email\s+ผู้รับ.*", re.DOTALL),
+    re.compile(r"\bClose\s+Send\b.*", re.DOTALL),
+    re.compile(r"ส่งโปรแกรมทัวร์\s+Email.*", re.DOTALL),
+    re.compile(r"py\s+text\b", re.IGNORECASE),
+]
+
+# IATA airline codes (2-letter) at title start
+_AIRLINE_PREFIX_RE = re.compile(r"^[A-Z]{2}\s+")
+# Only strip 3-letter airport codes that are known Thai departure airports —
+# prevents false positives like "TAM" in "Tam Dao" (Vietnamese place name)
+_GS25_DEPART_AIRPORTS = frozenset({"DMK", "BKK", "CNX", "HKT"})
+_AIRPORT_PREFIX_RE = re.compile(r"^([A-Z]{3})\s+")
+# " BY TK", " BY EK", " BY XJ" etc. — airline code in middle of title
+_BY_AIRLINE_RE = re.compile(r"\s+BY\s+[A-Z]{2}\b")
+# Duration codes embedded in URL slugs (9D7N, 5D3N) — redundant, shown via duration_display badge
+_DURATION_CODE_RE = re.compile(r"\s+\d+D\d*N\b", re.IGNORECASE)
+
 # Thai month abbreviations → month number (for departure date parsing)
 THAI_MONTHS = {
     "มกราคม": 1,
@@ -403,6 +423,8 @@ class GS25Scraper(BaseScraper):
         if not title:
             logger.warning("No title found at %s — skipping", url)
             return None
+        # Strip product code, airline/airport codes, and BY XX from title
+        title = self._clean_gs25_title(title, ext_id)
 
         # Use URL-derived values; fall back to HTML parsing only where URL lacks data
         product_code = ext_id  # ext_id IS the product code (e.g. DAD47)
@@ -452,6 +474,36 @@ class GS25Scraper(BaseScraper):
     # ------------------------------------------------------------------ #
     #  Field parsers — tune these if HTML structure changes
     # ------------------------------------------------------------------ #
+
+    def _clean_gs25_title(self, title: str, product_code: str = "") -> str:
+        """Strip product code, airline/airport IATA codes, and BY XX from GS25 title.
+
+        Examples:
+          "IST58 TURKIYE SIMPLY BY TK 9D7N บินตรง" → "TURKIYE SIMPLY 9D7N บินตรง"
+          "NRT69 XJ DMK TOKYO TULIP 9D7N"          → "TOKYO TULIP 9D7N"
+        """
+        if not title:
+            return title
+        # Strip product code prefix (e.g. "IST58 " or "NRT69 ")
+        if product_code and title.startswith(product_code):
+            title = title[len(product_code) :].lstrip()
+
+        # Strip leading airline (2-letter) and Thai departure airport (3-letter, whitelisted).
+        # Run airport→airline→airport to handle both orderings (XJ DMK vs DMK XJ).
+        def _strip_airport(t):
+            m = _AIRPORT_PREFIX_RE.match(t)
+            if m and m.group(1) in _GS25_DEPART_AIRPORTS:
+                return t[m.end() :]
+            return t
+
+        title = _strip_airport(title)
+        title = _AIRLINE_PREFIX_RE.sub("", title)
+        title = _strip_airport(title)
+        # Strip " BY XX" pattern (e.g. " BY TK", " BY EK")
+        title = _BY_AIRLINE_RE.sub("", title)
+        # Strip duration codes (9D7N, 5D3N) — shown separately via duration_display badge
+        title = _DURATION_CODE_RE.sub("", title)
+        return title.strip()
 
     def _parse_title(self, soup: BeautifulSoup) -> str:
         """Parse tour title from the detail page.
@@ -598,7 +650,11 @@ class GS25Scraper(BaseScraper):
             if el:
                 text = el.get_text(separator=" ", strip=True)
                 if text and len(text) > 20:
-                    return text[:2000]
+                    for junk_re in _GS25_JUNK_RE:
+                        text = junk_re.sub("", text)
+                    text = text.strip()
+                    if text:
+                        return text[:2000]
 
         return ""
 

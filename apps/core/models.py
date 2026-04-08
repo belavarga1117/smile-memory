@@ -15,7 +15,7 @@ class SiteConfiguration(models.Model):
     """Singleton model for site-wide settings editable via admin."""
 
     site_name = models.CharField(max_length=200, default="Smile Memory")
-    admin_email = models.EmailField(default="admin@smilememory.com")
+    admin_email = models.EmailField(default="admin@smilememorytravel.com")
     phone_number = models.CharField(max_length=50, blank=True)
     whatsapp_number = models.CharField(max_length=50, blank=True)
     line_id = models.CharField(max_length=100, blank=True, help_text="LINE @ ID")

@@ -162,8 +162,8 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 # Email
-DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="noreply@smilememory.com")
-ADMIN_EMAIL = env("ADMIN_EMAIL", default="admin@smilememory.com")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="noreply@smilememorytravel.com")
+ADMIN_EMAIL = env("ADMIN_EMAIL", default="admin@smilememorytravel.com")
 
 # Site configuration
 SITE_NAME = "Smile Memory"

@@ -1,7 +1,6 @@
 """Email notifications for marketing: newsletter welcome, campaign sends."""
 
 import logging
-import threading
 
 from django.conf import settings
 from django.core.mail import send_mail
@@ -10,7 +9,8 @@ from django.template.loader import render_to_string
 logger = logging.getLogger(__name__)
 
 
-def _send_async(subject, message, from_email, recipient_list, html_message):
+def _send_sync(subject, message, from_email, recipient_list, html_message):
+    """Send email synchronously — used in tests (locmem backend)."""
     try:
         send_mail(
             subject=subject,
@@ -26,22 +26,19 @@ def _send_async(subject, message, from_email, recipient_list, html_message):
 
 def _dispatch(subject, message, recipient_list, html_message):
     if "locmem" in settings.EMAIL_BACKEND:
-        _send_async(
+        _send_sync(
             subject, message, settings.DEFAULT_FROM_EMAIL, recipient_list, html_message
         )
         return
-    t = threading.Thread(
-        target=_send_async,
-        args=(
-            subject,
-            message,
-            settings.DEFAULT_FROM_EMAIL,
-            recipient_list,
-            html_message,
-        ),
-        daemon=True,
+    from apps.core.tasks import send_email_task
+
+    send_email_task.delay(
+        subject=subject,
+        message=message,
+        recipient_list=recipient_list,
+        html_message=html_message,
+        from_email=settings.DEFAULT_FROM_EMAIL,
     )
-    t.start()
 
 
 def send_newsletter_welcome(subscriber):

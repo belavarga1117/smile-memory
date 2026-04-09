@@ -40,8 +40,16 @@ BREVO_API_KEY = env("BREVO_API_KEY", default="")  # noqa: F405
 SENTRY_DSN = env("SENTRY_DSN", default="")  # noqa: F405
 if SENTRY_DSN:
     import sentry_sdk
+    from sentry_sdk.integrations.celery import CeleryIntegration
+    from sentry_sdk.integrations.django import DjangoIntegration
+    from sentry_sdk.integrations.redis import RedisIntegration
 
-    sentry_sdk.init(dsn=SENTRY_DSN, traces_sample_rate=0.1)
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration(), CeleryIntegration(), RedisIntegration()],
+        traces_sample_rate=0.1,
+        send_default_pii=False,
+    )
 
 # CSRF trusted origins (required for Django 4+ with HTTPS custom domains)
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])  # noqa: F405
